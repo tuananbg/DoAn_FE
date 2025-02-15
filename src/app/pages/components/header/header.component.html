@@ -1,0 +1,113 @@
+<div class="app-header">
+  <div class="banner-header">
+    <a [routerLink]="'/dashboard'">
+      <img *ngIf="!isCollapsed"
+           src="./assets/images/logoNodoJscBothText.jpg"
+           alt="Logo"
+      />
+      <img *ngIf="isCollapsed"
+           [ngClass]="isCollapsed ? 'img-response' : ''"
+           src="./assets/images/logoNodoJsc.jpg"
+           alt="Logo"
+      />
+    </a>
+    <span class="toolbar-header"><i (click)="toggleCollapsed()" class="fa-solid fa-bars" style="margin-right: 7px;"></i>Hệ thống văn phòng điện tử</span>
+    <span class="toolbar-child"><a href="https://nodo.vn/" style="color: #1F1F1F;" target="_blank">
+      <i class="fa-solid fa-house-user" style="margin-right: 3px;"></i>Giới thiệu</a></span>
+    <div class="menu-divider"></div>
+    <span class="toolbar-child"><a style="color: #1F1F1F;" (click)="showPopup()">
+      <i class="fa-solid fa-phone" style="margin-right: 3px;"></i>Liên hệ</a>
+    </span>
+    <div class="menu-divider"></div>
+    <span class="toolbar-child"><a style="color: #1F1F1F;" (click)="showPopup()">
+      <i class="fa-solid fa-circle-info" style="margin-right: 3px;"></i>Trợ giúp</a>
+    </span>
+  </div>
+  <div class="d-flex wrapper-right">
+    <button class="btn-gift" nz-button [nzType]="'text'" [nzShape]="'circle'" (click)="ninja(template2)"
+            style="margin-right: 10px;position: relative;">
+      <i class="fa-solid fa-gift" style="font-size: 20px;"></i>
+      <div  *ngIf="hasNotifications" class="circle"></div>
+    </button>
+    <ng-template #template2 let-notifyData="data">
+      <div class="ant-notification-notice-content">
+        <div class="ant-notification-notice-message">{{notifyData.message }}</div>
+        <div *ngFor="let employee of employees" class="d-flex justify-content-between">
+          <div class="ant-notification-notice-description">
+            <div *ngIf="hasNotifications">
+              <div>
+                <p>{{ employee.employeeName }} - {{ employee.birthday | date: 'dd/MM/yyyy'}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="ant-notification-notice-btn">
+            <button nz-button nzType="primary" nzSize="small" (click)="notifyData.close()">
+              <span (click)="markAsNotified(employee.id)">Đã xem</span>
+            </button>
+          </div>
+        </div>
+        <div *ngIf="!hasNotifications">
+          <p style="color: black;">Không có thông báo sinh nhật nào trong tháng này.</p>
+        </div>
+      </div>
+    </ng-template>
+    <button class="btn-nofi" nz-button [nzType]="'text'" [nzShape]="'circle'" (click)="ninja(template2)"
+            style="margin-right: 10px;position: relative;">
+      <i class="fas fa-bell" style="font-size: 20px;"></i>
+      <div class="circle"></div>
+    </button>
+    <ng-template #template2 let-notifyData="data">
+      <div class="ant-notification-notice-content">
+        <div>
+          <div class="ant-notification-notice-message">{{notifyData.message }}</div>
+          <div class="ant-notification-notice-description">
+            A function will be be called after the notification is closed (automatically after the "duration" time of
+            manually).
+          </div>
+          <span class="ant-notification-notice-btn">
+            <button nz-button nzType="primary" nzSize="small" (click)="notifyData.close()">
+            <span>Confirm</span>
+            </button>
+          </span>
+        </div>
+      </div>
+    </ng-template>
+    <a nz-dropdown
+       nzPlacement="bottomCenter"
+       [nzDropdownMenu]="menu"
+       [nzClickHide]="false"
+       [(nzVisible)]="visible"
+       style="margin-right: 30px; width: 70%;"
+       class="d-flex"
+    >
+      <div class="user-info__container">
+        <nz-avatar nzSize="default" nzIcon="user" style="background-color:#1F1F1F;" class="user-info__img"></nz-avatar>
+        <div class="user-info__description">
+          <div class="user-info__welcome">
+            <span style="color: black; font-size: 14px;">{{'Xin chào'}}</span>
+          </div>
+
+          <div class="user-info__name">
+            <span>{{employeeName}}</span>
+          </div>
+        </div>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu class="wrapper-ul">
+            <li nz-menu-item (click)="navigateToDetails()">
+              <span nz-icon nzType="user" nzTheme="outline"></span> Hồ sơ cá nhân
+            </li>
+            <li nz-menu-item (click)="navigateToChangePass()">
+              <span nz-icon nzType="safety" nzTheme="outline"></span> Đổi mật khẩu
+            </li>
+            <li nz-menu-item nzDanger (click)="logOut()">
+              <span nz-icon nzType="logout" nzTheme="outline"></span> Đăng xuất
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<app-pop-up-img *ngIf="isPopupVisible" [imageUrl]="popupImageUrl" (close)="hidePopup()"></app-pop-up-img>

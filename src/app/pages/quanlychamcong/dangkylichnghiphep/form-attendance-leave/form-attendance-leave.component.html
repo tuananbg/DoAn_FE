@@ -1,0 +1,101 @@
+<nz-drawer
+  [nzBodyStyle]="{ overflow: 'auto' }"
+  [nzMaskClosable]="false"
+  [nzWidth]="720"
+  [nzVisible]="visible"
+  [nzTitle]="!isUpdate ? 'Đăng ký đơn nghỉ phép' : 'Cập nhật đơn nghỉ phép'"
+  [nzFooter]="footerTpl"
+  (nzOnClose)="close()"
+>
+  <form nz-form *nzDrawerContent [formGroup]="createForm" (keyup.enter)="handleOkModal()">
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
+      <div nz-col nzSpan="24">
+        <app-select [ngClass]="'w-100'" [data]="lstLeaveCategory" [valueField]="'name'" [placeHolder]="'--Tất cả--'"
+                    [required]="true"
+                    [labelField]="'name'" [openSearchModal]="false" [getObjectValue]="true"
+                    [ngStyleCus]="{'padding-left' : '8px'}"
+                    [labelHorizontal]="false" formControlName="leaveCategory" labelContent="Loại nghỉ phép:">
+        </app-select>
+      </div>
+    </div>
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
+      <div nz-col nzSpan="24">
+        <app-date-picker formControlName="startDay" placeHolder="dd/mm/yyyy"
+                         [format]="'dd/MM/yyyy'"
+                         labelContent="Từ ngày"
+                         [ngClass]="'w-150'"
+                         [required]="true"
+                         [ngStyleCus]="{'padding-left' : '50px'}"
+                         [disableDateFromToday]="isDisableDateFromToday"
+                         (changeDate)="onChangeStartDay($event)" [errorTip]="startDayErrorMessage"
+                         [span]="24"></app-date-picker>
+      </div>
+    </div>
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
+      <div nz-col nzSpan="24">
+        <app-date-picker formControlName="endDay" placeHolder="dd/mm/yyyy"
+                         [format]="'dd/MM/yyyy'"
+                         labelContent="Đến ngày"
+                         [ngClass]="'w-150'"
+                         [required]="true"
+                         [ngStyleCus]="{'padding-left' : '40px'}"
+                         [disableDateFromToday]="isDisableDateFromToday"
+                         (changeDate)="onChangeEndDay($event)" [errorTip]="endDayErrorMessage"
+                         [span]="24"></app-date-picker>
+      </div>
+    </div>
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
+      <div nz-col nzSpan="24">
+        <app-input-text-v2 [ngClass]="{'w-100': true, 'disabled-button': true}" formControlName="totalTime" [required]="true"
+                           label="Tổng số ngày" nz-col nzSpan="24"
+                           [isDisabled]="true"
+                           [typeInput]="'number'"
+                           [ngStyleCus]="{'padding-left' : '0'}"
+                           [nzAllowClear]="true"></app-input-text-v2>
+      </div>
+    </div>
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
+      <div nz-col nzSpan="24">
+        <app-select [ngClass]="'w-100'" [data]="lstEmployee" [valueField]="'id'" [placeHolder]="'--Tất cả--'"
+                    [required]="true"
+                    [labelField]="'employeeName'" [openSearchModal]="false" [getObjectValue]="true"
+                    [ngStyleCus]="{'padding-left' : '22px'}"
+                    [labelHorizontal]="false" formControlName="reviewerId" labelContent="Người duyệt:">
+        </app-select>
+      </div>
+    </div>
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
+      <div nz-col nzSpan="24">
+        <app-select [ngClass]="'w-100'" [data]="lstEmployee" [valueField]="'id'" [placeHolder]="'--Tất cả--'"
+                    [required]="true"
+                    [labelField]="'employeeName'" [openSearchModal]="false" [getObjectValue]="true"
+                    [ngStyleCus]="{'padding-left' : '5px'}"
+                    [labelHorizontal]="false" formControlName="trackerId" labelContent="Người theo dõi:">
+        </app-select>
+      </div>
+    </div>
+    <div nz-row>
+      <nz-form-item nz-col nzSpan="24">
+        <nz-form-control>
+          <app-input-textarea-v2 formControlName="description" [maxlength]="'5000'"
+                                 label="Nội dung"
+                                 [placeholder]="'Nhập nội dung nghỉ phép'"
+                                 [ngClass]="'w-100'"
+                                 [ngStyleCus]="{'padding-left' : '52px'}"
+                                 [nzAllowClear]="true" [nzAutosize]="{ minRows: 6, maxRows: 10 }">
+          </app-input-textarea-v2>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-row>
+      <p style="font-size: 15px; color: blue; margin-left: 125px;">(*) Thông báo sẽ được gửi đến email cá nhân của người phê duyệt.</p>
+    </div>
+  </form>
+
+  <ng-template #footerTpl>
+    <div style="float: right">
+      <button nz-button style="margin-right: 8px;" (click)="close()">Hủy</button>
+      <button nz-button nzType="primary" (click)="handleOkModal()">Lưu</button>
+    </div>
+  </ng-template>
+</nz-drawer>

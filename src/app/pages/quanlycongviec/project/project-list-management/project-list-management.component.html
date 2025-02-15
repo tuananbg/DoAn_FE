@@ -1,0 +1,55 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#3ec995"
+             type="line-scale" [fullScreen]="false"><p style="color: white"> Đang tải... </p>
+</ngx-spinner>
+<div class="ant-breadcrumb-custom">
+  <nz-breadcrumb>
+    <nz-breadcrumb nzSeparator=">">
+      <nz-breadcrumb-item><a [routerLink]="'/dashboard'">Quản lý công việc</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a>Dự án</a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-breadcrumb>
+</div>
+<nz-card>
+  <div class="list__head pb-3">
+    <div class="list__head-left">
+      <div class="list__head-title">
+        <span class="head-title" style="font-size: 24px;"><i class="fa-solid fa-diagram-project"
+                                                             style="margin-right: 7px;"></i>Dự án công ty</span>
+      </div>
+    </div>
+    <div class="list__head-right">
+      <div appCheckAuthorize class="list__head-btn">
+        <app-button-create (clickCreate)="openCreateModal()" [loading]="isLoading"
+                           [text]="'Thêm mới dự án'"></app-button-create>
+        <!--        <router-outlet></router-outlet>-->
+      </div>
+    </div>
+  </div>
+  <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32}">
+    <div nz-col nzSpan="8" *ngFor="let project of projects">
+      <div class="project-card d-flex justify-content-between"
+           [style.background-image]="'url(http://localhost:8080/api/v1/project/' + project.customerAvatar + ')'"
+      >
+        <div class="wrapper-item" nz-col>
+          <div class="wrapper-card-header">
+            <h5 class="project-title">{{ project.projectName }}</h5>
+            <button appCheckAuthorize class="btn-edit" nz-button nzType="text" nzShape="circle" (click)="onEdit(project.id)">
+              <i style="font-size: 20px;" class="fa-solid fa-pen-to-square"></i>
+            </button>
+          </div>
+          <div class="wrapper-card-content" (click)="getListTask(project.id)">
+            <p>Từ ngày {{ project.startDay | date: 'dd/MM/yyyy' }} đến ngày {{ project.endDay | date: 'dd/MM/yyyy'}}</p>
+            <div class="card-content-footer">
+              <p style="color: #1abc9c; font-weight: bold;">{{ project.taskNumber}} Nhiệm vụ</p>
+              <p style="color: #f39f1e; font-weight: bold;">Etimate({{ project.etimate}}h)</p>
+              <p style="color: #d70303; font-weight: bold;">Timesheets({{ project.timesheet}}h)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nz-card>
+

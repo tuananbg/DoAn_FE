@@ -1,0 +1,63 @@
+<div style="margin-top: 40px;">
+  <form nz-form [formGroup]="createForm" (keyup.enter)="handleOkModal()">
+    <div nz-row class="mt-2">
+      <div nz-col nzSpan="24">
+        <div nz-row>
+          <app-input-text-v2 [ngClass]="{'w-100': true}"
+                             formControlName="contractCode" [required]="true"
+                             label="Mã hợp đồng" nz-col nzSpan="24"
+                             [ngStyleCus]="{'padding-left' : '35px'}"
+                             [nzAllowClear]="true"></app-input-text-v2>
+        </div>
+        <div nz-row>
+<!--          <nz-form-item nz-col nzSpan="24">-->
+<!--            <nz-form-control>-->
+<!--              <app-select [ngClass]="'w-100'" [data]="lstContractType" [valueField]="'id'"-->
+<!--                          [labelField]="'name'"-->
+<!--                          [placeHolder]="'&#45;&#45;Tất cả&#45;&#45;'" [required]="true"-->
+<!--                          [openSearchModal]="false" [getObjectValue]="true"-->
+<!--                          [ngStyleCus]="{'padding-left' : '30px'}"-->
+<!--                          [labelHorizontal]="false" formControlName="contractType" labelContent="Loại hợp đồng:">-->
+<!--              </app-select>-->
+<!--            </nz-form-control>-->
+<!--          </nz-form-item>-->
+          <app-input-text-v2 [ngClass]="{'w-100': true}"
+                             formControlName="contractType" [required]="true"
+                             label="Loại hợp đồng" nz-col nzSpan="24"
+                             [ngStyleCus]="{'padding-left' : '30px'}"
+                             [nzAllowClear]="true"></app-input-text-v2>
+        </div>
+        <div nz-row>
+          <nz-form-item nz-col nzSpan="24">
+            <nz-form-label [nzRequired]="true"
+                           [hidden]="false">File mềm
+            </nz-form-label>
+            <nz-upload
+              nzName="file"
+              [nzListType]="'text'"
+              nzAction="/file"
+              (nzChange)="onFileChanged($event)"
+              [nzAccept]="'.docx'"
+              [nzLimit]="1"
+            >
+              <button nz-button style="margin-left: 65px;">
+                <span nz-icon nzType="upload"></span>
+                Chọn file DOCX
+              </button>
+            </nz-upload>
+          </nz-form-item>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div *nzModalFooter>
+    <div class="ng-star-inserted">
+      <div class="modal__footer-wrapper d-flex justify-content-center">
+        <app-button-cancel [isIcon]="true" [popConfirm]="false"
+                           (clickCancel)="handleCancelModal()"></app-button-cancel>
+        <app-button-save [loading]="isLoading" [isIcon]="true" [text]="isUpdate ? 'Cập nhật' : 'Thêm mới'"
+                         (clickSave)="handleOkModal()"></app-button-save>
+      </div>
+    </div>
+  </div>
+</div>

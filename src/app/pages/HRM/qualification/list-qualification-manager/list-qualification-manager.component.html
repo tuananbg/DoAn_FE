@@ -1,0 +1,94 @@
+
+<nz-collapse nzExpandIconPosition="right" style="margin-top: 10px">
+  <nz-card>
+    <div class="list__head pb-3">
+      <div class="list__head-left">
+        <div class="list__head-title">
+          <span class="head-title">Danh sách bằng cấp chứng chỉ</span>
+          <span class="head-count"><span class="head-count__bracket">(</span><span
+            class="head-count__number">{{total}} bản ghi</span><span
+            class="head-count__bracket">)</span></span>
+        </div>
+      </div>
+      <div *ngIf="isVisableButton" class="list__head-right">
+        <div class="list__head-btn">
+          <app-button-create appCheckAuthorize (clickCreate)="openCreateModal()" [loading]="isLoading"></app-button-create>
+        </div>
+      </div>
+    </div>
+    <div class="list__table">
+      <nz-table #rowSelectionTable nzBordered [nzData]="lstData" [nzFrontPagination]="false"
+                [nzNoResult]="'Không có kết quả tìm kiếm'" [nzScroll]="{ x: SCROLL_TABLE.SCROLL_X}">
+        <thead>
+        <tr class="ant-header-customize">
+          <th nzWidth="60px" class="text-center">
+            STT
+          </th>
+          <th  nzWidth="150px" class="text-center">
+            Loại trình độ
+          </th>
+          <th nzWidth="150px" class="text-center">
+            Tên bằng cấp
+          </th>
+          <th nzWidth="150px" class="text-center">
+            Chuyên ngành
+          </th>
+          <th nzWidth="200px" class="text-center">
+            Ngày cấp bằng
+          </th>
+          <th nzWidth="150px" class="text-center">
+            Mô tả
+          </th>
+          <th appCheckAuthorize *ngIf="isVisableButton" nzWidth="150px" class="text-center" nzRight="0px">
+            Hành động
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-template ngFor let-data let-idx="index" [ngForOf]="rowSelectionTable.data">
+          <tr>
+            <td class="text-center max-width-60">{{ (request.currentPage * request.pageSize) + idx + 1}}</td>
+            <td class="max-width-150" [nz-tooltip]="data.level">{{data.level}}</td>
+            <td class="max-width-150" [nz-tooltip]="data.name">{{data.name}}</td>
+            <td class="max-width-150" [nz-tooltip]="data.major">{{data.major}}</td>
+            <td class="max-width-150" [nz-tooltip]="data.licenseDate | date: 'dd/MM/yyyy'">{{ data.licenseDate | date: 'dd/MM/yyyy' }}</td>
+            <td class="max-width-200" [nz-tooltip]="data.description">
+              {{ data.description.length > 100 ? (data.description | slice:0:50) + '...' : data.description }}
+            </td>
+            <td appCheckAuthorize *ngIf="isVisableButton" class="text-center max-width-150" nzRight="0px">
+              <div class="action">
+                <app-button-icon class="action__margin" [isEdit] = "true"
+                                 [tooltipTitle]="'Cập nhật bằng cấp'"
+                                 [loading]="isLoading"
+                                 (clickAction)="openUpdateModal(data)"></app-button-icon>
+                <app-button-icon class="action__margin" [isDelete]="true"
+                                 [tooltipTitle]="'Xóa bằng cấp'" (click)="openModalDelete(data)"></app-button-icon>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        </tbody>
+      </nz-table>
+      <div  nz-row class="list__pagination" *ngIf="lstData?.length">
+        <div *ngIf="isVisableButton" nz-col class="list__pagination-container">
+          <div>Tìm thấy
+            <strong>{{ total }}</strong> bản ghi &nbsp;
+          </div>
+          <app-paging class="app-paging" [itemOfPage]="request.pageSize" [currentPage]="request.currentPage"
+                      [totalItems]="total" (changeCurrentPage)="changeCurrentPage($event)"
+                      (changeItemPerPage)="changeItemPerPage($event)"></app-paging>
+        </div>
+      </div>
+    </div>
+  </nz-card>
+</nz-collapse>
+
+<app-modal-confirm title="Xác nhận xóa" [isVisible]="isVisibleModalDelete"
+                   textButtonCancel="Hủy"
+                   [text]="'Xóa'"
+                   [isDelete]="true"
+                   [isDescHTML]= "true"
+                   [descriptionHTML]="message"
+                   (callBack)="callBackModalDelete()"
+                   (clickCancel)="onCancelModalDelete()">
+</app-modal-confirm>

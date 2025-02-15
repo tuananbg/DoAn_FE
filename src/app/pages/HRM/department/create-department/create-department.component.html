@@ -1,0 +1,41 @@
+
+<div style="margin-top: 40px;">
+  <form nz-form [formGroup]="createForm" (keyup.enter)="handleOkModal()">
+    <div nz-row class="mt-2">
+      <div nz-col nzSpan="24">
+        <div nz-row>
+          <app-input-text-v2 [ngClass]="{'w-100': true, 'disabled-button': isUpdate}" formControlName="departmentCode" [required]="true"
+                             label="Mã phòng ban"  nz-col nzSpan="24"
+                             [isDisabled] = "true"
+                             [nzAllowClear]="true"></app-input-text-v2>
+        </div>
+        <div nz-row>
+          <app-input-text-v2 [ngClass]="'w-100'" formControlName="departmentName" [required]="true"
+                             label="Tên phòng ban" nz-col nzSpan="24"
+                             [nzAllowClear]="true"></app-input-text-v2>
+        </div>
+        <div nz-row>
+          <nz-form-item nz-col nzSpan="24">
+            <nz-form-control>
+              <app-select [ngClass]="'w-100'" [data]="lstStatus" [valueField]="'id'" [placeHolder]="'--Tất cả--'" [required]="true"
+                          [labelField]="'name'" [openSearchModal]="false" [getObjectValue]="true"
+                          [ngStyleCus] ="{'padding-left' : '30px'}"
+                          [labelHorizontal]="false" formControlName="status" labelContent="Trạng thái:">
+              </app-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div *nzModalFooter>
+    <div class="ng-star-inserted">
+      <div class="modal__footer-wrapper d-flex justify-content-center">
+        <app-button-cancel [isIcon]="true" [popConfirm]="false"
+                           (clickCancel)="handleCancelModal()"></app-button-cancel>
+        <app-button-save [loading]="isLoading" [isIcon]="true" [text]="isUpdate ? 'Cập nhật' : 'Thêm mới'"
+                         (clickSave)="handleOkModal()"></app-button-save>
+      </div>
+    </div>
+  </div>
+</div>

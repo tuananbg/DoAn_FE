@@ -1,0 +1,21 @@
+<div class="ticker">
+    <div
+            class="icon-wrapper"
+            [class]="getIconClass()"
+    >
+        <i [class]="'dx-icon dx-icon-' + icon"></i>
+    </div>
+    <div class="middle">
+        <div class="title">
+            {{ titleText }}
+        </div>
+        <div class="total">
+            {{
+            total === null
+                ? (getTotal | apply: data | currency: 'USD':'$':'1.0-0')
+                : total
+            }}
+          {{addText}}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,67 @@
+<div style="margin-top: 40px;">
+  <form nz-form [formGroup]="createForm" (keyup.enter)="handleOkModal()">
+    <div nz-row class="mt-2">
+      <div nz-col nzSpan="24">
+        <div nz-row>
+          <app-input-text-v2 [ngClass]="{'w-100': true}"
+                             formControlName="socialInsuranceCode" [required]="true"
+                             label="Mã thẻ BHXH" nz-col nzSpan="24"
+                             [isDisabled]="true"
+                             [ngStyleCus]="{'padding-left' : '75px'}"
+                             [nzAllowClear]="true"></app-input-text-v2>
+        </div>
+        <div nz-row>
+          <app-input-text-v2 [ngClass]="'w-100'" formControlName="initialPayment" [required]="true"
+                             label="Mức đóng ban đầu" nz-col nzSpan="24"
+                             [typeInput]="'number'"
+                             (change)="onChangeInitialPayment($event)"
+                             [ngStyleCus]="{'padding-left' : '41px'}"
+                             [nzAllowClear]="true"></app-input-text-v2>
+        </div>
+        <div nz-row>
+          <app-input-text-v2 [ngClass]="'w-100'" formControlName="percent" [required]="true"
+                             label="Giảm số phần trăm" nz-col nzSpan="24"
+                             [typeInput]="'number'"
+                             (change)="onChangePercent($event)"
+                             [numberMax]="100"
+                             [ngStyleCus]="{'padding-left' : '40px'}"
+                             [nzAllowClear]="true"></app-input-text-v2>
+        </div>
+        <div nz-row>
+          <app-input-text-v2 [ngClass]="{'w-100': true, 'disabled-button': true}" formControlName="actualPayment" [required]="true"
+                             label="Người lao động đóng" nz-col nzSpan="24"
+                             [typeInput]="'number'"
+                             [isDisabled]="true"
+                             [ngStyleCus]="{'padding-left' : '25px'}"
+                             [nzAllowClear]="true"></app-input-text-v2>
+        </div>
+        <div nz-row>
+          <app-date-picker formControlName="licenseDate" placeHolder="dd/mm/yyyy"
+                           [format]="'dd/MM/yyyy'"
+                           labelContent="Ngày hiệu lực"
+                           [ngClass]="'w-100'"
+                           [ngStyleCus]="{'padding-left' : '85px'}"
+                           [span]="24"></app-date-picker>
+        </div>
+        <div nz-row>
+          <app-date-picker formControlName="expiredDate" placeHolder="dd/mm/yyyy"
+                           [format]="'dd/MM/yyyy'"
+                           labelContent="Ngày hết hạn"
+                           [ngClass]="'w-100'"
+                           [ngStyleCus]="{'padding-left' : '85px'}"
+                           [span]="24"></app-date-picker>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div *nzModalFooter>
+    <div class="ng-star-inserted">
+      <div class="modal__footer-wrapper d-flex justify-content-center">
+        <app-button-cancel [isIcon]="true" [popConfirm]="false"
+                           (clickCancel)="handleCancelModal()"></app-button-cancel>
+        <app-button-save [loading]="isLoading" [isIcon]="true" [text]="isUpdate ? 'Cập nhật' : 'Thêm mới'"
+                         (clickSave)="handleOkModal()"></app-button-save>
+      </div>
+    </div>
+  </div>
+</div>

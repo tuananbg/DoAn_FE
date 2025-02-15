@@ -1,0 +1,60 @@
+
+<div class="centered-div d-flex">
+  <mat-card class="containner animate__animated animate__fadeInRight" style="padding: 0">
+    <mat-card-title style="display: flex; justify-content: center; background-color: white; height: 100%;">
+      <div class="wrapper__image">
+        <img src="assets/images/logoNodoJscBothText.jpg" alt="">
+      </div>
+    </mat-card-title>
+  </mat-card>
+  <mat-card class="containner animate__animated animate__fadeInLeft" style="padding: 0">
+    <mat-card-title style="display: flex; justify-content: center; background-color: white">
+      <div class="wrapper__logo">
+        <p style="margin: 0px; font-weight: bold;  text-transform: uppercase; margin-top: 20px;">N-Office</p>
+        <p style="font-size: 15px;">HỆ THỐNG QUẢN LÝ VĂN PHÒNG ĐIỆN TỬ</p>
+      </div>
+    </mat-card-title>
+    <mat-card>
+      <mat-card-title style="color: #FFFFFF">Đăng nhập</mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="form" (keyup.enter)="login()">
+          <p>
+            <mat-form-field>
+              <input type="email" matInput placeholder="Email" formControlName="email" style="color: #F0F0F0; font-size: 17px;">
+            </mat-form-field>
+          </p>
+          <div *ngIf="form.controls['email'].errors && (form.controls['email'].dirty || form.controls['email'].touched)">
+            <div *ngIf="form.controls['email'].errors['required']">
+              <p style="color: #d70303; text-align: left; font-size: 12px; margin-top: -25px;">Email không được để trống!</p>
+            </div>
+            <div *ngIf="form.controls['email'].errors['email']">
+              <p style="color: #D70303FF; text-align: left; font-size: 12px; margin-top: -25px;">Sai định dạng email!</p>
+            </div>
+          </div>
+          <p class="d-flex">
+            <mat-form-field>
+              <input [type]="hidePassword ? 'password' : 'text'" matInput placeholder="Mật khẩu" formControlName="password" style="color: #F0F0F0; font-size: 20px;">
+            </mat-form-field>
+            <button (click)="togglePasswordVisibility()" class="cl-button">
+              <i class="fa-solid " [ngClass]="{ 'fa-eye': hidePassword, 'fa-eye-slash': !hidePassword }" (click)="login()"></i>
+            </button>
+          </p>
+
+          <p *ngIf="isMeassgeError" class="error" style="color: #fff;">
+            <i class="fa-solid fa-triangle-exclamation" style="margin-right: 7px;"></i>{{ meassgeError }}
+          </p>
+
+          <div class="button d-flex justify-content-between">
+            <a style="color: #03a9f4; margin-top: 15px;" [routerLink]="'/auth/changePassword'">Quên mật khẩu</a>
+            <button type="submit" [disabled]="!form.valid" mat-button style="color: #FFFFFF; background-color: #181818" (click)="login()">Đăng nhập</button>
+          </div>
+
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </mat-card>
+</div>
+<div class="wrapper-footer-text animate__animated animate__fadeInDown">
+  <p style="margin: 0;">Địa chỉ: Phòng 1501, VNTower,19 Nguyễn Trãi, Thanh Xuân, Hà Nội</p>
+  <p>Website: http://nodo.vn/ , Telephone: (+84) 462.932.083, Email: hotro@nodo.vn</p>
+</div>

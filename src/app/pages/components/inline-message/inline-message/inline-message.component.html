@@ -1,0 +1,55 @@
+<div *ngIf="(formController.invalid && formController.dirty)">
+    <span *ngIf="formController.errors.required">
+      {{field}} không được để trống
+    </span>
+    <span *ngIf="formController.errors.moreThan">
+      {{field}} phải lớn hơn {{field2}}
+    </span>
+    <span *ngIf="formController.errors.lessThan">
+      {{field}} phải nhỏ hơn {{field2}}
+    </span>
+    <span *ngIf="formController.errors.notEqualZero">
+      {{field}} không được bằng 0
+    </span>
+    <span *ngIf="formController.errors.lessEqualThanToday">
+      {{field}} phải nhỏ hơn hoặc bằng ngày hiện tại
+    </span>
+    <span *ngIf="formController.errors.moreEqualThan">
+      {{field}} phải lớn hơn hoặc bằng {{field2}}
+    </span>
+    <span *ngIf="formController.errors.lessEqualThan">
+      {{field}} phải nhỏ hơn hoặc bằng {{field2}}
+    </span>
+    <span *ngIf="formController.errors.maxlength">
+      {{field}} không được lớn hơn {{formController.errors.maxlength?.requiredLength}} ký tự
+    </span>
+    <span *ngIf="formController.errors.minlength">
+      {{field}} không được ít hơn {{formController.errors.minlength?.requiredLength}} ký tự
+    </span>
+    <span *ngIf="formController.errors.multipleEmail && !formController.errors.maxlength">
+      Địa chỉ Email không đúng định dạng
+    </span>
+    <span *ngIf="formController.errors.email && !formController.errors.maxlength">
+      {{field}} không đúng định dạng email
+    </span>
+    <span *ngIf="formController.errors.max">
+      {{field}} không được lớn hơn {{formController.errors.max.max}}
+    </span>
+    <span *ngIf="formController.errors.lessEqualThanTodayMonth">
+      {{field}} phải nhỏ hơn hoặc bằng tháng hiện tại
+    </span>
+  <!--  //-->
+    <span *ngIf="formController.errors.pattern && !formController.errors.maxlength">
+      {{ message }} không đúng định dạng
+    </span>
+    <span *ngIf="formController.errors.codeNoSpace && !formController.errors.maxlength">
+      {{ message }} chỉ được phép nhập chữ cái không dấu, số và dấu _-
+    </span>
+    <span *ngIf="formController.errors.codeNoSpaceAnd && !formController.errors.maxlength">
+      {{ message }} chỉ được phép nhập chữ cái không dấu, số và dấu _
+    </span>
+    <span *ngIf="formController.errors.noSpecialCharacters && !formController.errors.maxlength">
+      {{ message }} chỉ được phép nhập chữ cái, số, khoảng trắng và dấu _-
+    </span>
+  </div>
+  

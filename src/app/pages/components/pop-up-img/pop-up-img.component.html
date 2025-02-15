@@ -1,0 +1,6 @@
+<div class="popup-background" (click)="closePopup()">
+  <div class="popup-content" (click)="$event.stopPropagation()">
+    <span class="close-button" (click)="closePopup()">&times;</span>
+    <img [src]="'assets/images/'+imageUrl" alt="Popup Image" />
+  </div>
+</div>

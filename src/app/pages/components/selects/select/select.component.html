@@ -1,0 +1,83 @@
+<nz-form-item>
+    <ng-container *ngIf="!hideLabel">
+      <app-label-vertical *ngIf="!labelHorizontal" [content]="labelContent" [required]="required" ></app-label-vertical>
+      <app-label-horizontal
+        *ngIf="labelHorizontal"
+        [content]="labelContent"
+        [required]="required"
+        [span]="24-span"
+        [isVisibilityLabel]="isVisibilityLabel"></app-label-horizontal>
+    </ng-container>
+    <nz-form-control [nzSpan]="labelHorizontal ? span : null" [nzErrorTip]="isShowError ? combineTpl : ''" [ngStyle]="ngStyleCus">
+      <nz-select
+        #select
+        (nzOnSearch)="handleSearch($event)"
+        [formControl]="ngControl.control ? $any(ngControl.control) : formController"
+        [nzMode]="nzMode"
+        [nzSize]="nzSize"
+        class="w-100 ant-select"
+        [nzAllowClear]="isShowClear"
+        [nzDropdownRender]="openSearchModal ? footer : null"
+        [nzPlaceHolder]="placeHolder"
+        [nzShowSearch]="isSearch"
+        nzHideUnMatched
+        [nzMaxTagCount]="maxSelectDisplay"
+        [nzNotFoundContent]="notFoundContent"
+        [nzDisabled]="disabled"
+        [(ngModel)]="value"
+        (ngModelChange)="handleSelectChange()">
+        <ng-container *ngIf="!isCustomLabel">
+          <div *ngIf="isCreateReport">
+            <nz-option
+              *ngFor="let item of data"
+              [nzLabel]="item['code']"
+              [nzValue]="item[valueField]">
+            </nz-option>
+          </div>
+          <div *ngIf="!isCreateReport">
+            <nz-option
+              *ngFor="let item of data"
+              [nzLabel]="staticLabelField ? item[labelField] : (item.code + '-' + item.name)"
+              [nzValue]="item[valueField]"
+              [nzDisabled]="item[valueField] === textDisable || item[labelField] === textDisable">
+            </nz-option>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="isCustomLabel">
+          <!-- giá trị select là id -->
+          <div *ngIf="valueFieldId">
+            <nz-option
+              *ngFor="let item of data"
+              [nzLabel]="staticLabelField ? item[labelField] : (item[labelField])"
+              [nzValue]="item[valueField]">
+            </nz-option>
+          </div>
+          <!-- giá trị select là name -->
+          <div *ngIf="!valueFieldId">
+            <nz-option
+            *ngFor="let item of data"
+            [nzLabel]="staticLabelField ? item[labelField] : (item[labelField])"
+            [nzValue]="item[labelField]">
+            </nz-option>
+        </div>
+
+        </ng-container>
+      </nz-select>
+
+      <ng-template #footer>
+        <div *ngIf="!isOpenCreateModal" (click)="select.onClearSelection(); handleOpenSearch()" class="add-item">
+          <i nz-icon nzType="plus"></i>Tìm kiếm thêm
+        </div>
+
+        <div *ngIf="isOpenCreateModal" (click)="select.onClearSelection(); handleOpenSearch()" class="add-item">
+          <i nz-icon nzType="plus"></i>Thêm nhanh
+        </div>
+      </ng-template>
+    </nz-form-control>
+    <ng-template #combineTpl let-control >
+      <ng-container *ngIf="control.hasError('required')">{{ errorTip }}</ng-container>
+      <ng-container *ngIf="control.hasError('validatePrecious')">Chỉ cho phép thêm mới báo cáo trước ngày 25</ng-container>
+      <ng-container *ngIf="control.hasError('validateYear')">Chỉ cho phép thêm mới báo cáo trước 25/12</ng-container>
+    </ng-template>
+</nz-form-item>

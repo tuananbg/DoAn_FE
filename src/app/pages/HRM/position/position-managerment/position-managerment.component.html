@@ -1,0 +1,175 @@
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "default" color = "#3ec995"
+             type = "line-scale" [fullScreen] = "false"><p style="color: white" > Đang tải... </p>
+</ngx-spinner>
+<div class="ant-breadcrumb-custom">
+  <nz-breadcrumb>
+    <nz-breadcrumb nzSeparator=">">
+      <nz-breadcrumb-item><a [routerLink]="'/dashboard'">Trang chủ</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a>Hành chính nhân sự</a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a>Quản lý chức vụ</a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-breadcrumb>
+</div>
+<nz-collapse nzExpandIconPosition="right">
+  <nz-collapse-panel nzHeader="Thông tin tìm kiếm" [nzActive]="isActive">
+    <form nz-form [formGroup]="searchForm" nzLayout="vertical" (keyup.enter)="nzOnSearch()">
+      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
+        <div nz-col [nzSm]="24" [nzMd]="8" [nzLg]="8">
+          <nz-form-item>
+            <nz-form-control [nzSm]="24" [nzXs]="24">
+              <app-input-text-v2 formControlName="positionCode" label="{{ 'Mã chức vụ' }}" [maxlength]="'255'"
+                                 [nzAllowClear]="true"></app-input-text-v2>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSm]="24" [nzMd]="8" [nzLg]="8">
+          <nz-form-item>
+            <nz-form-control [nzSm]="24" [nzXs]="24">
+              <app-input-text-v2 formControlName="positionName" label="{{ 'Tên chức vụ' }}" [maxlength]="'255'"
+                                 [nzAllowClear]="true"></app-input-text-v2>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSm]="24" [nzMd]="8" [nzLg]="8">
+          <nz-form-item>
+            <nz-form-control nzErrorTip="Trạng thái" [nzSm]="24" [nzXs]="24">
+              <app-select [data]="lstStatus" [valueField]="'id'" [placeHolder]="'--Tất cả--'"
+                          [labelField]="'name'" [openSearchModal]="false" [getObjectValue]="true"
+                          [labelHorizontal]="false" formControlName="isActive" labelContent="Trạng thái">
+              </app-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row>
+        <div nz-col nzSpan="24">
+          <div nz-row nzGutter="20" nzJustify="center">
+            <div nz-col>
+              <nz-form-item>
+                <nz-form-control>
+                  <app-button-common buttonType="default" buttonText="Nhập lại" iconTheme="outline"
+                                     [buttonClass]="'css-box-shadow'"
+                                     iconType="reload" (clickAction)="resetForm()"></app-button-common>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col>
+              <nz-form-item>
+                <nz-form-control>
+                  <app-button-base iconType="search" (clickAction)="nzOnSearch()"
+                                   [buttonClass]="'css-box-shadow'"
+                                   text="Tìm kiếm"></app-button-base>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col>
+              <nz-form-item>
+                <nz-form-control>
+                  <app-button-export (clickExport)="openExport()"
+                                     [buttonClass]="'css-box-shadow'"></app-button-export>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </nz-collapse-panel>
+</nz-collapse>
+<nz-collapse nzExpandIconPosition="right" style="margin-top: 10px">
+  <nz-card>
+    <div class="list__head pb-3">
+      <div class="list__head-left">
+        <div class="list__head-title">
+          <span class="head-title">Danh sách các chức vụ</span>
+          <span class="head-count"><span class="head-count__bracket">(</span><span
+            class="head-count__number">{{total}} bản ghi</span><span
+            class="head-count__bracket">)</span></span>
+        </div>
+      </div>
+      <div class="list__head-right">
+        <div class="list__head-btn">
+          <app-button-create (clickCreate)="openCreateModal()" [loading]="isLoading"></app-button-create>
+        </div>
+      </div>
+    </div>
+    <div class="list__table">
+      <nz-table #rowSelectionTable nzBordered [nzData]="lstData" [nzFrontPagination]="false"
+                [nzNoResult]="'Không có kết quả tìm kiếm'" [nzScroll]="{ x: SCROLL_TABLE.SCROLL_X}">
+        <thead>
+        <tr class="ant-header-customize">
+          <th nzWidth="50px" class="text-center">
+            STT
+          </th>
+          <th  nzWidth="100px" class="text-center">
+            Mã chức vụ
+          </th>
+          <th nzWidth="150px" class="text-center">
+            Tên chức vụ
+          </th>
+          <th nzWidth="150px" class="text-center">
+            Tên phòng ban
+          </th>
+          <th nzWidth="200px" class="text-center">
+            Mô tả
+          </th>
+          <th nzWidth="200px" class="text-center">
+            Trạng thái
+          </th>
+          <th nzWidth="100px" class="text-center">
+            Hành động
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-template ngFor let-data let-idx="index" [ngForOf]="rowSelectionTable.data">
+          <tr>
+            <td class="text-center max-width-50">{{ (request.currentPage * request.pageSize) + idx + 1}}</td>
+            <td class="max-width-100" [nz-tooltip]="data.positionCode">{{data.positionCode}}</td>
+            <td class="max-width-150" [nz-tooltip]="data.positionName">{{data.positionName}}</td>
+            <td class="max-width-150" [nz-tooltip]="data.departmentName">{{data.departmentName}}</td>
+            <td class="max-width-200" [nz-tooltip]="data.positionDescription">{{data.positionDescription}}</td>
+            <td class="max-width-200 text-center" [nz-tooltip]="'Không hoạt động'" *ngIf="data.isActive !== 1">
+              <span class="css-badge badge badge-pill bg-danger p-3">Không hoạt động</span></td>
+            <td class="max-width-200 text-center" [nz-tooltip]="'Hoạt động'" *ngIf="data.isActive === 1">
+              <span class="css-badge badge badge-pill bg-success p-3">Hoạt động</span></td>
+            <td class="text-center max-width-150">
+              <div class="action">
+                <app-button-icon class="action__margin" [isEdit] = "true"
+                                 [tooltipTitle]="'Cập nhật chức vụ'"
+                                 [loading]="isLoading"
+                                 (clickAction)="openUpdateModal(data)"></app-button-icon>
+                <app-button-icon class="action__margin" [isDelete]="true"
+                                 [tooltipTitle]="'Xóa chức vụ'" (click)="openModalDelete(data)"></app-button-icon>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        </tbody>
+      </nz-table>
+      <div nz-row class="list__pagination" *ngIf="lstData?.length">
+        <div nz-col class="list__pagination-container">
+          <div>Tìm thấy
+            <strong>{{ total }}</strong> bản ghi &nbsp;
+          </div>
+          <app-paging class="app-paging" [itemOfPage]="request.pageSize" [currentPage]="request.currentPage"
+                      [totalItems]="total" (changeCurrentPage)="changeCurrentPage($event)"
+                      (changeItemPerPage)="changeItemPerPage($event)"></app-paging>
+        </div>
+      </div>
+    </div>
+  </nz-card>
+</nz-collapse>
+
+<app-modal-confirm title="Xác nhận xóa" [isVisible]="isVisibleModalDelete"
+                   textButtonCancel="Hủy"
+                   [text]="'Đồng ý'"
+                   [isConfirm]="true"
+                   [description]="message"
+                   (callBack)="callBackModalDelete()"
+                   (clickCancel)="onCancelModalDelete()">
+</app-modal-confirm>

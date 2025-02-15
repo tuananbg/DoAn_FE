@@ -1,0 +1,16 @@
+<div
+  [ngClass]="{'input-with-bar': showBar }"
+  class="
+      status
+      status-indicator
+      status-indicator-{{ dashValue }}">
+  <span *ngIf="!isField" class="status-indicator-{{ dashValue }}">{{ getValue(value) }}</span>
+  <dx-text-box
+    *ngIf="isField"
+    class="status-indicator-{{ dashValue }}"
+    [inputAttr]="{class: 'status-input status-editor-input'}"
+    [hoverStateEnabled]="false"
+    [readOnly]="true"
+    [value]="getValue(value)">
+  </dx-text-box>
+</div>

@@ -1,0 +1,38 @@
+<nz-form-item>
+  <nz-form-label [nzRequired]="required"
+                 [nzFor]="ngControl.name === 'string' ? ngControl.name : undefined && ngControl.name !== null"
+                 [hidden]="hiddenLabel">{{label}}</nz-form-label>
+  <nz-form-control [nzErrorTip]="combineTpl" [ngStyle]="ngStyleCus">
+    <nz-input-group [nzSuffix]="inputTextareaClearTpl">
+    <textarea
+      #inputTextareaRef
+      nz-input
+      [formControl]="ngControl ? $any(ngControl.control) : formController"
+      [nzAutosize]="nzAutosize"
+      [disabled]="disabled"
+      [placeholder]="placeholder"
+      (focus)="onFocus(inputTextareaRef.value)"
+      (blur)="onBlur(inputTextareaRef.value)"
+      [ngClass]="ngClass"
+      [readOnly]="isReadOnly"
+      style="border: none"
+    ></textarea>
+      <ng-template #inputTextareaClearTpl>
+        <i
+          *ngIf="inputTextareaRef.value && isFocused"
+          nz-icon
+          class="ant-input-clear-icon"
+          nzTheme="fill"
+          nzType="close-circle"
+          (mousedown)="onClear(); inputTextareaRef.value = ''"
+        ></i>
+      </ng-template>
+    </nz-input-group>
+    <ng-template #combineTpl let-control>
+      <app-inline-message [formController]="control"
+                          [field]="label || ngControl.name"
+                          [field2]="label2"
+      ></app-inline-message>
+    </ng-template>
+  </nz-form-control>
+</nz-form-item>

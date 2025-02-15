@@ -1,0 +1,61 @@
+<div style="margin-top: 40px;">
+  <form nz-form [formGroup]="createForm" (keyup.enter)="handleOkModal()">
+    <div nz-row class="mt-2">
+      <div nz-col nzSpan="24">
+        <div nz-row>
+          <nz-form-item nz-col nzSpan="24">
+            <nz-form-control>
+              <app-select [ngClass]="'w-100'" [data]="lstContractType" [valueField]="'contractId'"
+                          [labelField]="'contractType'"
+                          [placeHolder]="'--Tất cả--'" [required]="true"
+                          [openSearchModal]="false" [getObjectValue]="true"
+                          [ngStyleCus]="{'padding-left' : '39px'}"
+                          [labelHorizontal]="false" formControlName="contractType" labelContent="Loại hợp đồng:">
+              </app-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-row>
+          <app-date-picker formControlName="activeDate" placeHolder="dd/mm/yyyy"
+                           [format]="'dd/MM/yyyy'"
+                           labelContent="Ngày hiệu lực"
+                           [ngClass]="'w-100'"
+                           [required]="true"
+                           (changeDate)="onChangeActiveDate($event)" [errorTip]="activeDateErrorMessage"
+                           [ngStyleCus]="{'padding-left' : '45px'}"
+                           [span]="24"></app-date-picker>
+        </div>
+        <div nz-row>
+          <app-date-picker formControlName="expiredDate" placeHolder="dd/mm/yyyy"
+                           [format]="'dd/MM/yyyy'"
+                           labelContent="Ngày hết hạn"
+                           [ngClass]="'w-100'"
+                           [required]="true"
+                           (changeDate)="onChangeExpiredDate($event)" [errorTip]="extendDateErrorMessage"
+                           [ngStyleCus]="{'padding-left' : '45px'}"
+                           [span]="24"></app-date-picker>
+        </div>
+        <div nz-row>
+          <app-date-picker formControlName="signDate" placeHolder="dd/mm/yyyy"
+                           [format]="'dd/MM/yyyy'"
+                           labelContent="Ngày ký kết"
+                           [ngClass]="'w-100'"
+                           [required]="true"
+                           (changeDate)="onChangeSignDate($event)" [errorTip]="signDateErrorMessage"
+                           [ngStyleCus]="{'padding-left' : '55px'}"
+                           [span]="24"></app-date-picker>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div *nzModalFooter>
+    <div class="ng-star-inserted">
+      <div class="modal__footer-wrapper d-flex justify-content-center">
+        <app-button-cancel [isIcon]="true" [popConfirm]="false"
+                           (clickCancel)="handleCancelModal()"></app-button-cancel>
+        <app-button-save [loading]="isLoading" [isIcon]="true" [text]="isUpdate ? 'Cập nhật' : 'Thêm mới'"
+                         (clickSave)="handleOkModal()"></app-button-save>
+      </div>
+    </div>
+  </div>
+</div>

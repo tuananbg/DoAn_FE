@@ -1,0 +1,23 @@
+.auth-layout {
+  width: 100%;
+  min-height: 100vh;
+  background-image: url("../../../../assets/images/hinhnenmauxanh.jpg");
+  background-repeat: no-repeat;
+  .auth-header {
+    width: 100%;
+    background: none;
+    margin-top: 1rem;
+    text-align: center;
+      h1 {
+        color: white;
+        font-size: 3rem;
+        font-weight: bolder;
+      }
+      h2 {
+        padding-bottom: 1rem;
+        color: white;
+        font-size: 2rem;
+        font-weight: bolder;
+      }
+  }
+}

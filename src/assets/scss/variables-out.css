@@ -1,0 +1,8 @@
+:root .dx-theme-generic {
+  --change-password-popup-height: 190px;
+}
+:root .dx-theme-material {
+  --change-password-popup-height: 260px;
+}
+
+/*# sourceMappingURL=variables-out.css.map */

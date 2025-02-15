@@ -1,0 +1,40 @@
+<ng-container *ngIf="!popConfirm ; else buttonWithPopConfirm">
+    <button
+      class="mr-2"
+      nz-button
+      (click)="handleClick()"
+      [ngClass]="buttonClass"
+      [nzType]="buttonType"
+      [nzShape]="buttonShape"
+      [nzSize]="buttonSize"
+      [disabled]="disabled"
+      [nzLoading]="loading"
+      [nz-tooltip]="tooltipTitle"
+      [ngStyle]="iconType ? {} : {'min-width': '80px'}"
+    >
+      <i *ngIf="iconType" nz-icon [ngClass]="iconClass" [nzType]="iconType" [nzTheme]="iconTheme" [nzIconfont]="iconFont"
+         [nzSpin]="iconSpin" [ngStyle]="iconStyle" [style.transform]="isRotate ? 'rotate(180deg)' : 'none'"></i>
+      {{ buttonText }}
+      <i *ngIf="iconTypeRight" nz-icon [ngClass]="iconClass" [nzType]="iconTypeRight" [nzTheme]="iconTheme" [nzIconfont]="iconFont"
+         [nzSpin]="iconSpin" [ngStyle]="iconStyle"></i>
+    </button>
+</ng-container>
+<ng-template #buttonWithPopConfirm>
+    <button
+      nz-button
+      nz-popconfirm
+      nzOkText="Đồng ý"
+      nzCancelText="Hủy bỏ"
+      nzPopconfirmTitle="Bạn có chắc chắn muốn gửi bản ghi?"
+      (nzOnConfirm)="handleClick()"
+      [nzType]="buttonType"
+      [nzSize]="buttonSize"
+      class="mr-2"
+    >
+      <i *ngIf="iconType" nz-icon [ngClass]="iconClass" [nzType]="iconType" [nzTheme]="iconTheme" [nzIconfont]="iconFont"
+         [nzSpin]="iconSpin" [ngStyle]="iconStyle"></i>
+      {{ buttonText }}
+    </button>
+</ng-template>
+  
+  

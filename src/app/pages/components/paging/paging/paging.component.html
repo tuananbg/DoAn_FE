@@ -1,0 +1,67 @@
+<div class="paging-contaier">
+    <div class="paging-contaier__wrapper">
+        <div class="limit">
+            <div nz-col>Hiển thị {{currentPage * itemOfPage + 1}}-{{((currentPage + 1) * itemOfPage) < totalItems ?
+                    ((currentPage + 1) * itemOfPage) : totalItems}} trong <span>{{ totalItems }}</span> bản ghi
+            </div>
+            <div class="choose-number-item ml-1" *ngIf="pages.length">
+                <nz-select class="select__page-size" name="select1" [nzSize]="size" [(ngModel)]="currentItemPerPage"
+                    (ngModelChange)="onChangeItemPerPage($event)">
+                    <nz-option *ngFor="let item of listItemOfPage" [nzValue]="item.value" [nzLabel]="item.label">
+                    </nz-option>
+                </nz-select>
+            </div>
+        </div>
+        <div class="number-pages" *ngIf="pages.length">
+            <button class="btn__fist-page" nz-button nzType="text" (click)="goPage(0)" [disabled]="currentPage == 0"
+                nzTooltipTitle="Trang đầu" nzTooltipPlacement="{{TOOLTIP.PLACEMENT_TOP}}"
+                nz-tooltip>
+<!--                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+<!--                    <path-->
+<!--                        d="M7.2 11.5975L7.2 0.402501C7.2 0.0667189 6.84677 -0.120773 6.60563 0.0871725L0.138829 5.68467C-0.0462763 5.84489 -0.0462764 6.1534 0.138829 6.31533L6.60563 11.9128C6.84677 12.1208 7.2 11.9333 7.2 11.5975Z"-->
+<!--                        fill="#595959" />-->
+<!--                    <path-->
+<!--                        d="M12 11.5975L12 0.402501C12 0.0667188 11.6468 -0.120773 11.4056 0.0871726L4.93883 5.68467C4.75372 5.84489 4.75372 6.1534 4.93883 6.31533L11.4056 11.9128C11.6468 12.1208 12 11.9333 12 11.5975Z"-->
+<!--                        fill="#595959" />-->
+<!--                </svg>-->
+              <span nz-icon nzType="double-left" nzTheme="outline"></span>
+            </button>
+            <button *ngIf="pages[currentPage-1]" [ngClass]="{'active': pages[currentPage-1].isActive}"
+                (click)="goPage(currentPage-1)" nz-button nzType="text">
+                {{pages[currentPage - 1].value + 1}}
+            </button>
+            <button [ngClass]="{'active': pages[currentPage].isActive}" (click)="goPage(currentPage)" nz-button
+                nzType="text">
+                {{pages[currentPage].value + 1}}
+            </button>
+            <button *ngIf="pages[currentPage+1]" [ngClass]="{'active': pages[currentPage+1].isActive}"
+                (click)="goPage(currentPage+1)" nz-button nzType="text">
+                {{pages[currentPage + 1].value + 1}}
+            </button>
+            <button *ngIf="pages[currentPage+2]" [ngClass]="{'active': pages[currentPage+2].isActive}"
+                (click)="goPage(currentPage+2)" nz-button nzType="text">
+                {{pages[currentPage + 2].value + 1}}
+            </button>
+            <button *ngIf="pages[currentPage+3]" [ngClass]="{'active': pages[currentPage+3].isActive}"
+                (click)="goPage(currentPage+3)" nz-button nzType="text">
+                {{pages[currentPage + 3].value + 1}}
+            </button>
+            <button *ngIf="currentPage+1 < pages.length-1 && totalPages > 5" nz-button nzType="text">
+                ...
+            </button>
+            <button class="btn__last-page" nz-button nzType="text" (click)="goPage(pages.length-1)"
+                [disabled]="currentPage == pages.length-1" nzTooltipTitle="Trang cuối"
+                nzTooltipPlacement="{{TOOLTIP.PLACEMENT_TOP}}" nz-tooltip>
+<!--                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+<!--                    <path-->
+<!--                        d="M4.8 0.402501L4.8 11.5975C4.8 11.9333 5.15323 12.1208 5.39437 11.9128L11.8612 6.31533C12.0463 6.15511 12.0463 5.8466 11.8612 5.68467L5.39437 0.0871726C5.15323 -0.120773 4.8 0.0667201 4.8 0.402501Z"-->
+<!--                        fill="#595959" />-->
+<!--                    <path-->
+<!--                        d="M1.38299e-07 0.402501L4.79977e-09 11.5975C7.95614e-10 11.9333 0.353228 12.1208 0.594375 11.9128L7.06117 6.31533C7.24628 6.15511 7.24628 5.8466 7.06117 5.68467L0.594375 0.0871725C0.353228 -0.120773 1.42303e-07 0.06672 1.38299e-07 0.402501Z"-->
+<!--                        fill="#595959" />-->
+<!--                </svg>-->
+              <span nz-icon nzType="double-right" nzTheme="outline"></span>
+            </button>
+        </div>
+    </div>
+</div>

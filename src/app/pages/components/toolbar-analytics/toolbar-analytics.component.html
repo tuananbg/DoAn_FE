@@ -1,0 +1,34 @@
+<dx-toolbar class="theme-dependent">
+    <dxi-item location="before">
+        <span class="toolbar-header">{{ titleText }}</span>
+    </dxi-item>
+
+    <dxi-item *ngIf="panelItems" location="before">
+        <dx-tabs
+                secondary="secondary"
+                keyExpr="key"
+                [showNavButtons]="false"
+                [scrollByContent]="true"
+                [selectedItemKeys]="selectedItems"
+                [items]="panelItems"
+                (onSelectionChanged)="selectionChange($event)"
+        ></dx-tabs>
+    </dxi-item>
+
+    <dxi-item
+            location="after"
+            locateInMenu="auto"
+            widget="dxButton"
+            showText="inMenu"
+            [options]="{
+      text: 'Refresh',
+      icon: 'refresh',
+      stylingMode: 'text'
+    }"
+    ></dxi-item>
+
+    <dxi-item location="after" locateInMenu="auto">
+        <div class="separator"></div>
+    </dxi-item>
+
+</dx-toolbar>

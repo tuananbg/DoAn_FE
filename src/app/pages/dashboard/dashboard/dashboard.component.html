@@ -1,0 +1,48 @@
+<dx-scroll-view class="view-wrapper-scroll">
+    <div class="view-wrapper">
+<!--        <app-toolbar-analytics-->
+<!--                titleText="Hệ thống văn phòng điện tử"-->
+<!--                [panelItems]="analyticsPanelItems"-->
+<!--                [selectedItems]="[5]"-->
+<!--                (selectionChanged)="selectionChange($event)"-->
+<!--        >-->
+<!--        </app-toolbar-analytics>-->
+        <div class="cards grey">
+            <app-ticker-card
+                    titleText="Tổng nhân viên"
+                    [total]="totalEmployee"
+                    [percentage]="totalEmployee"
+                    [addText]="' nhân viên'"
+                    icon="group"
+            ></app-ticker-card>
+            <app-ticker-card
+                    titleText="Sinh nhật trong tháng"
+                    [total]="totalBirthDayMonth"
+                    [percentage]="totalBirthDayMonth"
+                    [addText]="' nhân viên'"
+                    icon="gift"
+            ></app-ticker-card>
+            <app-ticker-card
+                    titleText="Số ngày đi muộn"
+                    [total]="totalLateWork"
+                    [percentage]="totalLateWork"
+                    [addText]="' ngày'"
+                    icon="runner"
+                    tone="warning"
+            ></app-ticker-card>
+            <app-ticker-card
+                    titleText="Số ngày nghỉ"
+                    [total]="totalLeaveWork"
+                    [percentage]="totalLeaveWork"
+                    [addText]="' ngày'"
+                    tone="info"
+                    icon="event"
+            ></app-ticker-card>
+        </div>
+        <app-sales-by-range-card [data]="salesByCategory"></app-sales-by-range-card>
+        <div class="cards">
+            <app-timeoff-analysis-card [data]="salesByState"></app-timeoff-analysis-card>
+            <app-contract-analysis-card [data]="lstContractType"></app-contract-analysis-card>
+        </div>
+    </div>
+</dx-scroll-view>

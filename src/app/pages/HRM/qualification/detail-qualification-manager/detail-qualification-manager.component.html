@@ -1,0 +1,59 @@
+<div style="margin-top: 40px;">
+  <form nz-form [formGroup]="createForm" (keyup.enter)="handleOkModal()">
+    <div nz-row class="mt-2">
+      <div nz-col nzSpan="24">
+        <div nz-row>
+          <app-input-text-v2 [ngClass]="{'w-100': true}"
+                             formControlName="level" [required]="true"
+                             label="Loại trình độ" nz-col nzSpan="24"
+                             [isDisabled]="true"
+                             [ngStyleCus]="{'padding-left' : '45px'}"
+                             [nzAllowClear]="true"></app-input-text-v2>
+        </div>
+        <div nz-row>
+          <app-input-text-v2 [ngClass]="'w-100'" formControlName="name" [required]="true"
+                             label="Tên bằng cấp" nz-col nzSpan="24"
+                             [ngStyleCus]="{'padding-left' : '41px'}"
+                             [nzAllowClear]="true"></app-input-text-v2>
+        </div>
+        <div nz-row>
+          <app-input-text-v2 [ngClass]="'w-100'" formControlName="major" [required]="true"
+                             label="Chuyên ngành" nz-col nzSpan="24"
+                             [ngStyleCus]="{'padding-left' : '35px'}"
+                             [nzAllowClear]="true"></app-input-text-v2>
+        </div>
+        <div nz-row>
+          <app-date-picker formControlName="licenseDate" placeHolder="dd/mm/yyyy"
+                           [format]="'dd/MM/yyyy'"
+                           labelContent="Ngày cấp phát"
+                           [ngClass]="'w-100'"
+                           [ngStyleCus]="{'padding-left' : '45px'}"
+                           [span]="24"></app-date-picker>
+        </div>
+        <div nz-row>
+          <nz-form-item nz-col nzSpan="24">
+            <nz-form-control>
+              <app-input-textarea-v2 formControlName="description" [maxlength]="'1000'"
+                                     label="Mô tả"
+                                     [placeholder]="'Nhập mô tả'"
+                                     [ngClass]="'w-100'"
+                                     [ngStyleCus]="{'padding-left' : '100px'}"
+                                     [nzAllowClear]="true" [nzAutosize]="{ minRows: 6, maxRows: 10 }">
+              </app-input-textarea-v2>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div *nzModalFooter>
+    <div class="ng-star-inserted">
+      <div class="modal__footer-wrapper d-flex justify-content-center">
+        <app-button-cancel [isIcon]="true" [popConfirm]="false"
+                           (clickCancel)="handleCancelModal()"></app-button-cancel>
+        <app-button-save [loading]="isLoading" [isIcon]="true" [text]="isUpdate ? 'Cập nhật' : 'Thêm mới'"
+                         (clickSave)="handleOkModal()"></app-button-save>
+      </div>
+    </div>
+  </div>
+</div>

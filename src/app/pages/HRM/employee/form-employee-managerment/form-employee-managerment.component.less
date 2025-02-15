@@ -1,0 +1,55 @@
+#uploader {
+  background-color: var(--typography-bg);
+  border-width: 1.5px;
+  border-style: dashed;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 124px;
+  user-select: none;
+  line-height: inherit;
+  margin-bottom: 10px;
+
+  & > span {
+    font-weight: 100;
+    text-align: center;
+  }
+}
+
+#uploader.dx-theme-border-color {
+  border: 2px dashed #ccc;
+  color: #555;
+  background-color: #f9f9f9;
+}
+
+/* Khi đã kéo ảnh vào */
+#uploader.dx-theme-accent-as-border-color {
+  border: 2px dashed #0078d4;
+  color: #0078d4;
+  background-color: #f2f8fe;
+}
+
+::ng-deep #form {
+  max-width: 600px;
+  margin: auto;
+}
+
+::ng-deep #button {
+  margin-top: 50px;
+  margin-right: 20px;
+  float: right;
+}
+
+::ng-deep #fileuploader-container {
+  border: 1px solid #d3d3d3;
+  margin: 20px 20px 0 20px;
+}
+
+::ng-deep #form h3 {
+  margin-left: 20px;
+  font-weight: normal;
+  font-size: 22px;
+}

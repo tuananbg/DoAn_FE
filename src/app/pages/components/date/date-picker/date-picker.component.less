@@ -1,0 +1,28 @@
+.form-item__flex-row {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+}
+
+@media only screen and (max-width: 1199px) {
+  .ant-row {
+    display: flex;
+    flex-flow: column;
+  }
+
+  .ant-form-item-control-wrapper {
+    width: 100%;
+  }
+}
+
+::ng-deep {
+  .ant-calendar-picker-input {
+    height: 40px;
+  }
+
+  .ant-calendar-picker-input:disabled {
+    color: unset !important;
+    background: #E9E9E9;
+    //border: 1px solid #E9E9E9;
+  }
+}

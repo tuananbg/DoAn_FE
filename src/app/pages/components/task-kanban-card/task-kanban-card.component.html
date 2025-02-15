@@ -1,0 +1,32 @@
+<div
+  class="card dx-theme-text-color dx-theme-background-color"
+>
+  <div class="card-wrapper priority-{{ task.taskStatusName | lowercase }}">
+    <div class="card-priority-low" *ngIf="task.priority == 1"></div>
+    <div class="card-priority-normal" *ngIf="task.priority == 2"></div>
+    <div class="card-priority-hight" *ngIf="task.priority == 3"></div>
+    <dx-button
+      icon="edit"
+      stylingMode="text"
+      (onClick)="navigateToDetails(task.projectId, task.id)"
+    ></dx-button>
+    <div class="card-content">
+      <div class="card-subject dx-theme-text-color">{{ task.taskName.length > 40 ? (task.taskName | slice:0:40) + '...' :task.taskName }}</div>
+      <div class="card-data">
+        <span class="priority-low" *ngIf="task.priority == 1">Low</span>
+        <span class="priority-normal" *ngIf="task.priority == 2">Normal</span>
+        <span class="priority-hight" *ngIf="task.priority == 3">High</span>
+        <span class="date dx-theme-text-color">{{
+          task.startDay | date: 'dd/MM/yyyy'
+          }} - </span>
+        <span class="date dx-theme-text-color">{{
+          task.endDay | date: 'dd/MM/yyyy'
+          }}</span>
+      </div>
+      <div class="card-assignee">
+        <span class="company dx-theme-text-color">{{ task.projectName }}</span>
+        <div class="circle" ></div>
+      </div>
+    </div>
+  </div>
+</div>

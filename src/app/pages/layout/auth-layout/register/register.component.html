@@ -1,0 +1,257 @@
+<div nz-row style="justify-content: center">
+  <div nz-col nzSpan="16" style="margin-top: 70px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; border-radius: 10px;">
+    <nz-card nzTitle="ĐĂNG KÝ TÀI KHOẢN" style="border-radius: 10px">
+      <nz-steps [nzCurrent]="current" nzLabelPlacement="vertical">
+        <nz-step nzTitle="Thông tin tài khoản"></nz-step>
+        <nz-step nzTitle="Xác thực tài khoản"></nz-step>
+        <nz-step nzTitle="Cấp tài khoản"></nz-step>
+      </nz-steps>
+      <div class="steps-content" *ngIf="current === 0">
+        <form nz-form [formGroup]="validateForm" (ngSubmit)="validationFormSubmit()" nzLayout="vertical">
+          <div class="register-form">
+            <nz-form-item>
+              <nz-form-label nzRequired nzFor="email">E-mail</nz-form-label>
+              <nz-form-control [nzSm]="24" [nzXs]="24" nzErrorTip="Email không đúng định dạng">
+                <input nz-input class="auth-input" formControlName="email" id="email"/>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzFor="password" nzRequired>Mật khẩu</nz-form-label>
+              <nz-form-control [nzSm]="24" [nzXs]="24" nzErrorTip="Vui lòng nhập mật khẩu">
+                <input
+                  nz-input class="auth-input"
+                  type="password"
+                  id="password"
+                  formControlName="password"
+                  (ngModelChange)="updateConfirmValidator()"
+                />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label nzFor="checkPassword" nzRequired>Nhập lại mật khẩu</nz-form-label>
+              <nz-form-control [nzSm]="24" [nzXs]="24" [nzErrorTip]="errorTpl">
+                <input nz-input class="auth-input" type="password" formControlName="checkPassword" id="checkPassword"/>
+                <ng-template #errorTpl let-control>
+                  <ng-container *ngIf="control.hasError('required')">Vui lòng nhập lại mật khẩu</ng-container>
+                  <ng-container *ngIf="control.hasError('confirm')">
+                    Mật khẩu không khớp
+                  </ng-container>
+                </ng-template>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nz-row class="register-area">
+              <nz-form-control>
+                <div class="flex-center">
+                  <button nz-button nzType="primary"><i style="margin-right: 7px;" class="fa-solid fa-right-to-bracket"></i>Đăng ký</button>
+                  <button style="margin-left: 7px;" nzType="primary" (click)="onChangeCurrent()">
+                    <i style="margin-right: 7px;" class="fa-solid fa-circle-up"></i>Cấp tài khoản
+                  </button>
+                </div>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </form>
+      </div>
+
+      <!--        <div class="steps-content" *ngIf="current === 1">-->
+      <!--          <form nz-form [formGroup]="companyInfoForm" (ngSubmit)="companyInfoFormSubmit()" nzLayout="vertical">-->
+      <!--            <div class="register-form">-->
+      <!--              <div nz-row nzGutter="16">-->
+      <!--                <div nz-col nzSpan="12">-->
+      <!--                  <nz-form-item>-->
+      <!--                    <nz-form-label-->
+      <!--                      nzFor="companyViName"-->
+      <!--                      nzRequired-->
+      <!--                    >-->
+      <!--                      <span>Tên công ty Tiếng Việt</span>-->
+      <!--                    </nz-form-label>-->
+      <!--                    <nz-form-control [nzSm]="24" [nzXs]="24" nzErrorTip="Vui lòng nhập tên công ty Tiếng Việt">-->
+      <!--                      <input nz-input class="auth-input" id="companyViName" formControlName="companyViName"/>-->
+      <!--                    </nz-form-control>-->
+      <!--                  </nz-form-item>-->
+      <!--                </div>-->
+      <!--                <div nz-col nzSpan="12">-->
+      <!--                  <nz-form-label-->
+      <!--                    nzFor="companyEnName"-->
+      <!--                    nzRequired-->
+      <!--                  >-->
+      <!--                    <span>Tên công ty Tiếng Anh</span>-->
+      <!--                  </nz-form-label>-->
+      <!--                  <nz-form-control [nzSm]="24" [nzXs]="24" nzErrorTip="Vui lòng nhập tên công ty Tiếng Anh">-->
+      <!--                    <input nz-input class="auth-input" id="companyEnName" formControlName="companyEnName"/>-->
+      <!--                  </nz-form-control>-->
+      <!--                </div>-->
+      <!--              </div>-->
+      <!--              <div nz-row>-->
+      <!--                <div nz-col nzSpan="24">-->
+      <!--                  <nz-form-label-->
+      <!--                    nzFor="address"-->
+      <!--                    nzRequired-->
+      <!--                  >-->
+      <!--                    <span>Địa chỉ trụ sở</span>-->
+      <!--                  </nz-form-label>-->
+      <!--                  <nz-form-control [nzSm]="24" [nzXs]="24" nzErrorTip="Vui lòng nhập địa chỉ trụ sở">-->
+      <!--                    <input nz-input class="auth-input" id="address" formControlName="address"/>-->
+      <!--                  </nz-form-control>-->
+      <!--                </div>-->
+      <!--              </div>-->
+      <!--              <div nz-row nzGutter="16">-->
+      <!--                <div nz-col nzSpan="12">-->
+      <!--                  <nz-form-item>-->
+      <!--                    <nz-form-label-->
+      <!--                      nzFor="taxCode"-->
+      <!--                      nzRequired-->
+      <!--                    >-->
+      <!--                      <span>Mã số thuế</span>-->
+      <!--                    </nz-form-label>-->
+      <!--                    <nz-form-control nzErrorTip="Vui lòng nhập mã số thuế">-->
+      <!--                      <input nz-input class="auth-input" id="taxCode" formControlName="taxCode"/>-->
+      <!--                    </nz-form-control>-->
+      <!--                  </nz-form-item>-->
+      <!--                </div>-->
+      <!--                <div nz-col nzSpan="12">-->
+      <!--                  <nz-form-label-->
+      <!--                    nzFor="legalType"-->
+      <!--                    nzRequired-->
+      <!--                  >-->
+      <!--                    <span>Loại hình doanh nghiệp</span>-->
+      <!--                  </nz-form-label>-->
+      <!--                  <nz-form-control [nzSm]="24" [nzXs]="24" nzErrorTip="Vui lòng chọn loại hình doanh nghiệp">-->
+      <!--                    <input nz-input class="auth-input" id="legalType" formControlName="legalType"/>-->
+      <!--                  </nz-form-control>-->
+      <!--                </div>-->
+      <!--              </div>-->
+      <!--              <div nz-row nzGutter="16">-->
+      <!--                <div nz-col nzSpan="12">-->
+      <!--                  <nz-form-item>-->
+      <!--                    <nz-form-label-->
+      <!--                      nzFor="representative"-->
+      <!--                      nzRequired-->
+      <!--                    >-->
+      <!--                      <span>Người đại diện</span>-->
+      <!--                    </nz-form-label>-->
+      <!--                    <nz-form-control nzErrorTip="Vui lòng nhập người đại diện">-->
+      <!--                      <input nz-input class="auth-input" id="representative" formControlName="representative"/>-->
+      <!--                    </nz-form-control>-->
+      <!--                  </nz-form-item>-->
+      <!--                </div>-->
+      <!--                <div nz-col nzSpan="12">-->
+      <!--                  <nz-form-item>-->
+      <!--                    <nz-form-label-->
+      <!--                      nzFor="foundingDate"-->
+      <!--                      nzRequired-->
+      <!--                    >-->
+      <!--                      <span>Ngày thành lập</span>-->
+      <!--                    </nz-form-label>-->
+      <!--                    <nz-form-control nzErrorTip="Vui lòng chọn ngày thành lập">-->
+      <!--                      <input nz-input class="auth-input" id="foundingDate" formControlName="foundingDate"/>-->
+      <!--                    </nz-form-control>-->
+      <!--                  </nz-form-item>-->
+      <!--                </div>-->
+      <!--              </div>-->
+      <!--              <div nz-row nzGutter="16">-->
+      <!--                <div nz-col nzSpan="12">-->
+      <!--                  <nz-form-item>-->
+      <!--                    <nz-form-label-->
+      <!--                      nzFor="phone"-->
+      <!--                    >-->
+      <!--                      <span>Số điện thoại</span>-->
+      <!--                    </nz-form-label>-->
+      <!--                    <nz-form-control>-->
+      <!--                      <input nz-input class="auth-input" id="phone" formControlName="phone"/>-->
+      <!--                    </nz-form-control>-->
+      <!--                  </nz-form-item>-->
+      <!--                </div>-->
+      <!--                <div nz-col nzSpan="12">-->
+      <!--                  <nz-form-item>-->
+      <!--                    <nz-form-label-->
+      <!--                      nzFor="website"-->
+      <!--                    >-->
+      <!--                      <span>Website</span>-->
+      <!--                    </nz-form-label>-->
+      <!--                    <nz-form-control>-->
+      <!--                      <input nz-input class="auth-input" id="website" formControlName="website"/>-->
+      <!--                    </nz-form-control>-->
+      <!--                  </nz-form-item>-->
+      <!--                </div>-->
+      <!--              </div>-->
+      <!--              <nz-form-item nz-row class="register-area">-->
+      <!--                <nz-form-control [nzSpan]="12" [nzOffset]="6">-->
+      <!--                  <button nz-button nzType="primary">Register</button>-->
+      <!--                </nz-form-control>-->
+      <!--              </nz-form-item>-->
+      <!--            </div>-->
+      <!--          </form>-->
+      <!--        </div>-->
+
+      <div class="steps-content" *ngIf="current === 1">
+        <form nz-form [formGroup]="verifyForm" (ngSubmit)="verifyFormSubmit()" nzLayout="vertical">
+          <div class="register-form">
+            <nz-form-item>
+              <nz-form-label
+                [nzSm]="12" [nzXs]="12" nzOffset="6"
+                nzFor="verifyCode"
+                nzRequired
+                style="text-align: center; padding-top: 1rem"
+              >
+                <span>Nhập mã xác thực tài khoản</span>
+              </nz-form-label>
+              <nz-form-control [nzSm]="12" [nzXs]="12" nzOffset="6" nzErrorTip="Vui lòng nhập mã xác thực tài khoản">
+                <input nz-input class="auth-input" id="verifyCode" formControlName="verifyCode"/>
+              </nz-form-control>
+            </nz-form-item>
+            <div nz-row>
+              <div nz-col>
+                <p><span style="color: red">*</span> Kiểm tra hộp thư email để lấy mã kích hoạt tài khoản của bạn</p>
+              </div>
+            </div>
+            <nz-form-item nz-row class="register-area">
+              <nz-form-control>
+                <div class="d-flex justify-content-center">
+                  <button style="margin-left: 7px;" nzType="primary" (click)="onChangeCurrentOne()">
+                    <i class="fa-solid fa-arrow-left" style="margin-right: 5px;"></i>Quay lại
+                  </button>
+                  <button nz-button nzType="primary" style="margin-left: 10px">Xác thực</button>
+                </div>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </form>
+      </div>
+      <div class="steps-content" *ngIf="current === 2">
+        <form nz-form [formGroup]="employeeForm" (ngSubmit)="employeeFormSubmit()" nzLayout="vertical">
+          <div class="register-form">
+            <nz-form-item nz-col nzSpan="24">
+              <nz-form-control>
+                <app-select [ngClass]="'w-100'" [data]="lstAccount" [valueField]="'id'" [placeHolder]="'--Tất cả--'"
+                            [required]="true"
+                            [labelField]="'email'" [openSearchModal]="false" [getObjectValue]="true"
+                            [labelHorizontal]="false" formControlName="id" labelContent="Tài khoản(Email)">
+                </app-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nz-col nzSpan="24">
+              <nz-form-control>
+                <app-select [ngClass]="'w-100'" [data]="lstEmployee" [valueField]="'id'" [placeHolder]="'--Tất cả--'"
+                            [required]="true"
+                            [labelField]="'employeeName'" [openSearchModal]="false" [getObjectValue]="true"
+                            [labelHorizontal]="false" formControlName="userDetailId" labelContent="Nhân viên">
+                </app-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nz-row class="register-area">
+              <nz-form-control>
+                <div class="flex-center">
+                  <button style="margin-left: 7px;" nzType="primary" (click)="onChangeCurrentOne()">
+                    <i class="fa-solid fa-arrow-left" style="margin-right: 5px;"></i>Quay lại
+                  </button>
+                  <button nz-button nzType="primary" style="margin-left: 10px"><i style="margin-right: 7px;" class="fa-solid fa-right-to-bracket"></i>Xác nhận</button>
+                </div>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </form>
+      </div>
+    </nz-card>
+  </div>
+</div>

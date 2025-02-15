@@ -1,0 +1,77 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#3ec995"
+             type="line-scale" [fullScreen]="false"><p style="color: white"> Đang tải... </p>
+</ngx-spinner>
+<div class="ant-breadcrumb-custom">
+  <nz-breadcrumb>
+    <nz-breadcrumb nzSeparator=">">
+      <nz-breadcrumb-item><a>Quản lý công việc</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a>Dự án</a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-breadcrumb>
+</div>
+<nz-card>
+  <div class="list__head pb-3">
+    <div class="list__head-left">
+      <div class="list__head-title">
+        <span class="head-title" style="font-size: 24px;"><i class="fa-solid fa-diagram-project"
+                                                             style="margin-right: 7px;"></i>Dự án << {{projectName}} >></span>
+      </div>
+    </div>
+    <div class="list__head-right">
+      <div class="list__head-btn">
+        <app-button-create (clickCreate)="openCreateModal()" [loading]="isLoading"></app-button-create>
+      </div>
+    </div>
+  </div>
+  <div nz-row style="justify-content: space-around;">
+    <dx-scroll-view
+      class="scrollable-board"
+      direction="both"
+      showScrollbar="always"
+    >
+      <dx-sortable
+        class="sortable-lists"
+        itemOrientation="horizontal"
+        handle=".list-title"
+        (onReorder)="onListReorder($event)"
+      >
+        <div class="list" *ngFor="let board of kanbanDataSource">
+          <div class="list-title dx-theme-text-color">
+            <span style="color: black; font-size: 20px;">{{ board.name }}</span>
+          </div>
+          <dx-scroll-view
+            class="scrollable-list"
+            direction="vertical"
+            showScrollbar="always"
+          >
+            <dx-sortable
+              class="sortable-cards"
+              group="cardsGroup"
+              [data]="board"
+              (onDragStart)="onTaskDragStart($event)"
+              (onReorder)="onTaskDrop($event)"
+              (onAdd)="onTaskDrop($event)"
+            >
+              <ng-container *ngFor="let task of board.taskForm">
+                <app-task-kanban-card class="dx-card" [task]="task"></app-task-kanban-card>
+              </ng-container>
+            </dx-sortable>
+
+            <div class="add-task">
+              <dx-button
+                icon="plus"
+                text="Thêm task"
+                stylingMode="text"
+                width="100%"
+                (onClick)="openCreateModal()"
+              ></dx-button>
+            </div>
+          </dx-scroll-view>
+        </div>
+      </dx-sortable>
+    </dx-scroll-view>
+  </div>
+</nz-card>
+

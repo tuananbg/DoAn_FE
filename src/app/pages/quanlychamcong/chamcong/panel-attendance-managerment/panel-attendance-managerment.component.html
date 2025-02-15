@@ -1,0 +1,57 @@
+<div class="list__table">
+  <nz-table #rowSelectionTable nzBordered [nzData]="lstData" [nzFrontPagination]="false"
+            [nzNoResult]="'Không có kết quả tìm kiếm'" [nzScroll]="{ x: SCROLL_TABLE.SCROLL_X}">
+    <thead>
+    <tr class="ant-header-customize">
+      <th nzWidth="50px" class="text-center">
+        STT
+      </th>
+      <th nzWidth="150px" class="text-center">
+        Tên nhân viên
+      </th>
+      <th nzWidth="100px" class="text-center">
+        Ngày làm việc
+      </th>
+      <th nzWidth="150px" class="text-center">
+        Giờ vào
+      </th>
+      <th nzWidth="150px" class="text-center">
+        Giờ ra
+      </th>
+      <th nzWidth="100px" class="text-center">
+        Số giờ
+      </th>
+      <th nzWidth="100px" class="text-center">
+        Hệ số công
+      </th>
+      <th nzWidth="100px" class="text-center">
+        Tổng phút phạt
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-template ngFor let-data let-idx="index" [ngForOf]="rowSelectionTable.data">
+      <tr>
+        <td class="text-center max-width-50">{{ (request.currentPage * request.pageSize) + idx + 1}}</td>
+        <td class="max-width-150" [nz-tooltip]="data.employeeName">{{data.employeeName}}</td>
+        <td class="max-width-100 text-center"
+            [nz-tooltip]="data.workingDay | date: 'dd/MM/yyyy'">{{ data.workingDay | date: 'dd/MM/yyyy' }}</td>
+        <td *ngIf="data.checkInTime" class="max-width-100 text-center" [nz-tooltip]="data.checkInTime | date: 'HH:mm'">
+          {{ data.checkInTime | date: 'HH:mm' }}</td>
+        <td *ngIf="!data.checkInTime" class="max-width-150 text-center" [nz-tooltip]="'Chưa chấm công'">
+          <span class="css-badge badge badge-pill bg-danger p-3">Chưa chấm công</span></td>
+        <td *ngIf="data.checkOutTime" class="max-width-150 text-center"
+            [nz-tooltip]="data.checkOutTime | date: 'HH:mm'">
+          {{ data.checkOutTime | date: 'HH:mm' }}</td>
+        <td *ngIf="!data.checkOutTime" class="max-width-100 text-center" [nz-tooltip]="'Chưa chấm công'">
+          <span class="css-badge badge badge-pill bg-danger p-3">Chưa chấm công</span></td>
+        <td class="max-width-100 text-center" [nz-tooltip]="data.workingTime">{{data.workingTime}}</td>
+        <td class="max-width-100 text-center" [nz-tooltip]="data.workingPoint">{{data.workingPoint}}</td>
+        <td class="max-width-100 text-center" [nz-tooltip]="data.totalPenalty"
+            style="color: red;">{{data.totalPenalty}}</td>
+      </tr>
+    </ng-template>
+    </tbody>
+  </nz-table>
+</div>
+

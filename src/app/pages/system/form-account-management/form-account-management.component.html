@@ -1,0 +1,46 @@
+<div style="margin-top: 40px;">
+  <form nz-form [formGroup]="createForm" (keyup.enter)="handleOkModal()">
+    <div nz-row class="mt-2">
+      <div nz-col nzSpan="24">
+        <div nz-row>
+          <app-input-text-v2 [ngClass]="'w-100'" formControlName="email" [required]="true"
+                             label="Email" nz-col nzSpan="24"
+                             [ngStyleCus]="{'padding-left' : '50px'}"
+                             [nzAllowClear]="true"></app-input-text-v2>
+        </div>
+        <div nz-row>
+          <nz-form-item nz-col nzSpan="24">
+            <nz-form-control>
+              <div class="d-flex">
+                <nz-form-label [nzRequired]="true"
+                               [hidden]="false">Vai trò
+                </nz-form-label>
+                <nz-select
+                  [nzMaxTagCount]="3"
+                  [nzMaxTagPlaceholder]="tagPlaceHolder"
+                  nzMode="multiple"
+                  nzPlaceHolder="Chọn vai trò người dùng"
+                  formControlName="roles"
+                  [ngStyle]="{'margin-left': '52px'}"
+                >
+                  <nz-option *ngFor="let item of listOfOption" [nzLabel]="item" [nzValue]="item"></nz-option>
+                </nz-select>
+              </div>
+              <ng-template #tagPlaceHolder let-selectedList>and {{ selectedList.length }} more selected</ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div *nzModalFooter>
+    <div class="ng-star-inserted">
+      <div class="modal__footer-wrapper d-flex justify-content-center">
+        <app-button-cancel [isIcon]="true" [popConfirm]="false"
+                           (clickCancel)="handleCancelModal()"></app-button-cancel>
+        <app-button-save [loading]="isLoading" [isIcon]="true" [text]="isUpdate ? 'Cập nhật' : 'Thêm mới'"
+                         (clickSave)="handleOkModal()"></app-button-save>
+      </div>
+    </div>
+  </div>
+</div>

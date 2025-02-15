@@ -1,0 +1,149 @@
+<div id="contact-form">
+  <dx-validation-group>
+    <app-toolbar-form
+      [isEditing]="isEditing"
+      titleClass="dx-form-group-caption"
+      (editingCancelled)="handleCancelClick()"
+      (editModeToggled)="handleEditClick()"
+      (saveButtonClicked)="handleSaveClick($event)"
+    >
+    </app-toolbar-form>
+
+    <dx-form
+      *ngIf="contactData"
+      class="form last plain-styled-form"
+      [formData]="contactData"
+      labelMode="floating"
+      [class.view-mode]="!isEditing"
+    >
+      <dxi-item itemType="group" [colCount]="2">
+        <dxo-col-count-by-screen [xs]="2"></dxo-col-count-by-screen>
+        <dxi-item>
+          <div *dxTemplate>
+            <app-form-photo [link]="contactData.avatar" [size]="184"></app-form-photo>
+          </div>
+        </dxi-item>
+        <dxi-item itemType="group">
+          <dxi-item>
+            <app-form-textbox
+              *dxTemplate
+              label="Mã nhân viên"
+              [(value)]="contactData.employeeCode"
+              [isEditing]="isEditing"
+            ></app-form-textbox>
+          </dxi-item>
+          <dxi-item>
+            <app-form-textbox
+              *dxTemplate
+              label="Tên nhân viên"
+              [(value)]="contactData.employeeName"
+              [isEditing]="isEditing"
+            ></app-form-textbox>
+          </dxi-item>
+        </dxi-item>
+
+        <dxi-item>
+          <app-form-textbox
+            *dxTemplate
+            label="Phòng ban"
+            [(value)]="contactData.departmentName"
+            [isEditing]="isEditing"
+          ></app-form-textbox>
+        </dxi-item>
+
+        <dxi-item cssClass="accent" [colSpan]="2">
+          <app-form-textbox
+            *dxTemplate
+            label="Email"
+            [(value)]="contactData.email"
+            [isEditing]="isEditing"
+          ></app-form-textbox>
+        </dxi-item>
+      </dxi-item>
+
+      <dxi-item itemType="group" [colCount]="4" caption="Contacts">
+        <dxo-col-count-by-screen [xs]="2"></dxo-col-count-by-screen>
+        <dxi-item [colSpan]="4">
+          <app-form-textbox
+            *dxTemplate
+            label="Địa chỉ"
+            [(value)]="contactData.address"
+            [isEditing]="isEditing"
+          ></app-form-textbox>
+        </dxi-item>
+
+        <dxi-item [colSpan]="2">
+          <app-form-textbox
+            *dxTemplate
+            label="Ngày sinh"
+            [(value)]="contactData.birthday"
+            [isEditing]="isEditing"
+          ></app-form-textbox>
+        </dxi-item>
+
+<!--        <dxi-item>-->
+<!--          <dx-number-box-->
+<!--            *dxTemplate-->
+<!--            label="Zip Code"-->
+<!--            stylingMode="filled"-->
+<!--            valueChangeEvent="keyup input change"-->
+<!--            [(value)]="contactData.zipCode"-->
+<!--            [readOnly]="!isEditing"-->
+<!--            [elementAttr]="{ class: 'form-editor' }"-->
+<!--            [inputAttr]="{ class: 'form-editor-input' }"-->
+<!--          >-->
+<!--            <dx-validator [validationRules]="[zipCodeValidator]"></dx-validator>-->
+<!--          </dx-number-box>-->
+<!--        </dxi-item>-->
+      </dxi-item>
+
+      <dxi-item itemType="group" [colCount]="2" cssClass="contact-fields-group">
+        <dxo-col-count-by-screen [xs]="2"></dxo-col-count-by-screen>
+        <dxi-item>
+          <div *dxTemplate>
+            <app-form-textbox
+              mask="+1(000)000-0000"
+              label="Phone"
+              [(value)]="contactData.email"
+              [isEditing]="isEditing"
+              [validators]="[]"
+            ></app-form-textbox>
+            <dx-button
+              class="form-item-button"
+              stylingMode="outlined"
+              [visible]="!isEditing"
+              [text]="'Call'"
+              [icon]="'tel'"
+              [type]="'default'"
+            ></dx-button>
+          </div>
+        </dxi-item>
+
+        <dxi-item>
+          <div *dxTemplate>
+            <app-form-textbox
+              label="Email"
+              [(value)]="contactData.email"
+              [isEditing]="isEditing"
+              [validators]="[{ type: 'email' }]"
+            ></app-form-textbox>
+            <dx-button
+              class="form-item-button"
+              stylingMode="outlined"
+              [visible]="!isEditing"
+              [text]="'Send Email'"
+              [icon]="'email'"
+              [type]="'default'"
+            ></dx-button>
+          </div>
+        </dxi-item>
+      </dxi-item>
+    </dx-form>
+  </dx-validation-group>
+  <dx-load-panel
+    container="#contact-form"
+    [position]="{ of: '#contact-form' }"
+    [visible]="!contactData || isLoading"
+    [showPane]="false"
+  ></dx-load-panel>
+</div>

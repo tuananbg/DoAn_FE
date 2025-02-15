@@ -1,0 +1,33 @@
+<!--<div-->
+<!--  id="uploader"-->
+<!--  [ngClass]="{-->
+<!--  'dx-theme-accent-as-border-color': isDropZoneActive,-->
+<!--  'dx-theme-border-color': !isDropZoneActive-->
+<!--  }"-->
+<!--&gt;-->
+<!--  <span>Kéo và thả ảnh vào đây hoặc nhấp vào khu vực để chọn ảnh từ thư mục</span>-->
+<!--</div>-->
+<!--<dx-file-uploader-->
+<!--  dialogTrigger="#uploader"-->
+<!--  dropZone="#uploader"-->
+<!--  [multiple]="false"-->
+<!--  accept="image/*"-->
+<!--  uploadMode="useForm"-->
+<!--  [showFileList]= "false"-->
+<!--  [visible]="false"-->
+<!--  (onDropZoneEnter)="onDropZoneEnter($event)"-->
+<!--  (onDropZoneLeave)="onDropZoneLeave($event)"-->
+<!--&gt;-->
+<!--</dx-file-uploader>-->
+
+<div id="fileuploader-container">
+<dx-file-uploader
+  [multiple]="true"
+  selectButtonText="Chọn file ảnh"
+  labelText="Ảnh đại diện"
+  accept="image/*"
+  uploadMode="useForm"
+  (onValueChanged)="onValueChanged($event)"
+>
+</dx-file-uploader>
+</div>

@@ -1,0 +1,26 @@
+<button
+  id="btnConfirm"
+  (click)="confirm()"
+  nz-button
+  [disabled]="disableButton"
+  [nzType]="buttonType"
+  [nzSize]="buttonSize"
+  class="mr-2"
+  style="margin: 0 20px 0 20px;"
+>
+
+  <i nz-icon *ngIf="!isEdit">
+    <svg width="18" height="13" viewBox="0 0 18 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 10.1998L2.5 6.69982C2.11 6.30982 1.49 6.30982 1.1 6.69982C0.709995 7.08982 0.709995 7.70982 1.1 8.09982L5.29 12.2898C5.68 12.6798 6.31 12.6798 6.7 12.2898L17.3 1.69982C17.69 1.30982 17.69 0.689824 17.3 0.299824C16.91 -0.0901758 16.29 -0.0901758 15.9 0.299824L6 10.1998Z" fill="#EE0033"/>
+    </svg>
+  </i>
+
+  <i nz-icon nzType="save" nzTheme="fill" class="icon-button" *ngIf="isEdit"></i>
+
+  <ng-container *ngIf="text; else defaultText">
+    {{ text }}
+  </ng-container>
+  <ng-template #defaultText>
+    Đồng ý
+  </ng-template>
+</button>

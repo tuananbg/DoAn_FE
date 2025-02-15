@@ -1,0 +1,86 @@
+<div class="ant-breadcrumb-custom">
+  <nz-breadcrumb>
+    <nz-breadcrumb nzSeparator=">">
+      <nz-breadcrumb-item>
+        <a>Hành chính nhân sự</a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a>Quản lý nhân sự</a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a [routerLink]="'/employee'">Danh sách nhân viên</a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a>Chi tiết nhân viên</a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-breadcrumb>
+</div>
+<dx-scroll-view class="view-wrapper-scroll">
+  <div class="view-wrapper" id="contentToConvert">
+    <dx-toolbar class="toolbar-details theme-dependent">
+      <dxi-item location="before">
+        <dx-button icon="arrowleft" stylingMode="text" (click)="redirectToPreviousPage()"></dx-button>
+      </dxi-item>
+      <dxi-item location="before" [text]="contactName"></dxi-item>
+      <dxi-item location="after" locateInMenu="auto" style="margin-right: 10px;">
+        <dx-button
+          text="Xuất file PDF"
+          type="default"
+          stylingMode="contained"
+          (click) = "onExportPdf()"
+        ></dx-button>
+      </dxi-item>
+<!--      <dxi-item location="after">-->
+<!--        <dx-button-->
+<!--          text="Đang làm việc"-->
+<!--          type="success"-->
+<!--          stylingMode="contained"-->
+<!--        >-->
+<!--        </dx-button>-->
+<!--      </dxi-item>-->
+      <dxi-item location="after" locateInMenu="auto">
+        <div class="separator"></div>
+      </dxi-item>
+      <dxi-item
+        location="after"
+        locateInMenu="auto"
+        widget="dxButton"
+        showText="inMenu"
+        [options]="{
+          text: 'Copy',
+          icon: 'copy',
+          stylingMode: 'text'
+        }"
+      ></dxi-item>
+      <dxi-item
+        location="after"
+        locateInMenu="auto"
+        widget="dxButton"
+        showText="inMenu"
+        [options]="{
+          text: 'Refresh',
+          icon: 'refresh',
+          onClick: refresh,
+          stylingMode: 'text'
+        }"
+      ></dxi-item>
+    </dx-toolbar>
+
+    <div class="panels theme-dependent">
+      <div class="left" style="position: relative; height: 100vh;">
+        <app-panel-employee-managerment
+          [(isOpened)]="isPanelOpened"
+          [isDisablePinClose]="true"
+          [userId]="contactId"
+          [isMarTop] = "true"
+        >
+        </app-panel-employee-managerment>
+      </div>
+
+      <div class="right theme-dependent">
+        <app-information-flow></app-information-flow>
+      </div>
+    </div>
+  </div>
+</dx-scroll-view>

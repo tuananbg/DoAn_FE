@@ -1,0 +1,21 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#3ec995"
+             type="line-scale" [fullScreen]="false"><p style="color: white"> Đang tải... </p>
+</ngx-spinner>
+<nz-card>
+  <nz-tabset [nzSelectedIndex]="0">
+    <nz-tab nzTitle="Bằng cấp chứng chỉ" [tabIndex]="0">
+      <app-list-qualification-manager></app-list-qualification-manager>
+    </nz-tab>
+    <nz-tab nzTitle="Quản lý hợp đồng" [tabIndex]="1">
+      <app-list-contract-for-employee></app-list-contract-for-employee>
+    </nz-tab>
+    <nz-tab nzTitle="Thông tin bảo hiểm" [tabIndex]="2">
+      <app-list-socialinsurance-managerment></app-list-socialinsurance-managerment>
+    </nz-tab>
+
+    <nz-tab nzTitle="Thông tin phụ cấp" [tabIndex]="3">
+      <app-list-wage-for-employee></app-list-wage-for-employee>
+    </nz-tab>
+  </nz-tabset>
+</nz-card>
+

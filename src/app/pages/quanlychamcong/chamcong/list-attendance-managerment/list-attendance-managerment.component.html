@@ -1,0 +1,119 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#3ec995"
+             type="line-scale" [fullScreen]="false"><p style="color: white"> Đang tải... </p>
+</ngx-spinner>
+<div class="ant-breadcrumb-custom">
+  <nz-breadcrumb>
+    <nz-breadcrumb nzSeparator=">">
+      <nz-breadcrumb-item><a [routerLink]="'/dashboard'">Trang chủ</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a>Chấm công</a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-breadcrumb>
+</div>
+<nz-collapse nzExpandIconPosition="right">
+  <nz-collapse-panel nzHeader="Chấm công ngày {{dateNow | date: 'dd/MM/yyyy'}}" [nzActive]="isActive">
+    <div class="d-flex justify-content-between">
+      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }"
+           style="width: 70%; align-items: center;" class="d-flex justify-content-center">
+        <div nz-col style="width: 45%; margin-right: 10px;">
+          <label for="select1">Phòng ban</label>
+          <nz-select id="select1" style="width: 100%;" nzShowSearch nzAllowClear
+                     [(ngModel)]="selectedOptionDepartment"
+                     (ngModelChange)="onOptionChangeDepartment($event)">
+            <nz-option *ngFor="let option of lstDepartment" [nzValue]="option.departmentId"
+                       [nzLabel]="option.departmentName"></nz-option>
+          </nz-select>
+        </div>
+        <div nz-col style="width: 45%; margin-left: 10px;">
+          <label for="select2">Nhân viên</label>
+          <nz-select id="select2" style="width: 100%;" nzShowSearch nzAllowClear
+                     [(ngModel)]="selectedOptionEmployee"
+                     (ngModelChange)="onOptionChangeEmployee($event)">
+            <nz-option *ngFor="let option of lstEmployee" [nzValue]="option.id"
+                       [nzLabel]="option.employeeName +' - '+ option.employeeCode"></nz-option>
+          </nz-select>
+        </div>
+      </div>
+      <nz-row class="btn-wrappers" nzJustify="end" nzAlign="middle">
+        <button nz-button nzType="primary" (click)="loadStartDate()"
+                [nzLoading]="isLoadingOne"
+                [disabled]="isDisabled"
+                [ngStyle]="{ 'background-color': backgroundColorOne ? backgroundColorOne : '#f39f1e' }">
+          <span nz-icon nzType="poweroff" style="font-size: 20px; font-weight: bold; color: #1F1F1F"></span>
+          <div class="button-text">Giờ vào</div>
+          <div class="button-text">(8:00)</div>
+          <div *ngIf="isDisabled" class="button-text" style="color: red;">(Đã chấm)</div>
+        </button>
+        <button nz-button nzType="primary" (click)="loadEndDate()"
+                [nzLoading]="isLoadingTwo"
+                [disabled]="false"
+                [ngStyle]="{ 'background-color': backgroundColorTwo }">
+          <span nz-icon nzType="poweroff" style="font-size: 20px; font-weight: bold; color: #1F1F1F"></span>
+          <div class="button-text">Giờ ra</div>
+          <div class="button-text">(18:00)</div>
+          <div *ngIf="isDisabledTwo" class="button-text" style="color: red;">(Đã chấm)</div>
+        </button>
+      </nz-row>
+    </div>
+  </nz-collapse-panel>
+</nz-collapse>
+<nz-collapse nzExpandIconPosition="right" style="margin-top: 10px">
+  <nz-card>
+    <div class="scheduler-container d-flex">
+      <div class="left-side-panel-content " style="background-color: cadetblue; height: 300px; margin-right: 10px;">
+        <div class="buttons">
+          <dx-button
+            text="Hôm nay"
+            (onClick)="onSelectedDateChange()"
+          ></dx-button>
+        </div>
+        <div class="calendar">
+          <dx-calendar
+            [value]="currentDate"
+            (valueChange)="onCalendarDateChange($event)"
+          ></dx-calendar>
+        </div>
+        <div class="wrapper-button d-flex justify-content-center">
+            <span
+              style="width: 80%; font-size: 14px; color: #F0F0F0; border-radius: 10px; box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;">
+                <dx-button
+                  text="Xuất báo cáo theo tháng"
+                  (onClick)="openExport()"
+                ></dx-button>
+            </span>
+        </div>
+      </div>
+      <dx-scheduler
+        #schedulerRef
+        height="inherit"
+        [allDayPanelMode]="'hidden'"
+        [dataSource]="tasks"
+        [currentView]="currentView"
+        [currentDate]="getSchedulerCurrentDate | apply: currentDate"
+        [showCurrentTimeIndicator]="false"
+        [showAllDayPanel]="false"
+        class="hide-time-column"
+        (onCellClick)="onCellClick($event)"
+      >
+        <dxi-view type="month"></dxi-view>
+      </dx-scheduler>
+    </div>
+    <nz-drawer
+      [nzClosable]="false"
+      [nzVisible]="visible"
+      [nzPlacement]="placement"
+      (nzOnClose)="close()"
+    >
+      <ng-container *nzDrawerContent>
+        <app-panel-attendance-managerment
+          [employeeId]="selectedOptionEmployee"
+          [departmentId]="selectedOptionDepartment"
+          [workingDay]="currentDate"
+        ></app-panel-attendance-managerment>
+      </ng-container>
+    </nz-drawer>
+  </nz-card>
+</nz-collapse>
+
+

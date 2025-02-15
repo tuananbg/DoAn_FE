@@ -1,0 +1,43 @@
+<ng-container *ngIf="!popConfirm ; else buttonWithPopConfirm">
+    <button
+      (click)="handleClick()"
+      [ngClass]="buttonClass"
+      nz-button
+      [nzType]="buttonType"
+      [nzShape]="buttonShape"
+      [nzSize]="buttonSize"
+      class="mr-2"
+      [disabled]="disabled"
+      [nzLoading]="loading"
+    >
+      <i *ngIf="iconType" [ngClass]="iconClass" nz-icon [nzType]="iconType" [nzTheme]="iconTheme" [nzIconfont]="iconFont"
+         [nzSpin]="iconSpin"></i>
+      <ng-container *ngIf="text">
+        {{ text }}
+      </ng-container>
+    </button>
+</ng-container>
+
+<ng-template #buttonWithPopConfirm>
+    <button
+      nz-button
+      nz-popconfirm
+      nzOkText="Đồng ý"
+      nzCancelText="Hủy bỏ"
+      nzPopconfirmTitle="Bạn có chắc chắn muốn gửi bản ghi?"
+      (nzOnConfirm)="handleClick()"
+      [nzType]="buttonType"
+      [nzSize]="buttonSize"
+      class="mr-2"
+    >
+      <ng-container *ngTemplateOutlet="content"></ng-container>
+    </button>
+</ng-template>
+
+<ng-template #content>
+    <i nz-icon [nzType]="iconType" [nzTheme]="iconTheme" [nzIconfont]="iconFont" [nzSpin]="iconSpin"></i>
+    <ng-container *ngIf="text">
+      {{ text }}
+    </ng-container>
+</ng-template>
+

@@ -1,0 +1,19 @@
+.steps-content {
+  margin-top: 1rem;
+  .register-form {
+    display: flex;
+    flex-direction: column;
+    //gap: 1rem;
+    width: 50%;
+    margin: 0 auto;
+  }
+  .auth-input {
+    width: 100%;
+    border-radius: 5px;
+  }
+}
+
+.flex-center{
+  display: flex;
+  justify-content: center;
+}

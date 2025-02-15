@@ -1,0 +1,87 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#3ec995"
+             type="line-scale" [fullScreen]="false"><p style="color: white"> Đang tải... </p>
+</ngx-spinner>
+<div class="ant-breadcrumb-custom">
+  <nz-breadcrumb>
+    <nz-breadcrumb nzSeparator=">">
+      <nz-breadcrumb-item><a [routerLink]="'/dashboard'">Trang chủ</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a>Quản lý cấu hình</a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-breadcrumb>
+</div>
+<nz-collapse>
+  <nz-collapse-panel [nzExtra]="title" [nzActive]="resultActive" nzHeader="Quản lý phân quyền Menu">
+    <ng-template #title>
+      <nz-select style="width: 300px" nzPlaceHolder="--Chọn quyền--" (click)="$event.stopPropagation()"
+                 [(ngModel)]="roleSelect" (ngModelChange)="handleSelectChange($event)">
+        <nz-option nzLabel="Admin" nzValue="ADMIN"></nz-option>
+        <nz-option nzLabel="User" nzValue="USER"></nz-option>
+      </nz-select>
+    </ng-template>
+
+    <nz-transfer
+      [nzDataSource]="menuItems"
+      [nzShowSearch]="true"
+      [nzRenderList]="[renderList, renderList]"
+      (nzSelectChange)="handleTranferSelectChange($event)"
+      (nzChange)="handleTranferChange($event)"
+    >
+      <ng-template
+        #renderList
+        let-items
+        let-direction="direction"
+        let-stat="stat"
+        let-onItemSelectAll="onItemSelectAll"
+        let-onItemSelect="onItemSelect"
+      >
+        <nz-table #t [nzShowPagination]="true" [nzFooter]="footer" nzBordered [nzData]="$asTransferItems(items)"
+                  nzSize="small" [nzTitle]="direction === 'left' ? 'Danh sách Menu' : 'Menu hiện tại'" [nzLoading]="tableLoading">
+          <thead>
+          <tr>
+            <th [nzChecked]="stat.checkAll" (nzCheckedChange)="onItemSelectAll($event)"></th>
+            <th style="text-align: center">STT</th>
+            <th style="text-align: center">Mã menu</th>
+            <th style="text-align: center">Tên menu</th>
+            <th style="text-align: center">Quyền thao tác</th>
+          </tr>
+          </thead>
+          <tbody *ngIf="!tableLoading">
+          <tr *ngFor="let data of t.data; let i = index" (click)="clickLog(data)">
+            <td
+              [nzChecked]="!!data.checked"
+              (nzCheckedChange)="onItemSelect(data)"
+            ></td>
+            <td style="text-align: center">{{ i + 1 }}</td>
+            <td style="text-align: center">{{ data.title }}</td>
+            <td style="text-align: center">{{ data['menuItemName'] }}</td>
+            <td style="text-align: center">
+              <nz-tag
+                nzMode="checkable"
+                *ngFor="let p of data['permissions']"
+                [nzColor]="p.id === 1 ? 'green' : p.id === 2 ? 'geekblue' : p.id === 3 ? 'gold' : 'red'"
+              >
+                {{ p.permissionName }}
+              </nz-tag>
+            </td>
+          </tr>
+          </tbody>
+          <ng-template #footer>
+<!--            <nz-pagination-->
+<!--              [(nzPageIndex)]="pageIndex"-->
+<!--              [(nzPageSize)]="pageSize"-->
+<!--              [nzTotal]="total"-->
+<!--              (nzPageIndexChange)="onPageIndexChange($event)"-->
+<!--              (nzPageSizeChange)="onPageSizeChange($event)">-->
+<!--            </nz-pagination>-->
+          </ng-template>
+        </nz-table>
+      </ng-template>
+    </nz-transfer>
+    <div class="d-flex wrapper-submit">
+      <button style="width: 160px;" nz-button nzType="primary" (click)="handleOkModal()">
+        <i class="fa-solid fa-floppy-disk" style="margin-right: 7px;"></i>Lưu</button>
+    </div>
+  </nz-collapse-panel>
+</nz-collapse>

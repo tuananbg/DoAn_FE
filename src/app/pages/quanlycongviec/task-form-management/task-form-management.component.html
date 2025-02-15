@@ -1,0 +1,277 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#3ec995"
+             type="line-scale" [fullScreen]="false"><p style="color: white"> Đang tải... </p>
+</ngx-spinner>
+<div class="ant-breadcrumb-custom">
+  <nz-breadcrumb>
+    <nz-breadcrumb nzSeparator=">">
+      <nz-breadcrumb-item><a [routerLink]="'/dashboard'">Quản lý công việc</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a [routerLink]="'/project'">Dự án</a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a>Tạo task công việc</a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-breadcrumb>
+</div>
+<nz-card class="nz-card__form" [nzBordered]="false">
+  <nz-collapse [nzBordered]="false">
+    <nz-collapse-panel #formPanel [nzExpandedIcon]="formExpandedIcon" [nzActive]="true"
+                       [nzHeader]="'Tạo mới công việc cho dự án << '+projectName+' >>'">
+      <ng-template #formExpandedIcon let-active>{{ active }}
+        <i nz-icon nzType="caret-right" class="ant-collapse-arrow" [nzRotate]="formPanel.nzActive ? 90 : -90"></i>
+      </ng-template>
+      <form nz-form [formGroup]="addForm" nzLayout="vertical">
+        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
+          <div nz-col [nzSm]="24" [nzMd]="8" [nzLg]="8">
+            <app-input-text-v2 formControlName="taskCode" [required]="true"
+                               [ngClass]="{'disabled-button': true}"
+                               label="{{ 'Mã công việc'}}"
+                               [disabled]="isView"
+                               [nzAllowClear]="true" [maxlength]="'250'">
+            </app-input-text-v2>
+          </div>
+          <div nz-col nzSpan="8">
+            <app-input-text-v2 formControlName="taskName" [required]="true"
+                               label="{{ 'Tên công việc'}}"
+                               [placeHolder]="isView ? '' : 'Nhập tên công việc'"
+                               [disabled]="isView"
+                               [nzAllowClear]="true" [maxlength]="'250'">
+            </app-input-text-v2>
+          </div>
+          <div nz-col nzSpan="8">
+            <app-select [ngClass]="'w-100'" [data]="lstPriority"
+                        [valueField]="'code'"
+                        [required]="true"
+                        [labelField]="'name'"
+                        [disabled]="isView"
+                        [placeHolder]="isView ? '' : 'Chọn độ ưu tiên'"
+                        [openSearchModal]="false" [getObjectValue]="true"
+                        [labelHorizontal]="false" formControlName="priority" labelContent="Độ ưu tiên:">
+            </app-select>
+          </div>
+        </div>
+        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32}">
+          <div nz-col nzSpan="8">
+            <app-select [ngClass]="'w-100'" [data]="lstEmployee"
+                        [valueField]="'id'"
+                        [required]="true"
+                        [labelField]="'employeeName'"
+                        [disabled]="isView"
+                        [placeHolder]="isView ? '' : 'Chọn tên người theo dõi'"
+                        [openSearchModal]="false" [getObjectValue]="true"
+                        [labelHorizontal]="false" formControlName="followId" labelContent="Người theo dõi:">
+            </app-select>
+          </div>
+          <div nz-col nzSpan="8">
+            <app-date-picker formControlName="startDay" placeHolder="dd/mm/yyyy"
+                             [format]="'dd/MM/yyyy'"
+                             labelContent="Từ ngày"
+                             [ngClass]="'w-150'"
+                             [required]="true"
+                             [disableDateFromToday]="isDisableDateFromToday"
+                             (changeDate)="onChangeStartDay($event)" [errorTip]="startDayErrorMessage"
+                             [span]="24"></app-date-picker>
+          </div>
+          <div nz-col nzSpan="8">
+            <app-date-picker formControlName="endDay" placeHolder="dd/mm/yyyy"
+                             [format]="'dd/MM/yyyy'"
+                             labelContent="Đến ngày"
+                             [ngClass]="'w-150'"
+                             [required]="true"
+                             [disableDateFromToday]="isDisableDateFromToday"
+                             (changeDate)="onChangeEndDay($event)" [errorTip]="endDayErrorMessage"
+                             [span]="24"></app-date-picker>
+          </div>
+        </div>
+        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32}">
+          <div nz-col nzSpan="8">
+            <app-select [ngClass]="'w-100'" [data]="lstTaskStatus"
+                        [valueField]="'code'"
+                        [required]="true"
+                        [labelField]="'name'"
+                        [disabled]="isView"
+                        [placeHolder]="isView ? '' : 'Chọn trạng thái'"
+                        [openSearchModal]="false" [getObjectValue]="true"
+                        [labelHorizontal]="false" formControlName="taskStatus" labelContent="Trạng thái:">
+            </app-select>
+          </div>
+          <div nz-col nzSpan="8">
+            <app-input-text-v2 formControlName="duration"
+                               label="{{ 'Khoảng thời gian (giờ)'}}"
+                               [placeHolder]="isView ? '' : 'Nhập khoảng thời gian'"
+                               [disabled]="isView"
+                               [typeInput]="'number'"
+                               [nzAllowClear]="true" [maxlength]="'250'">
+            </app-input-text-v2>
+          </div>
+        </div>
+        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32}">
+          <div nz-col [nzSm]="24" [nzMd]="24" [nzLg]="24">
+            <nz-form-item nz-col nzSpan="24">
+              <nz-form-control>
+                <div style="display: block">
+                  <div style="width: 200px;">
+                    <nz-form-label [nzRequired]="true"
+                                   [hidden]="false">Nhân viên tham gia
+                    </nz-form-label>
+                  </div>
+                  <nz-select
+                    [nzMaxTagCount]="25"
+                    [nzMaxTagPlaceholder]="tagPlaceHolder"
+                    nzMode="multiple"
+                    nzPlaceHolder="Chọn tên người nhận việc"
+                    formControlName="employees"
+                  >
+                    <nz-option *ngFor="let item of listOfOption" [nzLabel]="item" [nzValue]="item"></nz-option>
+                  </nz-select>
+                </div>
+                <ng-template #tagPlaceHolder let-selectedList>và hơn {{ selectedList.length }} người khác</ng-template>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32}">
+          <div nz-col [nzSm]="24" [nzMd]="24" [nzLg]="24">
+            <nz-tabset [nzSelectedIndex]="0">
+              <nz-tab nzTitle="Mô tả" [tabIndex]="0">
+                <nz-form-item nz-col nzSpan="24">
+                  <nz-form-control>
+                    <ckeditor [editor]="Editor" formControlName="taskDescription" [config]="editorConfig">
+                    </ckeditor>
+                  </nz-form-control>
+                </nz-form-item>
+              </nz-tab>
+              <nz-tab nzTitle="Timesheet" [tabIndex]="1">
+                <form nz-form [formGroup]="addFormTimeSheet" nzLayout="vertical" (ngSubmit)="submitTimeSheetForm()">
+                  <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32}">
+                    <div nz-col nzSpan="8">
+                      <app-date-picker formControlName="dayTimeSheet" placeHolder="dd/mm/yyyy"
+                                       [format]="'dd/MM/yyyy'"
+                                       labelContent="Ngày khai báo"
+                                       [ngClass]="'w-150'"
+                                       [required]="true"
+                                       [disableDateFromToday]="isDisableDateFromToday"
+                                       [span]="24"></app-date-picker>
+                    </div>
+                    <div nz-col nzSpan="8">
+                      <app-input-text-v2 formControlName="durationTimeSheet"
+                                         label="{{ 'Khoảng thời gian (giờ)'}}"
+                                         [placeHolder]="'Nhập khoảng thời gian'"
+                                         [disabled]="isView"
+                                         [typeInput]="'number'"
+                                         [required]="true"
+                                         [nzAllowClear]="true" [maxlength]="'250'">
+                      </app-input-text-v2>
+                    </div>
+                    <div nz-col nzSpan="8" class="d-flex" style="justify-content: right; align-items: center">
+                      <button style="width: 140px;" nz-button nzType="primary" type="submit">Lưu Time Sheet</button>
+                    </div>
+                  </div>
+                  <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32}">
+                    <div nz-col nzSpan="24">
+                      <app-input-textarea-v2 formControlName="timeSheetDescription" [maxlength]="'5000'"
+                                             label="Mô tả"
+                                             [placeholder]="'Nhập khuyến mô tả'"
+                                             [ngClass]="'w-100'"
+                                             [nzAllowClear]="true" [nzAutosize]="{ minRows: 6, maxRows: 10 }">
+                      </app-input-textarea-v2>
+                    </div>
+                  </div>
+                </form>
+                <nz-collapse nzExpandIconPosition="right" style="margin-top: 10px">
+                  <div class="list__table">
+                    <nz-table #rowSelectionTable nzBordered [nzData]="lstData" [nzFrontPagination]="false"
+                              [nzNoResult]="'Không có kết quả tìm kiếm'" [nzScroll]="{ x: SCROLL_TABLE.SCROLL_X}">
+                      <thead>
+                      <tr class="ant-header-customize">
+                        <th nzWidth="150px" class="text-center">
+                          Ngày
+                        </th>
+                        <th nzWidth="100px" class="text-center">
+                          Số giờ
+                        </th>
+                        <th nzWidth="200px" class="text-center">
+                          Mô tả
+                        </th>
+                        <th nzWidth="100px" class="text-center">
+                          Hành động
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <ng-template ngFor let-data let-idx="index" [ngForOf]="rowSelectionTable.data">
+                        <tr>
+                          <td class="max-width-150 text-center"
+                              [nz-tooltip]="data.dayTimeSheet | date: 'dd/MM/yyyy'">{{data.dayTimeSheet | date: 'dd/MM/yyyy'}}</td>
+                          <td class="max-width-100 text-center"
+                              [nz-tooltip]="data.durationTimeSheet">{{data.durationTimeSheet}}</td>
+                          <td class="max-width-200"
+                              [nz-tooltip]="data.timeSheetDescription">{{data.timeSheetDescription}}</td>
+                          <td class="text-center max-width-150">
+                            <div class="action">
+                              <app-button-icon class="action__margin" [isDelete]="true"
+                                               [tooltipTitle]="'Xóa'"
+                                               (click)="openModalDelete(data)"></app-button-icon>
+                            </div>
+                          </td>
+                        </tr>
+                      </ng-template>
+                      </tbody>
+                    </nz-table>
+                  </div>
+                </nz-collapse>
+              </nz-tab>
+              <nz-tab nzTitle="Thông tin trao đổi" [tabIndex]="2">
+                <nz-form-item nz-col nzSpan="24">
+                  <nz-form-control>
+                    <ckeditor [editor]="Editor" formControlName="communication"
+                              [ngStyle]="{'min-height': '300px'}">
+                    </ckeditor>
+                  </nz-form-control>
+                </nz-form-item>
+              </nz-tab>
+            </nz-tabset>
+          </div>
+        </div>
+      </form>
+      <div nz-row class="nz-card__form-action pt-4 d-flex" style="margin-bottom: 50px;">
+        <div *ngIf="!isUpdate && !isView" nz-col nzSpan="24" class="p-3">
+          <label class="create-another" nz-checkbox [(ngModel)]="continueAdd">
+            Tiếp tục tạo mới
+          </label>
+        </div>
+        <div *ngIf="isUpdate && !isView" nz-col nzSpan="24"
+             class="form-action__wrapper text-center d-flex justify-content-center">
+          <div style="margin-right: 10px;">
+            <app-button-cancel [isIcon]="true" [popConfirm]="false" (clickCancel)="cancelConfirm()"></app-button-cancel>
+          </div>
+          <app-button-save [isIcon]="true" text="Cập nhật"
+                           (clickSave)="submitForm()"></app-button-save>
+        </div>
+        <div *ngIf="!isUpdate && !isView" nz-col nzSpan="24"
+             class="form-action__wrapper text-center d-flex justify-content-center">
+          <div style="margin-right: 10px;">
+            <app-button-cancel [isIcon]="true" [popConfirm]="false" (clickCancel)="cancelConfirm()"></app-button-cancel>
+          </div>
+          <app-button-save [isIcon]="true" text="Tạo mới"
+                           (clickSave)="submitForm()"></app-button-save>
+        </div>
+        <div *ngIf="!isUpdate && isView" nz-col nzSpan="24"
+             class="form-action__wrapper text-center d-flex justify-content-center">
+          <app-button-cancel [isIcon]="true" text="Đóng" [popConfirm]="false"
+                             (clickCancel)="goBack()"></app-button-cancel>
+        </div>
+      </div>
+    </nz-collapse-panel>
+  </nz-collapse>
+</nz-card>
+
+
+<app-modal-confirm title="Xác nhận xóa" [isVisible]="isVisibleModalDelete"
+                   textButtonCancel="Hủy"
+                   [text]="'Đồng ý'"
+                   [isConfirm]="true"
+                   (callBack)="callBackModalDelete()"
+                   (clickCancel)="onCancelModalDelete()">
+</app-modal-confirm>

@@ -1,0 +1,59 @@
+<app-card-analytics titleText="Thống kê đăng ký lịch" contentClass="sales-by-state grid">
+    <dx-data-grid
+            [dataSource]="data"
+            [height]="290"
+            [width]="670"
+            [loadPanel]="{ enabled: false }"
+    >
+        <dxi-column caption="Nhân viên"
+                    dataField="employeeName"
+                    [width]="200"
+        > </dxi-column>
+
+        <dxi-column
+                alignment="left"
+                caption="Công việc"
+                dataField="totalTask"
+                dataType="number"
+                sortOrder="desc"
+                [hidingPriority]="1"
+                [width]="150"
+        >
+        </dxi-column>
+
+        <dxi-column
+                alignment="left"
+                caption="Hoàn thành"
+                dataField="percentage"
+                name="percentN"
+                format="percent"
+                [hidingPriority]="1"
+                [width]="150"
+        >
+        </dxi-column>
+
+        <dxi-column
+                alignment="left"
+                caption=""
+                dataField="percentage"
+                name="percentB"
+                cellTemplate="salesBullet"
+                cssClass="sales-bullet"
+                [width]="150"
+        >
+        </dxi-column>
+
+        <div *dxTemplate="let cellInfo of 'salesBullet'">
+            <dx-bullet
+                    [showTarget]="false"
+                    [showZeroLevel]="false"
+                    [value]="cellInfo.data.percentage * 100"
+                    [startScaleValue]="0"
+                    [endScaleValue]="150"
+            >
+                <dxo-tooltip [enabled]="false"></dxo-tooltip>
+                <dxo-size [width]="150" [height]="20"></dxo-size>
+            </dx-bullet>
+        </div>
+    </dx-data-grid>
+</app-card-analytics>

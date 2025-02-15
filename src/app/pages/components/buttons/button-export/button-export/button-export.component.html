@@ -1,0 +1,22 @@
+<button
+  id="btnExport"
+  (click)="openExport()"
+  nz-button
+  [nzType]="buttonType"
+  [nzSize]="buttonSize"
+  [nzShape]="buttonShape"
+  [ngClass]="buttonClass"
+  [class.mr-3]="isMarginRight"
+>
+  <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 7px;">
+    <path d="M11.0133 15.5469L15.8408 10.795H13.1564V1.25H8.87087V10.795H6.18579L11.0133 15.5469Z" fill="#3EC995"/>
+    <path d="M20.1663 18.75V16.25V12.7344H17.5511V16.25H4.47548V12.7344H1.86035V16.25V18.75H20.1663Z" fill="#3EC995"/>
+  </svg>
+
+  <ng-container *ngIf="text; else defaultText">
+    {{ text }}
+  </ng-container>
+  <ng-template #defaultText>
+    Xuất báo cáo
+  </ng-template>
+</button>

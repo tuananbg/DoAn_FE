@@ -1,0 +1,31 @@
+<nz-form-item [class.form-item__flex-row]="isFilterList">
+  <ng-container *ngIf="!hideLabel">
+    <app-label-vertical
+      *ngIf="!labelHorizontal"
+      [content]="labelContent"
+      [required]="required"
+    ></app-label-vertical>
+
+    <app-label-horizontal
+      [span]="24 - span"
+      *ngIf="labelHorizontal"
+      [for]="name"
+      [content]="labelContent"
+      [required]="required"
+      [isFilterList]="isFilterList"
+    ></app-label-horizontal>
+  </ng-container>
+
+  <nz-form-control [nzSpan]="labelHorizontal ? span : null" [nzErrorTip]="errorTip" [ngClass]="classWidth" [ngStyle]="ngStyleCus">
+    <nz-date-picker
+      class="w-100"
+      [nzFormat]="format"
+      [(ngModel)]="date"
+      [formControl]="ngControl ? $any(ngControl.control) : formController"
+      [nzDisabled]="disabled"
+      [nzPlaceHolder]="placeHolder"
+      [nzDisabledDate]="disableDateFromToday"
+      (ngModelChange)="onChange($event)"
+    ></nz-date-picker>
+  </nz-form-control>
+</nz-form-item>

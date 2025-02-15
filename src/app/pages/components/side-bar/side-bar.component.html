@@ -1,0 +1,88 @@
+<div class="wrapper side-bar-scroll scrollable-area" [style]="{'width': isCollapsed ? '80px' : '250px'}">
+<!--  <button nz-button nzType="primary" (click)="toggleCollapsed()" class="toggle-sidebar-button"-->
+<!--          [style]="{'width': isCollapsed ? '80px' : '250px'}">-->
+<!--    <i nz-icon [nzType]="isCollapsed ? 'double-right' : 'double-left'" nzTheme="outline"></i>-->
+<!--  </button>-->
+  <ul nz-menu nzMode="inline" [nzInlineCollapsed]="isCollapsed" class="sidebar-item">
+    <li
+      nz-menu-item
+      [nzMatchRouter]="true"
+    >
+<!--      <i nz-icon nzType="home" nzTheme="outline"></i>-->
+      <i class="fa-solid fa-house" style="margin-right: 5px;"></i>
+      <span><a [routerLink]="'/dashboard'">Trang chủ</a></span>
+    </li>
+    <li nz-submenu nzTitle="Hành chính nhân sự" nzIcon="usergroup-add" [nzOpen]="subMenuQLNS">
+      <ul>
+        <li nz-submenu nzTitle="Quản lý nhân sự">
+          <ul>
+            <li nz-menu-item [nzMatchRouter]="true">
+              <!--              <i nz-icon nzTheme="outline"></i>-->
+              <span><a [routerLink]="'/employee'">Danh sách nhân viên</a></span>
+            </li>
+            <li nz-menu-item [nzMatchRouter]="true">
+              <!--              <i nz-icon nzTheme="outline"></i>-->
+              <span><a [routerLink]="'/infor-employee/' + userId">Xuất hồ sơ cá nhân</a></span>
+            </li>
+          </ul>
+        </li>
+        <li
+          appCheckAuthorize
+          nz-menu-item
+          [nzMatchRouter]="true"
+        >
+          <!--          <i nz-icon nzTheme="outline"></i>-->
+          <span><a [routerLink]="'/wage'">Thông tin phụ cấp</a></span>
+        </li>
+        <li
+          appCheckAuthorize
+          nz-menu-item
+          [nzMatchRouter]="true"
+        >
+          <!--          <i nz-icon nzTheme="outline"></i>-->
+          <span><a [routerLink]="'/contract'">Quản lý hợp đồng</a></span>
+        </li>
+        <li
+          appCheckAuthorize
+          nz-menu-item [nzMatchRouter]="true">
+          <!--          <i nz-icon nzTheme="outline"></i>-->
+          <span><a [routerLink]="'/department'">Phòng ban</a></span>
+        </li>
+        <li
+          appCheckAuthorize
+          nz-menu-item [nzMatchRouter]="true">
+          <!--          <i nz-icon nzTheme="outline"></i>-->
+          <span><a [routerLink]="'/position'">Chức vụ</a></span>
+        </li>
+      </ul>
+    </li>
+    <li nz-submenu nzTitle="Quản lý lịch làm việc" nzIcon="calendar" [nzOpen]="subMenuLLV">
+      <ul>
+        <li nz-menu-item [nzMatchRouter]="true">
+          <span><a [routerLink]="'/attendance'">Chấm công</a></span>
+        </li>
+        <li nz-menu-item [nzMatchRouter]="true">
+          <span><a [routerLink]="'/attendanceleave'">Đăng ký nghỉ phép</a></span>
+        </li>
+        <li nz-menu-item [nzMatchRouter]="true">
+          <span><a [routerLink]="'/attendanceOt'">Đăng ký OT</a></span>
+        </li>
+      </ul>
+    </li>
+    <li nz-submenu nzTitle="Quản lý công việc" nzIcon="carry-out" [nzOpen]="subMenuQLCV">
+      <ul>
+        <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/project'">Dự án</a></span></li>
+        <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/task-list'">Danh sách công việc</a></span></li>
+        <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="['/project-person', userId]">Việc của tôi</a></span></li>
+      </ul>
+    </li>
+    <li appCheckAuthorize nz-submenu nzTitle="Quản trị hệ thống" nzIcon="database" [nzOpen]="subMenuQLHT">
+      <ul>
+        <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/register'">Tạo tài khoản</a></span></li>
+        <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/account'">Quản lý tài khoản</a></span></li>
+        <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/system'">Quản lý cây phân cấp</a></span></li>
+        <li nz-menu-item [nzMatchRouter]="true"><span><a >Cấu hình</a></span></li>
+      </ul>
+    </li>
+  </ul>
+</div>

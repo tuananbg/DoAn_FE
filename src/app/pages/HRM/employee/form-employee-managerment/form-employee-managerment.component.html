@@ -1,0 +1,151 @@
+
+
+<dx-form class="plain-styled-form" [screenByWidth]="getSizeQualifier">
+  <dxi-item itemType="group">
+    <dxo-col-count-by-screen
+      [xs]="1"
+      [sm]="1"
+      [md]="1"
+      [lg]="1"
+    ></dxo-col-count-by-screen>
+    <dxi-item class="uploader">
+      <div *dxTemplate>
+        <div id="fileuploader-container">
+          <dx-file-uploader
+            [multiple]="true"
+            selectButtonText="Chọn file ảnh"
+            labelText="Ảnh đại diện"
+            accept="image/*"
+            uploadMode="useForm"
+            (onValueChanged)="onValueChanged($event)"
+          >
+          </dx-file-uploader>
+        </div>
+      </div>
+    </dxi-item>
+  </dxi-item>
+
+  <dxi-item itemType="group">
+    <dxo-col-count-by-screen
+      [xs]="1"
+      [sm]="2"
+      [md]="2"
+      [lg]="2"
+    ></dxo-col-count-by-screen>
+    <dxi-item>
+      <div *dxTemplate>
+        <app-form-textbox
+          label="Mã nhân viên"
+          [(value)]="newUser.employeeCode"
+          [isEditing]="true"
+        >
+        </app-form-textbox>
+      </div>
+    </dxi-item>
+    <dxi-item>
+      <div *dxTemplate>
+        <app-form-textbox
+          label="Tên nhân viên"
+          [(value)]="newUser.employeeName"
+          [isEditing]="true"
+        >
+        </app-form-textbox>
+      </div>
+    </dxi-item>
+    <dxi-item>
+      <div *dxTemplate>
+        <app-form-textbox
+          icon="tel"
+          label="Số điện thoại"
+          mask="+84(000)000-0000"
+          [(value)]="newUser.phone"
+          [isEditing]="true"
+        >
+        </app-form-textbox>
+      </div>
+    </dxi-item>
+    <dxi-item>
+      <div *dxTemplate>
+        <app-form-textbox
+          icon="home"
+          label="Địa chỉ"
+          [(value)]="newUser.address"
+          [isEditing]="true"
+        ></app-form-textbox>
+      </div>
+    </dxi-item>
+    <dxi-item>
+      <div *dxTemplate>
+        <dx-select-box
+          [label]="'Phòng ban'"
+          [dataSource]="lstDepartment"
+          valueExpr="departmentId"
+          displayExpr="departmentName"
+          [searchEnabled]="true"
+          (onValueChanged)="onDepartmentChanged($event)"
+          [(value)]="newUser.departmentId">
+        </dx-select-box>
+      </div>
+    </dxi-item>
+    <dxi-item>
+      <div *dxTemplate>
+        <dx-select-box
+          [label]="'Chức vụ'"
+          [dataSource]="lstPosition"
+          valueExpr="id"
+          displayExpr="positionName"
+          [searchEnabled]="true"
+          [(value)]="newUser.positionId"
+        >
+        </dx-select-box>
+      </div>
+    </dxi-item>
+  </dxi-item>
+
+  <dxi-item itemType="group" cssClass="contact-fields-group">
+    <dxo-col-count-by-screen
+      [xs]="1"
+      [sm]="2"
+      [md]="2"
+      [lg]="2"
+    ></dxo-col-count-by-screen>
+    <dxi-item>
+      <div *dxTemplate>
+        <dx-date-box
+          (onValueChanged)="valueChanged($event)"
+          label="Ngày sinh"
+          id="birth-date"
+          placeholder="Chọn ngày sinh..."
+          [stylingMode]="stylingMode"
+          displayFormat="dd/MM/yyyy"
+        >
+        </dx-date-box>
+      </div>
+    </dxi-item>
+    <dxi-item>
+      <div *dxTemplate>
+        <dx-select-box
+          [label]="'Giới tính'"
+          [dataSource]="lstGender"
+          valueExpr="id"
+          displayExpr="gender"
+          [searchEnabled]="true"
+          [(value)]="newUser.gender">
+        </dx-select-box>
+      </div>
+    </dxi-item>
+<!--    <dxi-item>-->
+<!--      <div *dxTemplate>-->
+<!--        <dx-select-box-->
+<!--          [label]="'Tài khoản'"-->
+<!--          [dataSource]="lstAccount"-->
+<!--          valueExpr="id"-->
+<!--          displayExpr="email"-->
+<!--          [searchEnabled]="true"-->
+<!--          [(value)]="newUser.gender">-->
+<!--        </dx-select-box>-->
+<!--      </div>-->
+<!--    </dxi-item>-->
+  </dxi-item>
+</dx-form>
+

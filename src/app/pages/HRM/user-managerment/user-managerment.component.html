@@ -1,0 +1,110 @@
+<div class="ant-breadcrumb-custom">
+  <nz-breadcrumb>
+    <nz-breadcrumb nzSeparator=">">
+      <nz-breadcrumb-item><a [routerLink]="'/dashboard'">Trang chủ</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a>Quản lý nhân sự</a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-breadcrumb>
+</div>
+<nz-collapse nzExpandIconPosition="right">
+  <nz-collapse-panel
+    nzHeader="Điều kiện tìm kiếm"
+    [nzActive]="searchActive"
+  >
+    <form
+      nz-form
+      nzLayout="vertical"
+    >
+      <div nz-row nzGutter="16">
+        <div nz-col>
+          <nz-form-item>
+            <nz-form-label >Field A</nz-form-label>
+            <nz-form-control  nzErrorTip="Please input your username!">
+              <input nz-input placeholder="input placeholder" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col>
+          <nz-form-item>
+            <nz-form-label >Field B</nz-form-label>
+            <nz-form-control  nzErrorTip="Please input your Password!">
+              <input nz-input placeholder="input placeholder" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row>
+        <div nz-col nzOffset="8" nzSpan="8">
+          <nz-form-item>
+            <nz-form-control>
+              <button nz-button nzType="primary">Submit</button>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-collapse-panel>
+</nz-collapse>
+
+<nz-collapse nzExpandIconPosition="right" style="margin-top: 20px">
+  <nz-collapse-panel
+    nzHeader="Kết quả tìm kiếm"
+    [nzActive]="resultActive"
+  >
+    <nz-table
+      #sortTable
+      [nzData]="searchUserRespone"
+      nzSize="small"
+      nzBordered
+      [nzFrontPagination]="false"
+      [nzLoading]="tableLoading"
+      [nzShowSizeChanger]="true"
+      [nzTotal]="pagination.total"
+      [nzPageIndex]="pagination.current + 1"
+      [nzPageSize]="pagination.pageSize"
+      [nzPageSizeOptions]="[10, 15, 20]"
+      [nzScroll]="{ x: 'maxContent'}"
+      (nzPageIndexChange)="handlePageIndexChange($event)"
+      (nzPageSizeChange)="handlePageSizeChange($event)"
+    >
+      <thead>
+      <tr>
+        <th nzWidth="70px" style="text-align: center">STT</th>
+        <th *ngFor="let column of columns" [nzSortFn]="column.compare" [nzWidth]="column.width" style="text-align: center">
+          {{ column.title }}
+        </th>
+        <th nzRight nzWidth="140px" style="text-align: center">Hành động</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of sortTable.data; let i = index">
+        <td style="text-align: center">{{pagination.current * pagination.pageSize + i + 1}}</td>
+        <td>{{ data.fullName }}</td>
+        <td>{{ data.gender === 1 ? 'Nam' : 'Nữ' }}</td>
+        <td>{{ data.birthday}}</td>
+        <td>{{ data.email}}</td>
+        <td>{{ data.address }}</td>
+        <td>{{ data.birthPlace }}</td>
+        <td>{{ data.departmentName }}</td>
+        <td style="text-align: center">{{ data.createdAt }}</td>
+        <td nzRight>
+          <div nz-row nzGutter="16" nzJustify="center">
+            <div nz-col>
+              <span nz-tooltip nzTooltipTitle="Cập nhật">
+                <span nz-icon nzType="edit" nzTheme="outline" style="cursor: pointer; color: red"></span>
+              </span>
+            </div>
+            <div nz-col>
+              <span nz-tooltip nzTooltipTitle="Xem chi tiết">
+                <span nz-icon nzType="eye" nzTheme="outline" style="cursor: pointer; color: red"></span>
+              </span>
+            </div>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </nz-table>
+  </nz-collapse-panel>
+</nz-collapse>

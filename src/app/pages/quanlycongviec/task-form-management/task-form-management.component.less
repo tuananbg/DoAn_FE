@@ -1,0 +1,25 @@
+#task-form {
+  min-height: 250px;
+}
+
+.form-editor {
+  task-priority,
+  task-status {
+    position: absolute;
+    bottom: 0;
+    padding-left: calc(var(--filled-texteditor-input-horizontal-padding) + 3px);
+
+    ::ng-deep {
+      span {
+        font-size: 13px;
+      }
+    }
+  }
+}
+
+
+.ant-tabs-top > .ant-tabs-nav, .ant-tabs-bottom > .ant-tabs-nav, .ant-tabs-top > div > .ant-tabs-nav, .ant-tabs-bottom > div > .ant-tabs-nav {
+  margin: 0 0 16px 0;
+  background-color: aliceblue!important;
+  padding-left: 15px!important;
+}

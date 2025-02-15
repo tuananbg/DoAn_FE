@@ -1,0 +1,149 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#3ec995"
+             type="line-scale" [fullScreen]="false"><p style="color: white"> Đang tải... </p>
+</ngx-spinner>
+<div class="ant-breadcrumb-custom">
+  <nz-breadcrumb>
+    <nz-breadcrumb nzSeparator=">">
+      <nz-breadcrumb-item>
+        <a>Hành chính nhân sự</a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a>Quản lý nhân sự</a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a>Danh sách nhân viên</a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-breadcrumb>
+</div>
+<div class="view-wrapper list-page crm-contact-list">
+  <dx-data-grid
+    class="grid theme-dependent"
+    noDataText=""
+    height="100%"
+    keyExpr="id"
+    [dataSource]="lstData"
+    [allowColumnReordering]="true"
+    [focusedRowEnabled]="true"
+    [showBorders]="true"
+    [(focusedRowKey)]="userId"
+    (onRowClick)="rowClick($event)"
+    (onExporting)="onExporting($event)"
+  >
+    <dxo-scrolling mode="virtual"></dxo-scrolling>
+    <dxo-selection
+      selectAllMode="allPages"
+      showCheckBoxesMode="always"
+      mode="multiple"
+    ></dxo-selection>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-header-filter [visible]="true"></dxo-header-filter>
+    <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+    <dxo-search-panel class="search-wrapper"
+                      style="width: 150px; height: 40px;"
+                      [visible]="true"
+                      placeholder="Tìm kiếm nhân viên"
+    ></dxo-search-panel>
+    <dxo-export
+      [enabled]="true"
+      [allowExportSelectedData]="true"
+      [formats]="['xlsx']"
+    >
+    </dxo-export>
+
+    <dxo-toolbar>
+      <dxi-item location="before">
+        <div class="grid-header"><i class="fa-solid fa-users-viewfinder" style="margin-right: 7px;"></i>Nhân viên</div>
+      </dxi-item>
+      <dxi-item location="after" locateInMenu="auto" appCheckAuthorize>
+        <dx-button
+          text="Thêm nhân viên"
+          icon="plus"
+          type="default"
+          stylingMode="contained"
+          (onClick)="addContact()"
+        ></dx-button>
+      </dxi-item>
+      <dxi-item
+        location="after"
+        locateInMenu="auto"
+        showText="inMenu"
+        widget="dxButton"
+        [options]="{
+                      text: 'Refresh',
+                      icon: 'refresh',
+                      onClick: refresh,
+                      stylingMode: 'text'
+                    }"
+      ></dxi-item>
+      <dxi-item location="after" locateInMenu="auto">
+        <div class="separator"></div>
+      </dxi-item>
+      <dxi-item name="exportButton"></dxi-item>
+      <dxi-item location="after" locateInMenu="auto">
+        <div class="separator"></div>
+      </dxi-item>
+      <dxi-item name="columnChooserButton" locateInMenu="auto"></dxi-item>
+      <dxi-item name="searchPanel" locateInMenu="auto"></dxi-item>
+    </dxo-toolbar>
+
+    <dxi-column
+      dataField="employeeCode"
+      caption="Mã nhân viên"
+      sortOrder="desc"
+      [hidingPriority]="5"
+      [minWidth]="150"
+    ></dxi-column>
+    <dxi-column
+      dataField="employeeName"
+      caption="Tên nhân viên"
+      sortOrder="asc"
+      [hidingPriority]="5"
+      [minWidth]="150"
+    ></dxi-column>
+    <dxi-column
+      dataField="departmentName"
+      caption="Phòng ban"
+      [hidingPriority]="5"
+      [minWidth]="150"
+    ></dxi-column>
+    <dxi-column
+      dataField="positionName"
+      caption="Chức vụ"
+      [hidingPriority]="5"
+      [minWidth]="150"
+    ></dxi-column>
+    <dxi-column
+      dataField="phone"
+      caption="Số điện thoại"
+      [hidingPriority]="5"
+      [minWidth]="150"
+    ></dxi-column>
+    <dxi-column
+      dataField="genderName"
+      caption="Giới tính"
+      [hidingPriority]="5"
+      [minWidth]="100"
+    ></dxi-column>
+    <dxi-column
+      dataField="address"
+      caption="Địa chỉ"
+      [hidingPriority]="5"
+      [minWidth]="100"
+    ></dxi-column>
+  </dx-data-grid>
+
+  <app-panel-employee-managerment
+    [userId]="userId"
+    [(isOpened)]="isPanelOpened"
+    (isOpenedChange)="onOpenedChange($event)"
+    (pinnedChange)="onPinnedChange()"
+  >
+  </app-panel-employee-managerment>
+
+  <app-form-popup [(visible)]="isAddContactPopupOpened" (save)="handleOkModal()" titleText="Thêm nhân viên mới">
+      <app-form-employee-managerment></app-form-employee-managerment>
+  </app-form-popup>
+
+</div>
+

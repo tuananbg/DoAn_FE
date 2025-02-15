@@ -1,0 +1,99 @@
+
+<nz-collapse nzExpandIconPosition="right" style="margin-top: 10px">
+  <nz-card>
+    <div class="list__head pb-3">
+      <div class="list__head-left">
+        <div class="list__head-title">
+          <span class="head-title">Thông tin bảo hiểm xã hội</span>
+          <span class="head-count"><span class="head-count__bracket">(</span><span
+            class="head-count__number">{{total}} bản ghi</span><span
+            class="head-count__bracket">)</span></span>
+        </div>
+      </div>
+      <div *ngIf="isVisableButton" class="list__head-right">
+        <div class="list__head-btn">
+          <app-button-create appCheckAuthorize (clickCreate)="openCreateModal()" [loading]="isLoading"></app-button-create>
+        </div>
+      </div>
+    </div>
+    <div class="list__table">
+      <nz-table #rowSelectionTable nzBordered [nzData]="lstData" [nzFrontPagination]="false"
+                [nzNoResult]="'Không có kết quả tìm kiếm'" [nzScroll]="{ x: SCROLL_TABLE.SCROLL_X}">
+        <thead>
+        <tr class="ant-header-customize">
+          <th nzWidth="60px" class="text-center">
+            STT
+          </th>
+          <th  nzWidth="150px" class="text-center">
+            Mã BHXH
+          </th>
+          <th nzWidth="150px" class="text-right">
+            Mức đóng
+          </th>
+          <th nzWidth="150px" class="text-center">
+            Phần trăm giảm
+          </th>
+          <th nzWidth="200px" class="text-right">
+            Người lao động đóng
+          </th>
+          <th nzWidth="150px" class="text-center">
+            Ngày hiệu lực
+          </th>
+          <th nzWidth="150px" class="text-center">
+            Ngày hết hạn
+          </th>
+          <th appCheckAuthorize *ngIf="isVisableButton" nzWidth="150px" class="text-center" nzRight="0px">
+            Hành động
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-template ngFor let-data let-idx="index" [ngForOf]="rowSelectionTable.data">
+          <tr>
+            <td class="text-center max-width-60">{{ (request.currentPage * request.pageSize) + idx + 1}}</td>
+            <td class="max-width-150" [nz-tooltip]="data.socialInsuranceCode">{{data.socialInsuranceCode}}</td>
+            <td class="max-width-150" [nz-tooltip]="data.initialPayment | currency: 'VND'">
+              <span style="color: #1e61f3; font-weight: bold">{{data.initialPayment | currency: 'VND'}}</span>
+            </td>
+            <td class="max-width-150 text-center" [nz-tooltip]="data.percent">{{data.percent}}%</td>
+            <td class="max-width-150 text-right" [nz-tooltip]="data.actualPayment | currency: 'VND'">
+              <span style="color: #1e61f3; font-weight: bold">{{data.actualPayment | currency: 'VND'}}</span>
+            </td>
+            <td class="max-width-150" [nz-tooltip]="data.licenseDate | date: 'dd/MM/yyyy'">{{ data.licenseDate | date: 'dd/MM/yyyy' }}</td>
+            <td class="max-width-150" [nz-tooltip]="data.expiredDate | date: 'dd/MM/yyyy'">{{ data.expiredDate | date: 'dd/MM/yyyy' }}</td>
+            <td appCheckAuthorize *ngIf="isVisableButton" class="text-center max-width-150" nzRight="0px">
+              <div class="action">
+                <app-button-icon class="action__margin" [isEdit] = "true"
+                                 [tooltipTitle]="'Cập nhật bảo hiểm'"
+                                 [loading]="isLoading"
+                                 (clickAction)="openUpdateModal(data)"></app-button-icon>
+                <app-button-icon class="action__margin" [isDelete]="true"
+                                 [tooltipTitle]="'Xóa bảo hiểm'" (click)="openModalDelete(data)"></app-button-icon>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        </tbody>
+      </nz-table>
+      <div nz-row class="list__pagination" *ngIf="lstData?.length">
+        <div *ngIf="isVisableButton" nz-col class="list__pagination-container">
+          <div>Tìm thấy
+            <strong>{{ total }}</strong> bản ghi &nbsp;
+          </div>
+          <app-paging class="app-paging" [itemOfPage]="request.pageSize" [currentPage]="request.currentPage"
+                      [totalItems]="total" (changeCurrentPage)="changeCurrentPage($event)"
+                      (changeItemPerPage)="changeItemPerPage($event)"></app-paging>
+        </div>
+      </div>
+    </div>
+  </nz-card>
+</nz-collapse>
+
+<app-modal-confirm title="Xác nhận xóa" [isVisible]="isVisibleModalDelete"
+                   textButtonCancel="Hủy"
+                   [text]="'Đồng ý'"
+                   [isConfirm]="true"
+                   [description]="message"
+                   (callBack)="callBackModalDelete()"
+                   (clickCancel)="onCancelModalDelete()">
+</app-modal-confirm>
