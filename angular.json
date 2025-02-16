@@ -44,23 +44,7 @@
               "./node_modules/devextreme/dist/css/dx.light.css",
               "./node_modules/devexpress-gantt/dist/dx-gantt.css",
               "src/styles.less",
-              "src/theme.less",
-              {
-                "input": "devextreme/scss/bundles/dx.fluent.blue.light.scss",
-                "bundleName": "theme-light"
-              },
-              {
-                "input": "devextreme/scss/bundles/dx.fluent.blue.dark.scss",
-                "bundleName": "theme-dark"
-              },
-              {
-                "input": "src/app/theme/styles/variables-light.scss",
-                "bundleName": "theme-light"
-              },
-              {
-                "input": "src/app/theme/styles/variables-dark.scss",
-                "bundleName": "theme-dark"
-              }
+              "src/theme.less"
             ],
             "scripts": []
           },
@@ -99,6 +83,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "company-management-fe:build"
+          },
           "configurations": {
             "production": {
               "browserTarget": "company-management-fe:build:production"
