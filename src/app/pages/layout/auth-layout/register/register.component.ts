@@ -218,10 +218,19 @@ export class RegisterComponent implements OnInit {
   }
 
   fetchAccount() {
-    this.accountService.getAllAccount(this.payloadAccount, 0, -1).subscribe((response: any) => {
-      if (response) {
-        this.lstAccount = response.dataList;
-        this.lstAccount.sort((a, b) => a.email.localeCompare(b.email));
+    this.accountService.getAllAccount(this.payloadAccount, 0, 1).subscribe({
+      next: (response: any) => {
+        if (response && response.dataList) {
+          this.lstAccount = response.dataList;
+          this.lstAccount.sort((a, b) => a.email.localeCompare(b.email));
+        }
+      },
+      error: (err) => {
+        console.error("Lỗi API:", err);
+        this.toastService.openErrorToast(err.error?.msgCode || "Đã xảy ra lỗi! Vui lòng thử lại.");
+      },
+      complete: () => {
+        console.log("Hoàn thành tải danh sách tài khoản.");
       }
     });
   }

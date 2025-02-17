@@ -49,26 +49,27 @@ export class ProjectListManagementComponent implements OnInit {
   loadData() {
     this.idUserDetail = this.idUserDetail ? this.idUserDetail : null;
     this.spinner.show().then();
-    this.projectService.search(this.idUserDetail).subscribe(res => {
-      if (res && res.code === "OK") {
-        this.projects = res.data;
-        this.projects.sort((a, b) => {
-          if (a.createdDate > b.createdDate) {
-            return -1;
-          } else if (a.createdDate < b.createdDate) {
-            return 1;
-          } else {
-            return 0;
-          }
-        });
+
+    this.projectService.search(this.idUserDetail).subscribe({
+      next: (res) => {
+        console.log(res);
+        if (res && res.code === "OK") {
+          this.projects = res.data;
+          this.projects.sort((a, b) => (a.createdDate > b.createdDate ? -1 : a.createdDate < b.createdDate ? 1 : 0));
+        }
         this.spinner.hide().then();
-      } else {
-        this.toastService.openErrorToast(res.msgCode);
+      },
+      error: (err) => {
+        console.error("Lỗi API:", err);
+        this.toastService.openErrorToast(err.error?.msgCode || "Đã xảy ra lỗi! Vui lòng thử lại.");
         this.spinner.hide().then();
+      },
+      complete: () => {
+        console.log("Hoàn thành tải dữ liệu dự án.");
       }
-      this.spinner.hide().then();
-    })
+    });
   }
+
 
   openCreateModal(): void {
     this.isUpdate = false

@@ -3,7 +3,7 @@
     <ng-container *ngIf="!isLoading">
       <dx-toolbar class="panel-toolbar">
         <dxi-item location="before" cssClass="accent">
-          <div *dxTemplate style="display: flex;">
+          <div *dxTemplate style="display: flex; padding: 5px 40px;">
             <div *ngIf="!isDisablePinClose"
                  [ngClass]="user.isActive == 2 ? 'circle-button-success' : 'circle-button-danger'">
             </div>

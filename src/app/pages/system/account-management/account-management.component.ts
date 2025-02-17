@@ -71,16 +71,31 @@ export class AccountManagementComponent implements OnInit {
   ngOnInit(): void {
     this.getData()
   }
-  getData () {
-    this.accountService.getAllAccount(this.searchData, this.pagination.current, this.pagination.pageSize).subscribe({
-      next: (res) => {
-        console.log(res)
-        this.tableData = res.dataList
-        this.pagination.current = res.pageIndex
-        this.pagination.pageSize = res.pageSize
-        this.pagination.total = res.totalElements
-      }
-    })
+  getData() {
+    this.spinner.show().then(); // Hiển thị spinner khi bắt đầu load dữ liệu
+
+    this.accountService.getAllAccount(this.searchData, this.pagination.current, this.pagination.pageSize)
+      .subscribe({
+        next: (res) => {
+          console.log(res);
+          if (res && res.dataList) {
+            this.tableData = res.dataList;
+            this.pagination.current = res.pageIndex;
+            this.pagination.pageSize = res.pageSize;
+            this.pagination.total = res.totalElements;
+          }
+          this.spinner.hide().then(); // Ẩn spinner sau khi tải xong
+        },
+        error: (err) => {
+          if (err.error && err.error.msgCode) {
+            this.toastService.openErrorToast(err.error.msgCode);
+          }
+          this.spinner.hide().then(); // Ẩn spinner khi có lỗi
+        },
+        complete: () => {
+          console.log("Hoàn thành tải dữ liệu tài khoản.");
+        }
+      });
   }
   handlePageIndexChange ($event: number) {
     this.pagination.current = $event - 1

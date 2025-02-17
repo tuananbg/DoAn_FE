@@ -16,7 +16,7 @@ export class AccountService {
   constructor(private http: HttpClient) { }
 
   getAllAccount(searchData: object, page: number, size: number):Observable<any>{
-    return this.http.post(AUTH_API + apiAccountManagement.apiGetAccount +`?page=${page}&size=${size}`,searchData, httpOptions)
+    return this.http.get(AUTH_API + apiAccountManagement.apiGetAccount +`?page=${page}&size=${size}`,searchData)
   }
 
   getAllRole():Observable<any>{
