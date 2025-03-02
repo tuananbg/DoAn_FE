@@ -15,7 +15,7 @@
   margin-bottom: calc(var(--toolbar-margin-bottom) / 2);
   //background-color: black !important;
   //box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  color: black;
+  color:  rgba(255, 255, 255, 0.35);
   position: absolute;
 
   .dx-toolbar-label > div {
@@ -48,15 +48,15 @@
 }
 
 .left{
-  background: black !important;
+  background:  rgba(255, 255, 255, 0.35) !important;
   padding: 20px !important;
 }
 
 .wrapper-app-panel{
   width: 100%;
   margin: 0 auto;
-  background-color: #242424;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  background-color:  rgba(255, 255, 255, 0.35);
+  box-shadow: rgba(255, 255, 255, 0.35) 0px 5px 15px;
   padding:20px;
 }
 .wrapper-title{
@@ -74,4 +74,21 @@
 }
 .dx-editor-filled.dx-texteditor-label-outside .dx-texteditor-label {
   margin-top: 20px!important;
+}
+.tabs {
+  display: flex;
+  border-bottom: 2px solid #ddd;
+}
+
+.tabs a {
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #000;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+}
+
+.tabs a.active {
+  font-weight: bold;
+  border-bottom: 3px solid #3ec995; /* Màu xanh giống hình */
 }

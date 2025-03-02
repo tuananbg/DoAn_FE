@@ -20,6 +20,8 @@ import {PositionService} from "../../../../service/position.service";
 })
 export class DetailInforEmployeeComponent implements OnInit {
 
+  activeTab = 'bang-cap'; // Mặc định chọn tab đầu tiên
+
   contactId!: number;
 
   contactName = 'Quay lại danh sách';

@@ -189,10 +189,38 @@
           ></dx-load-panel>
         </div>
       </div>
-      <app-list-qualification-manager [isVisableButton]="false"></app-list-qualification-manager>
-      <app-list-contract-for-employee [isVisableButton]="false"></app-list-contract-for-employee>
-      <app-list-socialinsurance-managerment [isVisableButton]="false"></app-list-socialinsurance-managerment>
-      <app-list-wage-for-employee [isVisableButton]="false"></app-list-wage-for-employee>
+      <div class="tabs">
+        <a href="javascript:void(0)" (click)="activeTab = 'bang-cap'" [class.active]="activeTab === 'bang-cap'">
+          Bằng cấp chứng chỉ
+        </a>
+        <a href="javascript:void(0)" (click)="activeTab = 'hop-dong'" [class.active]="activeTab === 'hop-dong'">
+          Quản lý hợp đồng
+        </a>
+        <a href="javascript:void(0)" (click)="activeTab = 'bao-hiem'" [class.active]="activeTab === 'bao-hiem'">
+          Thông tin bảo hiểm
+        </a>
+        <a href="javascript:void(0)" (click)="activeTab = 'phu-cap'" [class.active]="activeTab === 'phu-cap'">
+          Thông tin phụ cấp
+        </a>
+      </div>
+
+      <!-- Nội dung từng tab -->
+      <div *ngIf="activeTab === 'bang-cap'">
+        <app-list-qualification-manager [isVisableButton]="true"></app-list-qualification-manager>
+      </div>
+
+      <div *ngIf="activeTab === 'hop-dong'">
+        <app-list-contract-for-employee [isVisableButton]="true"></app-list-contract-for-employee>
+      </div>
+
+      <div *ngIf="activeTab === 'bao-hiem'">
+        <app-list-socialinsurance-managerment [isVisableButton]="true"></app-list-socialinsurance-managerment>
+      </div>
+
+      <div *ngIf="activeTab === 'phu-cap'">
+        <app-list-wage-for-employee [isVisableButton]="true"></app-list-wage-for-employee>
+      </div>
+
     </div>
   </div>
 </dx-scroll-view>
