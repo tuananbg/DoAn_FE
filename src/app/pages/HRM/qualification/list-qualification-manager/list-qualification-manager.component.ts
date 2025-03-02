@@ -74,7 +74,7 @@ export class ListQualificationManagerComponent implements OnInit {
       sort: this.request.sort,
     };
     this.spinner.show().then();
-    this.qualificationService.search(this.idUserDetail, pageable).subscribe(res => {
+    this.qualificationService.search(this.idUserDetail).subscribe(res => {
       if (res && res.code === "OK") {
         this.lstData = res.data.content;
         this.total = res.data.totalElements;

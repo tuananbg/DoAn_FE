@@ -25,13 +25,11 @@ export class WageService {
     )
   }
 
-  searchForEmployee(payload: any, pageable: any): Observable<any> {
-    return this.httpClient.post(
-      AUTH_API + "/searchForEmployee",
-      payload,
+  searchForEmployee(id: any): Observable<any> {
+    return this.httpClient.get(
+      AUTH_API + "/employee-detail/" + id,
       {
         headers: new HttpHeaders({'Content-Type': 'application/json'}),
-        params: pageable,
       }
     )
   }

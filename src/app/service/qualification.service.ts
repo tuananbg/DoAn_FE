@@ -24,12 +24,11 @@ export class QualificationService {
     }
   }
 
-  search(userDetailId: any, pageable: any): Observable<any> {
-    return this.httpClient.post(
-      AUTH_API + "/search/" + userDetailId,
+  search(userDetailId: any): Observable<any> {
+    return this.httpClient.get(
+      AUTH_API + "/employee-detail/" + userDetailId,
       {
         headers: new HttpHeaders({'Content-Type': 'application/json'}),
-        params: pageable,
       }
     )
   }
@@ -46,7 +45,7 @@ export class QualificationService {
 
   getId(id: number | undefined): Observable<any> {
     return this.httpClient.get(
-      AUTH_API + "/detail" + '/' + id,
+      AUTH_API + "/detail/" + id,
     );
   }
 

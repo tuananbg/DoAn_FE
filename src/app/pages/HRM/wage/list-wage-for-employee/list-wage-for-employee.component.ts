@@ -64,7 +64,7 @@ export class ListWageForEmployeeComponent implements OnInit {
       userDetailId : this.idUserDetail
     };
     this.spinner.show().then();
-    this.wageService.searchForEmployee(queryModel, pageable).subscribe(res => {
+    this.wageService.searchForEmployee(this.idUserDetail).subscribe(res => {
       if (res && res.code === "OK") {
         this.lstData = res.data.data;
         this.total = res.data.dataCount;
