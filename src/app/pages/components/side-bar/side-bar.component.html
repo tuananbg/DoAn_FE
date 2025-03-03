@@ -1,14 +1,14 @@
 <div class="wrapper side-bar-scroll scrollable-area" [style]="{'width': isCollapsed ? '80px' : '250px'}">
-<!--  <button nz-button nzType="primary" (click)="toggleCollapsed()" class="toggle-sidebar-button"-->
-<!--          [style]="{'width': isCollapsed ? '80px' : '250px'}">-->
-<!--    <i nz-icon [nzType]="isCollapsed ? 'double-right' : 'double-left'" nzTheme="outline"></i>-->
-<!--  </button>-->
+  <!--  <button nz-button nzType="primary" (click)="toggleCollapsed()" class="toggle-sidebar-button"-->
+  <!--          [style]="{'width': isCollapsed ? '80px' : '250px'}">-->
+  <!--    <i nz-icon [nzType]="isCollapsed ? 'double-right' : 'double-left'" nzTheme="outline"></i>-->
+  <!--  </button>-->
   <ul nz-menu nzMode="inline" [nzInlineCollapsed]="isCollapsed" class="sidebar-item">
     <li
       nz-menu-item
       [nzMatchRouter]="true"
     >
-<!--      <i nz-icon nzType="home" nzTheme="outline"></i>-->
+      <!--      <i nz-icon nzType="home" nzTheme="outline"></i>-->
       <i class="fa-solid fa-house" style="margin-right: 5px;"></i>
       <span><a [routerLink]="'/dashboard'">Trang chủ</a></span>
     </li>
@@ -73,7 +73,8 @@
       <ul>
         <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/project'">Dự án</a></span></li>
         <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/task-list'">Danh sách công việc</a></span></li>
-        <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="['/project-person', userId]">Việc của tôi</a></span></li>
+        <li nz-menu-item [nzMatchRouter]="true"><span><a
+          [routerLink]="['/project-person', userId]">Việc của tôi</a></span></li>
       </ul>
     </li>
     <li appCheckAuthorize nz-submenu nzTitle="Quản trị hệ thống" nzIcon="database" [nzOpen]="subMenuQLHT">
@@ -81,7 +82,7 @@
         <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/register'">Tạo tài khoản</a></span></li>
         <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/account'">Quản lý tài khoản</a></span></li>
         <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/system'">Quản lý cây phân cấp</a></span></li>
-        <li nz-menu-item [nzMatchRouter]="true"><span><a >Cấu hình</a></span></li>
+        <li nz-menu-item [nzMatchRouter]="true"><span><a>Cấu hình</a></span></li>
       </ul>
     </li>
   </ul>
