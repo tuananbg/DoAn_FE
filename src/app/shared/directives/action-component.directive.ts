@@ -23,25 +23,27 @@ export class ActionComponentDirective implements OnInit, AfterViewInit{
     this.checkAuthorize();
   }
 
-  checkAuthorize(){
+  checkAuthorize() {
     const optionalRole = this.loginService.getListRolesMenuItem();
+    console.log("Roles from localStorage:", optionalRole);
+
     if (optionalRole && optionalRole.length > 0) {
-      for(let index = 0; index <optionalRole.length; index++ ){
-        this.userComponent = optionalRole[index];
-        if (this.userComponent.roleName !== "ADMIN") {
-          this.el.nativeElement.hidden = true;  //ẩn đi
-          this.el.nativeElement.style.display = 'none';
-        } else {
-          this.el.nativeElement.hidden = false;  //hiển thị
-          this.el.nativeElement.style.display = 'block';
-          break;
-        }
+      const userRole = optionalRole[0]?.roleName || optionalRole;  // Tránh lỗi undefined
+      console.log("Checking role:", userRole);
+
+      if (userRole === "ADMIN") {
+        this.el.nativeElement.hidden = false;
+        this.el.nativeElement.style.display = 'block';
+      } else {
+        this.el.nativeElement.hidden = true;
+        this.el.nativeElement.style.display = 'none';
       }
     } else {
-      console.error('No roles found');
-      this.el.nativeElement.hidden = false; // Hoặc hành động mặc định khác
+      this.el.nativeElement.hidden = true;
     }
-
   }
+
+
+
 
 }

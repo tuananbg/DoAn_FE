@@ -37,7 +37,7 @@ export class ListEmployeeManagermentComponent implements OnInit {
     name: null,
     currentPage: 0,
     pageSize: 10,
-    sort: 'created_date,DESC', // -: desc | +: asc,
+    // sort: 'CREATED_DATE/DESC', // -: desc | +: asc,
   };
   lstData: any[] = [];
   total = 0;
@@ -60,45 +60,47 @@ export class ListEmployeeManagermentComponent implements OnInit {
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
+  searchKeyword: string | null = null; // Mặc định là null
+
+  onSearchChanged(event: any) {
+    this.searchKeyword = event.value ? event.value : null; // Nếu không nhập, đặt lại null
+    this.fetchData(this.request.currentPage, this.request.pageSize); // Gọi API
+  }
+
   fetchData(currentPage?: number, pageSize?: number) {
-    const formValue = this.searchForm.value;
-    const queryModel = {
-      employeeCode: !formValue.employeeCode ? null : formValue.employeeCode.toString(),
-      employeeName: !formValue.employeeName ? null : formValue.employeeName.toString(),
-      employeeEmail: !formValue.employeeEmail ? null : formValue.employeeEmail.toString(),
-      employeeGender: !formValue.employeeGender ? null : formValue.employeeGender,
-      positionId: !formValue.positionId ? null : formValue.positionId,
-      departmentId: !formValue.departmentId ? null : formValue.departmentId
-    };
     const pageable = {
       page: currentPage,
       size: pageSize,
-      sort: this.request.sort,
     };
+
     this.spinner.show().then();
-    this.employeeService.searchEmployee(queryModel, pageable).subscribe(res => {
+    console.log("Search Keyword:", this.searchKeyword);
+
+    this.employeeService.searchEmployee(this.searchKeyword, pageable).subscribe(res => {
       if (res && res.code === "OK") {
-        this.lstData = res.data.data;
-        this.total = res.data.totalElements;
+        // Sửa cách lấy danh sách nhân viên
+        this.lstData = res.data.content || [];  // Lấy từ res.data.content
+        this.total = res.data.totalElements || 0;
+
         this.spinner.hide().then();
-        if (this.lstData.length === 0) {
-          if (this.request.currentPage !== 0) {
-            this.request.currentPage = this.request.currentPage - 1;
-            this.fetchData(this.request.currentPage, this.request.pageSize);
-          }
+
+        // Kiểm tra nếu không có dữ liệu và trang hiện tại > 0 thì giảm trang
+        if (this.lstData.length === 0 && this.request.currentPage !== 0) {
+          this.request.currentPage = this.request.currentPage - 1;
+          this.fetchData(this.request.currentPage, this.request.pageSize);
         }
-        this.spinner.hide().then();
       } else {
-        this.toastService.openErrorToast(res.body.msgCode);
+        this.toastService.openErrorToast(res.message || "Lỗi không xác định");
       }
       this.spinner.hide().then();
     }, error => {
-      this.toastService.openErrorToast(error.error.msgCode);
+      this.toastService.openErrorToast(error.error?.msgCode || "Lỗi kết nối");
       this.spinner.hide().then();
     }, () => {
       this.spinner.hide().then();
     });
   }
+
 
 
   addContact() {

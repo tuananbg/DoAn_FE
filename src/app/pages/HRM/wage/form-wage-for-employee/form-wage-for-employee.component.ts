@@ -139,7 +139,7 @@ export class FormWageForEmployeeComponent implements OnInit {
   }
 
   fetchEmployee() {
-    this.employeeService.searchEmployee(this.payloadEmployee, {page: 0, size: -1}).subscribe(res => {
+    this.employeeService.searchEmployee(null, {page: 0, size: -1}).subscribe(res => {
       if (res && res.code === "OK") {
         this.lstEmployee = res.data.data;
         this.lstEmployee = this.lstEmployee.map(item => ({

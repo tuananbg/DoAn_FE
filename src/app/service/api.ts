@@ -14,4 +14,5 @@ export const apiAccountManagement = {
   apiGetMenuItem: '/api/v1/account/menu-item',
   apiUpdateRoleMenuItem: '/api/v1/account/update-role-menu-item',
   apiUpdateRole: '/api/v1/account/updateRole',
+  apiGetRolesDetail: '/api/v1/account/getDetail',
 }

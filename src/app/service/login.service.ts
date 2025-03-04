@@ -73,12 +73,14 @@ export class LoginService {
     return JSON.parse(jsonPayload);
   };
 
-   getListRolesMenuItem(): Role[] {
+  getListRolesMenuItem(): Role[] {
     const serializedList = localStorage.getItem("roles");
-    if (serializedList) {
-      return JSON.parse(serializedList);
+    try {
+      return serializedList ? JSON.parse(serializedList) : [];
+    } catch (error) {
+      return [];
     }
-    return [];
   }
+
 
 }

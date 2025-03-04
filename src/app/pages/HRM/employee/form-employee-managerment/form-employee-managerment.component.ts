@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
 import {DepartmentService} from "../../../../service/department.service";
 import {PositionService} from "../../../../service/position.service";
 import DevExpress from "devextreme";
@@ -24,6 +24,7 @@ export class FormEmployeeManagermentComponent implements OnInit {
   lstDepartment: any[] = [];
   lstAccount: any[] = [];
   lstPosition: any[] = [];
+  idUserDetail: any;
   lstGender = [{id: 1, gender: 'Nam'}, {id: 0, gender: 'Nữ'}];
   payloadDepartment = {name: null, status: null};
   payloadPosition = {positionCode: null, positionName: null, isActive: 1};
@@ -53,12 +54,36 @@ export class FormEmployeeManagermentComponent implements OnInit {
     private accountService:AccountService,
   ) {
   }
+  parseJwt(token: string) {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+  };
 
   ngOnInit(): void {
-    this.fetchDepartment();
-    this.fetchAccount();
+    // const token = localStorage.getItem('token');
+    // const payloadToken: any = token ? this.parseJwt(token) : null;
+    // const userObject = JSON.parse(payloadToken.user);
+    // this.idUserDetail = userObject.userDetailId;
+    //
+    //   this.fetchAccount(this.idUserDetail);
     // this.fetchPosition();
   }
+  // ngOnChanges(changes: SimpleChanges): void {
+  //   const {userId} = changes;
+  //   if (typeof userId.currentValue === 'number' && userId?.currentValue) {
+  //     if( this.idUserDetail === userId.currentValue){
+  //       this.isUserOffice = true;
+  //     }else{
+  //       this.isUserOffice = false;
+  //     }
+  //     this.fetchAccount(userId.currentValue);
+  //   }
+  // }
 
   valueChanged(e : any) {
     if(e.value!=null){
@@ -75,23 +100,23 @@ export class FormEmployeeManagermentComponent implements OnInit {
     }
   }
 
-  fetchDepartment() {
-    this.departmentService.searchDepartment(this.payloadDepartment, {page: 0, size: -1}).subscribe((response: any) => {
-      if (response && response.code === "OK") {
-        this.lstDepartment = response.data.content;
-        this.lstDepartment.sort((a, b) => a.departmentName.localeCompare(b.departmentName));
-      }
-    });
-  }
-
-  fetchAccount() {
-    this.accountService.getAllAccount(this.payloadAccount, 0, -1).subscribe((response: any) => {
-      if (response) {
-        this.lstAccount = response.dataList;
-        this.lstAccount.sort((a, b) => a.email.localeCompare(b.email));
-      }
-    });
-  }
+  // fetchDepartment() {
+  //   this.departmentService.searchDepartment(this.payloadDepartment, {page: 0, size: -1}).subscribe((response: any) => {
+  //     if (response && response.code === "OK") {
+  //       this.lstDepartment = response.data.content;
+  //       this.lstDepartment.sort((a, b) => a.departmentName.localeCompare(b.departmentName));
+  //     }
+  //   });
+  // }
+  //
+  // fetchAccount = (id: number) => {
+  //   this.accountService.getRole(id).subscribe((response: any) => {
+  //     if (response) {
+  //       this.lstAccount = response.dataList;
+  //       this.lstAccount.sort((a, b) => a.email.localeCompare(b.email));
+  //     }
+  //   });
+  // }
 
   onDepartmentChanged(event: any) {
     const selectedDepartmentId = event.value;

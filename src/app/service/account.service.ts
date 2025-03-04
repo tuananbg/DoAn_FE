@@ -22,6 +22,11 @@ export class AccountService {
   getAllRole():Observable<any>{
     return this.http.get(AUTH_API + apiAccountManagement.apiGetRoles, httpOptions)
   }
+  getRole(id: any): Observable<any> {
+    return this.http.get(
+      AUTH_API + apiAccountManagement.apiGetRolesDetail + "/"+id,
+    );
+  }
 
   getAllMenuItem():Observable<any>{
     return this.http.get(AUTH_API + apiAccountManagement.apiGetMenuItem, httpOptions)
