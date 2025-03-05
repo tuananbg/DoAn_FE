@@ -29,7 +29,7 @@ export class ListEmployeeManagermentComponent implements OnInit {
   searchForm!: FormGroup;
   isAddContactPopupOpened = false;
 
-  userId: number | undefined;
+  employeeCode: string | null = null;
   request: any = {
     listTextSearch: [],
     code: null,
@@ -131,14 +131,28 @@ export class ListEmployeeManagermentComponent implements OnInit {
   };
 
   rowClick(e: DxDataGridTypes.RowClickEvent) {
-    const {data} = e;
-    this.userId = data.id;
+    console.log("Dữ liệu hàng:", e.data); // Kiểm tra dữ liệu dòng khi click
+    const newEmployeeCode = e.data?.employeeCode;
+
+    if (!newEmployeeCode) {
+      console.warn("Không tìm thấy mã nhân viên!");
+      return;
+    }
+
+    if (newEmployeeCode !== this.employeeCode) {
+      console.log(`Cập nhật employeeCode: ${this.employeeCode} => ${newEmployeeCode}`);
+      this.employeeCode = newEmployeeCode;
+    } else {
+      console.log("Nhấn vào cùng một nhân viên, không cập nhật.");
+    }
+
     this.isPanelOpened = true;
   }
 
+
   onOpenedChange = (value: boolean) => {
     if (!value) {
-      this.userId == null;
+      this.employeeCode == null;
     }
   };
 

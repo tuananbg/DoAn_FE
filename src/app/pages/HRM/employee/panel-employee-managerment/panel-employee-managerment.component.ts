@@ -33,7 +33,8 @@ export class PanelEmployeeManagermentComponent implements OnInit, OnChanges, Aft
   @Input() isOpened = false;
   @Input() isMarTop = false;
   @Input() isDisablePinClose = false;
-  @Input() userId: any;
+  // @Input() userId: any;
+  @Input() employeeCode: string | null = null; // Thêm Input
   @Output() isOpenedChange = new EventEmitter<boolean>();
   @Output() pinnedChange = new EventEmitter<boolean>();
   private pinEventSubject = new Subject<boolean>();
@@ -89,16 +90,13 @@ export class PanelEmployeeManagermentComponent implements OnInit, OnChanges, Aft
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const {userId} = changes;
-    if (typeof userId.currentValue === 'number' && userId?.currentValue) {
-      if( this.idUserDetail === userId.currentValue){
-        this.isUserOffice = true;
-      }else{
-        this.isUserOffice = false;
-      }
-      this.loadUserById(userId.currentValue);
+
+    if (changes["employeeCode"] && changes["employeeCode"].currentValue) {
+      console.log("Gọi API với employeeCode:",changes["employeeCode"].currentValue);
+      this.loadUserByCode(changes["employeeCode"].currentValue);
     }
   }
+
 
   ngOnDestroy(): void {
     this.userPanelSubscriptions.forEach((sub) => sub.unsubscribe());
@@ -114,9 +112,24 @@ export class PanelEmployeeManagermentComponent implements OnInit, OnChanges, Aft
     return JSON.parse(jsonPayload);
   };
 
-  loadUserById = (id: number) => {
+  // loadUserById = (id: number) => {
+  //   this.isLoading = true;
+  //   this.employeeService.getEmployeeId(id).subscribe(res => {
+  //     if (res && res.code === "OK") {
+  //       this.user = res.data;
+  //       this.user.birthday = moment(res.data.birthday).format('DD/MM/YYYY');
+  //       this.isLoading = false;
+  //       this.isEditing = false;
+  //     } else {
+  //       this.toastService.openErrorToast(res.msgCode);
+  //     }
+  //   });
+  // };
+
+  loadUserByCode = (code: string) => {
     this.isLoading = true;
-    this.employeeService.getEmployeeId(id).subscribe(res => {
+    console.log(code);
+    this.employeeService.getEmployeeCode(code).subscribe(res => {
       if (res && res.code === "OK") {
         this.user = res.data;
         this.user.birthday = moment(res.data.birthday).format('DD/MM/YYYY');
@@ -127,6 +140,7 @@ export class PanelEmployeeManagermentComponent implements OnInit, OnChanges, Aft
       }
     });
   };
+
 
   onClosePanel = () => {
     this.isOpened = false;
@@ -174,7 +188,7 @@ export class PanelEmployeeManagermentComponent implements OnInit, OnChanges, Aft
   };
 
   navigateToDetails = () => {
-    this.router.navigate(['/detail-employee/' + this.userId], {state: {page: this.request}});
+    // this.router.navigate(['/detail-employee/' + this.employeeCode], {state: {page: this.request}});
   };
 
   // fetchDepartment() {

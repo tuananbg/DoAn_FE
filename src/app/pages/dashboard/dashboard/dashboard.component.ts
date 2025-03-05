@@ -86,7 +86,7 @@ export class DashboardComponent implements OnInit {
   }
 
   loadStatisticalHeader(){
-    this.dashboardService.getStaticticalHeader(this.employeeCode).subscribe(
+    this.dashboardService.getStatisticalHeader(this.employeeCode).subscribe(
       res => {
         if (res && res.code === "OK") {
           this.totalEmployee = res.data.totalEmployee;
@@ -101,7 +101,7 @@ export class DashboardComponent implements OnInit {
   }
 
   loadStatisticalContract(){
-    this.dashboardService.getStaticticalContract().subscribe(
+    this.dashboardService.getStatisticalContract().subscribe(
       res => {
         if (res && res.code === "OK") {
           this.lstContractType = res.data;

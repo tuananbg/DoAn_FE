@@ -14,7 +14,7 @@ import * as jspdf from "jspdf";
 })
 export class DetailEmployeeManagermentComponent implements OnInit {
 
-  contactId!: number;
+  contactId!: string;
 
   contactName = 'Quay lại danh sách';
 
@@ -39,7 +39,7 @@ export class DetailEmployeeManagermentComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private fileManagerService: FileManagerService
   ) {
-    this.contactId = Number(this.activatedRoute.snapshot.params['id']);
+    // this.contactId = Number(this.activatedRoute.snapshot.params['code']);
   }
 
   ngOnInit(): void {

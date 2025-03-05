@@ -19,7 +19,7 @@ export class ContractService {
 
   search(payload: any, pageable: any): Observable<any> {
     return this.httpClient.post(
-      API_CONFIG.BASE_URL + "contract/search",
+      API_CONFIG.BASE_URL + "employee-contract/search",
       payload,
       {
         headers: new HttpHeaders({'Content-Type': 'application/json'}),
@@ -30,7 +30,7 @@ export class ContractService {
 
   searchForEmployee(payload: any, pageable: any): Observable<any> {
     return this.httpClient.post(
-      API_CONFIG.BASE_URL + "contract/searchForEmployee",
+      API_CONFIG.BASE_URL + "employee-contract/searchForEmployee",
       payload,
       {
         headers: new HttpHeaders({'Content-Type': 'application/json'}),
@@ -45,7 +45,7 @@ export class ContractService {
     formData.append('contractCode', contractDTO.contractCode);
     formData.append('contractType', contractDTO.contractType);
     return this.httpClient.post(
-      API_CONFIG.BASE_URL + "contract/create",
+      API_CONFIG.BASE_URL + "employee-contract/create",
       formData,
       {
         observe: 'response'
@@ -54,7 +54,7 @@ export class ContractService {
   }
 
   createForEmployee(userDetailContractDTO: any): Observable<any> {
-    return this.httpClient.post(API_CONFIG.BASE_URL + "contract/createForEmployee",
+    return this.httpClient.post(API_CONFIG.BASE_URL + "employee-contract/createForEmployee",
       userDetailContractDTO,
       {
         observe: 'response'
@@ -63,7 +63,7 @@ export class ContractService {
 
   getContractId(id: number | undefined): Observable<any> {
     return this.httpClient.get(
-      API_CONFIG.BASE_URL + "contract/detail/" + id,
+      API_CONFIG.BASE_URL + "employee-contract/detail/" + id,
     );
   }
 
@@ -74,7 +74,7 @@ export class ContractService {
     formData.append('contractCode', contractDTO.contractCode);
     formData.append('contractType', contractDTO.contractType);
     return this.httpClient.put(
-      API_CONFIG.BASE_URL + "contract",
+      API_CONFIG.BASE_URL + "employee-contract",
       formData,
       {
         observe: 'response'
@@ -84,26 +84,26 @@ export class ContractService {
 
   editForEmployee(payload: any): Observable<any> {
     return this.httpClient.put(
-      API_CONFIG.BASE_URL + "contract/updateForEmployee",
+      API_CONFIG.BASE_URL + "employee-contract/updateForEmployee",
       payload
     );
   }
 
   delete(id: string): Observable<any> {
     return this.httpClient.delete(
-      API_CONFIG.BASE_URL + "contract/delete/" + id,
+      API_CONFIG.BASE_URL + "employee-contract/delete/" + id,
     );
   }
 
   deleteForEmployee(id: string): Observable<any> {
     return this.httpClient.delete(
-      API_CONFIG.BASE_URL + "contract/deleteForEmployee/" + id,
+      API_CONFIG.BASE_URL + "employee-contract/deleteForEmployee/" + id,
     );
   }
 
   downLoadFile(fileName: any): Observable<any> {
     const params = new HttpParams().set('fileName', fileName);
-    return this.httpClient.post(API_CONFIG.BASE_URL + "contract/download", null, {
+    return this.httpClient.post(API_CONFIG.BASE_URL + "employee-contract/download", null, {
       responseType: 'blob',
       observe: 'response',
       params: params

@@ -26,7 +26,7 @@
     [allowColumnReordering]="true"
     [focusedRowEnabled]="true"
     [showBorders]="true"
-    [(focusedRowKey)]="userId"
+    [(focusedRowKey)]="employeeCode"
     (onRowClick)="rowClick($event)"
     (onExporting)="onExporting($event)"
   >
@@ -135,7 +135,7 @@
   </dx-data-grid>
 
   <app-panel-employee-managerment
-    [userId]="userId"
+    [employeeCode]="employeeCode"
     [(isOpened)]="isPanelOpened"
     (isOpenedChange)="onOpenedChange($event)"
     (pinnedChange)="onPinnedChange()"

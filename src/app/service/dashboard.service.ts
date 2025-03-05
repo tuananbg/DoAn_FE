@@ -17,15 +17,15 @@ export class DashboardService {
     return this.httpClient.get(API_CONFIG.BASE_URL + "department/total",);
   }
 
-  getStaticticalHeader(id: any): Observable<any> {
+  getStatisticalHeader(id: any): Observable<any> {
     return this.httpClient.get(
       API_CONFIG.BASE_URL + "employee/total/" + id,
     );
   }
 
-  getStaticticalContract(): Observable<any> {
+  getStatisticalContract(): Observable<any> {
     return this.httpClient.get(
-      API_CONFIG.BASE_URL + "dashboard/statisticalContract/",
+      API_CONFIG.BASE_URL + "employee-contract/statistical",
     );
   }
 
