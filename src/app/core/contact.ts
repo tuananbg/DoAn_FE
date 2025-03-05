@@ -1,6 +1,6 @@
-import { Activity } from './activities';
-import { TaskForm } from './task';
-import { Opportunities } from './opportunities';
+import {Activity} from './activities';
+import {TaskForm} from './task';
+import {Opportunities} from './opportunities';
 
 export const contactStatusList: string[] = [
   'Salaried',
@@ -11,7 +11,7 @@ export const contactStatusList: string[] = [
 export type ContactStatus = (typeof contactStatusList)[number];
 
 type State = {
-    stateShort: string;
+  stateShort: string;
 };
 
 export interface ContactBase {

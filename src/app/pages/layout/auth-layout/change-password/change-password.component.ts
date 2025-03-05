@@ -8,6 +8,7 @@ import {HttpClient} from "@angular/common/http";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {RegisterData} from "../register/types/register";
+import {API_CONFIG} from "../../../../config/api-config";
 
 @Component({
   selector: 'app-change-password',
@@ -26,8 +27,8 @@ export class ChangePasswordComponent implements OnInit {
   password: string = '';
   hidePassword: boolean = true;
   isTabOne = true;
-  isTabTwo= false;
-  isTabThree= false;
+  isTabTwo = false;
+  isTabThree = false;
   registerFormData = {
     email: '',
     password: '',
@@ -48,6 +49,7 @@ export class ChangePasswordComponent implements OnInit {
     password: new FormControl('', [Validators.required]),
     confirmPassword: new FormControl('', [Validators.required]),
   });
+
   submit() {
     if (this.formGmail.valid) {
       this.submitEM.emit(this.formGmail.value);
@@ -60,7 +62,7 @@ export class ChangePasswordComponent implements OnInit {
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
     private router: Router,
-    private http:HttpClient,
+    private http: HttpClient,
     private notification: NzNotificationService,
   ) {
   }
@@ -76,8 +78,8 @@ export class ChangePasswordComponent implements OnInit {
     if (this.formCodeConfirm.valid) {
       console.log('submit', this.formCodeConfirm.value);
       const verifyCode = this.formCodeConfirm.value['code']
-      this.http.post(`http://localhost:8080/api/v1/auth/getForgotCode/${verifyCode}`, null).subscribe({
-        next: res=> {
+      this.http.post(API_CONFIG.BASE_URL + `auth/getForgotCode/${verifyCode}`, null).subscribe({
+        next: res => {
           console.log(res)
           this.isTabOne = false;
           this.isTabTwo = false;
@@ -95,7 +97,7 @@ export class ChangePasswordComponent implements OnInit {
       Object.values(this.formCodeConfirm.controls).forEach(control => {
         if (control.invalid) {
           control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
+          control.updateValueAndValidity({onlySelf: true});
         }
       });
     }
@@ -103,10 +105,10 @@ export class ChangePasswordComponent implements OnInit {
 
   verifyEmailFormSubmit(): void {
     if (this.formGmail.valid) {
-      const email  = this.formGmail.value['email'];
+      const email = this.formGmail.value['email'];
       this.spinner.show().then();
-      this.http.get(`http://localhost:8080/api/v1/auth/forgot-password/${email}`).subscribe({
-        next: res=> {
+      this.http.get(API_CONFIG.BASE_URL + `auth/forgot-password/${email}`).subscribe({
+        next: res => {
           this.isTabOne = false;
           this.isTabTwo = true;
           this.isMessageError = false;
@@ -124,20 +126,20 @@ export class ChangePasswordComponent implements OnInit {
       Object.values(this.formGmail.controls).forEach(control => {
         if (control.invalid) {
           control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
+          control.updateValueAndValidity({onlySelf: true});
         }
       });
       this.spinner.hide().then();
     }
   }
 
-  onChangeTab(){
+  onChangeTab() {
     this.isTabOne = true;
     this.isTabTwo = false;
     this.isTabThree = false;
   }
 
-  verifyFormChangePasswordSubmit(){
+  verifyFormChangePasswordSubmit() {
     if (this.formChangePasswordConfirm.valid) {
       this.registerFormData.email = this.formChangePasswordConfirm.value['email']
       this.registerFormData.password = this.formChangePasswordConfirm.value['password']
@@ -147,13 +149,13 @@ export class ChangePasswordComponent implements OnInit {
       Object.values(this.formChangePasswordConfirm.controls).forEach(control => {
         if (control.invalid) {
           control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
+          control.updateValueAndValidity({onlySelf: true});
         }
       });
     }
     this.spinner.show().then();
-    this.http.post('http://localhost:8080/api/v1/auth/change-password', this.registerFormData).subscribe({
-      next: res=> {
+    this.http.post(API_CONFIG.BASE_URL + 'auth/change-password', this.registerFormData).subscribe({
+      next: res => {
         this.notification.success("Thành công", "Đổi mật khẩu thành công")
         this.spinner.hide().then();
         this.router.navigate(['/auth/login']).then();

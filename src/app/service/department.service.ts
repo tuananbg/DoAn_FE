@@ -3,8 +3,9 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {AuthService} from "./auth.service";
 import {LoginService} from "./login.service";
+import {API_CONFIG} from "../config/api-config";
 
-const AUTH_API: string = "http://localhost:8080/api/v1/department";
+// const AUTH_API: string = "http://localhost:8080/api/v1/department";
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
 };
@@ -19,7 +20,7 @@ export class DepartmentService {
 
   searchDepartment(payload: any, pageable: any): Observable<any> {
     return this.httpClient.post(
-      AUTH_API + "/getAllPage",
+      API_CONFIG.BASE_URL + "department/getAllPage",
       payload,
       {
         params: pageable,
@@ -29,7 +30,7 @@ export class DepartmentService {
 
   createDepartment(department: any): Observable<any> {
     return this.httpClient.post(
-      AUTH_API + "/create",
+      API_CONFIG.BASE_URL + "department/create",
       department,
       {
         observe: 'response'
@@ -39,20 +40,20 @@ export class DepartmentService {
 
   getDepartmentById(id: number | undefined): Observable<any> {
     return this.httpClient.get(
-      AUTH_API + "/detail" + '/' + id,
+      API_CONFIG.BASE_URL + "department/detail/" + id,
     );
   }
 
   editDepartment(payload: any, id: number): Observable<any> {
     return this.httpClient.post(
-      AUTH_API + "/update" + '/' + id,
+      API_CONFIG.BASE_URL + "department/update/" + id,
       payload,
     );
   }
 
   deleteDepartment(id: string): Observable<any> {
     return this.httpClient.delete(
-      AUTH_API + "/delete" + '/' + id,
+      API_CONFIG.BASE_URL + "department/delete/" + id,
     );
   }
 }

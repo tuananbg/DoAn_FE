@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import {Injectable} from '@angular/core';
+import {ToastrService} from 'ngx-toastr';
 
 export enum ToasterPosition {
   bottomRight = 'toast-bottom-right',
@@ -17,7 +17,7 @@ export class ToastService {
   }
 
   openSuccessToast(message?: string, title?: string) {
-    this.toastrService.success(message, title ? title : 'Thành công!' );
+    this.toastrService.success(message, title ? title : 'Thành công!');
   }
 
   openErrorToast(message: string, title?: string) {

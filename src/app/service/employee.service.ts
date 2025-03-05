@@ -1,11 +1,13 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {BehaviorSubject, Observable} from "rxjs";
+import {API_CONFIG} from "../config/api-config";
 
-const AUTH_API: string = "http://localhost:8080/api/v1/employee";
+// const AUTH_API: string = "http://localhost:8080/api/v1/employee";
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
 };
+
 @Injectable({
   providedIn: 'root'
 })
@@ -25,18 +27,18 @@ export class EmployeeService {
   }
 
   searchEmployee(keyword: any, pageable: any): Observable<any> {
-    let params = new HttpParams({ fromObject: pageable });
+    let params = new HttpParams({fromObject: pageable});
 
     if (keyword) {
       params = params.set('keyword', keyword); // Thêm keyword vào params
     }
 
     return this.httpClient.get(
-        AUTH_API + "/list",
-        {
-          headers: new HttpHeaders({'Content-Type': 'application/json'}),
-          params: params,
-        }
+      API_CONFIG.BASE_URL + "employee/list",
+      {
+        headers: new HttpHeaders({'Content-Type': 'application/json'}),
+        params: params,
+      }
     )
   }
 
@@ -53,23 +55,20 @@ export class EmployeeService {
     formData.append('departmentId', userDetailDTO.departmentId);
     formData.append('positionId', userDetailDTO.positionId);
     return this.httpClient.post(
-        AUTH_API+ "/create",
-        formData,
-        {
-          observe: 'response'
-        }
+      API_CONFIG.BASE_URL + "employee/create",
+      formData,
+      {
+        observe: 'response'
+      }
     );
   }
 
   getEmployeeId(id: number): Observable<any> {
-    return this.httpClient.get(
-        AUTH_API + "/detail" + '/' + id,
-    );
+    return this.httpClient.get(API_CONFIG.BASE_URL + "employee/detail/" + id,);
   }
+
   getEmployeeCode(code: String): Observable<any> {
-    return this.httpClient.get(
-      AUTH_API + "/detail/" + code,
-    );
+    return this.httpClient.get(API_CONFIG.BASE_URL + "employee/detail/" + code,);
   }
 
   editEmployee(avatarFile: File, userDetailDTO: any): Observable<any> {
@@ -85,30 +84,30 @@ export class EmployeeService {
     formData.append('departmentId', userDetailDTO.departmentId);
     formData.append('positionId', userDetailDTO.positionId);
     return this.httpClient.put(
-        AUTH_API,
-        formData,
+      API_CONFIG.BASE_URL,
+      formData,
     );
   }
 
   deleteEmployee(id: string): Observable<any> {
     return this.httpClient.delete(
-        AUTH_API + "/delete" + '/' + id,
+      API_CONFIG.BASE_URL + "employee/delete/" + id,
     );
   }
 
-  exportEmployee(payload : any, pageable: any) : Observable<any>{
-    return this.httpClient.post(AUTH_API + "/export",
-        pageable,
-        {
-          responseType: 'blob',
-          observe: 'response',
-          params: payload
-        }
+  exportEmployee(payload: any, pageable: any): Observable<any> {
+    return this.httpClient.post(API_CONFIG.BASE_URL + "employee/export",
+      pageable,
+      {
+        responseType: 'blob',
+        observe: 'response',
+        params: payload
+      }
     );
   }
 
-  exportPdf() : Observable<any>{
-    return this.httpClient.post(AUTH_API + "/export-pdf" +"/3",
+  exportPdf(): Observable<any> {
+    return this.httpClient.post(API_CONFIG.BASE_URL + "employee/export-pdf" + "/3",
       null,
       {
         headers: new HttpHeaders({'Content-Type': 'application/json'}),

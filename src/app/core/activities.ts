@@ -1,5 +1,5 @@
 export type Activity = {
-    name: string,
-    date: string | Date,
-    manager: string,
+  name: string,
+  date: string | Date,
+  manager: string,
 };

@@ -37,7 +37,7 @@ export class FormAccountManagementComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private  accountService:AccountService,
+    private accountService: AccountService,
   ) {
   }
 

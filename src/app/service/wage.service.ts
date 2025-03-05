@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpContext, HttpHeaders, HttpParams} from "@angular/common/http";
 import {BehaviorSubject, Observable} from "rxjs";
+import {API_CONFIG} from "../config/api-config";
 
-const AUTH_API: string = "http://localhost:8080/api/v1/wage";
+// const AUTH_API: string = "http://localhost:8080/api/v1/wage";
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
 };
@@ -16,7 +17,7 @@ export class WageService {
 
   search(payload: any, pageable: any): Observable<any> {
     return this.httpClient.post(
-      AUTH_API + "/search",
+      API_CONFIG.BASE_URL + "wage/search",
       payload,
       {
         headers: new HttpHeaders({'Content-Type': 'application/json'}),
@@ -27,7 +28,7 @@ export class WageService {
 
   searchForEmployee(id: any): Observable<any> {
     return this.httpClient.get(
-      AUTH_API + "/employee-detail/" + id,
+      API_CONFIG.BASE_URL + "wage/employee-detail/" + id,
       {
         headers: new HttpHeaders({'Content-Type': 'application/json'}),
       }
@@ -41,7 +42,7 @@ export class WageService {
     formData.append('wageBase', wageDTO.wageBase);
     formData.append('wageDescription', wageDTO.wageDescription);
     return this.httpClient.post(
-      AUTH_API + "/create",
+      API_CONFIG.BASE_URL + "wage/create",
       formData,
       {
         observe: 'response'
@@ -50,7 +51,7 @@ export class WageService {
   }
 
   createForEmployee(userDetailContractDTO: any): Observable<any> {
-    return this.httpClient.post(AUTH_API + "/createForEmployee",
+    return this.httpClient.post(API_CONFIG.BASE_URL + "wage/createForEmployee",
       userDetailContractDTO,
       {
         observe: 'response'
@@ -59,7 +60,7 @@ export class WageService {
 
   getContractId(id: number | undefined): Observable<any> {
     return this.httpClient.get(
-      AUTH_API + "/detail" + '/' + id,
+      API_CONFIG.BASE_URL + "wage/detail/" + id,
     );
   }
 
@@ -71,7 +72,7 @@ export class WageService {
     formData.append('wageBase', wageDTO.wageBase);
     formData.append('wageDescription', wageDTO.wageDescription);
     return this.httpClient.put(
-      AUTH_API,
+      API_CONFIG.BASE_URL + "wage",
       formData,
       {
         observe: 'response'
@@ -81,26 +82,26 @@ export class WageService {
 
   editForEmployee(payload: any): Observable<any> {
     return this.httpClient.put(
-      AUTH_API+ "/updateForEmployee",
+      API_CONFIG.BASE_URL + "wage/updateForEmployee",
       payload
     );
   }
 
   delete(id: string): Observable<any> {
     return this.httpClient.delete(
-      AUTH_API + "/delete" + '/' + id,
+      API_CONFIG.BASE_URL + "wage/delete/" + id,
     );
   }
 
   deleteForEmployee(id: string): Observable<any> {
     return this.httpClient.delete(
-      AUTH_API + "/deleteForEmployee" + '/' + id,
+      API_CONFIG.BASE_URL + "wage/deleteForEmployee/" + id,
     );
   }
 
   downLoadFile(fileName: any): Observable<any> {
     const params = new HttpParams().set('fileName', fileName);
-    return this.httpClient.post(AUTH_API + "/download", null, {
+    return this.httpClient.post(API_CONFIG.BASE_URL + "wage/download", null, {
       responseType: 'blob',
       observe: 'response',
       params: params

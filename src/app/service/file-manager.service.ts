@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import { _HttpClient } from '@delon/theme';
+import {_HttpClient} from '@delon/theme';
 import {ToastService} from "./toast.service";
 import {Observable} from "rxjs";
 
@@ -44,13 +44,13 @@ export class FileManagerService {
     });
 
     return this.httpClient.post<any>(
-      "http://localhost:8080/" + "dev/file/upload"+ '?type=' + type + '&_allow_anonymous=true',
+      "http://localhost:8080/" + "dev/file/upload" + '?type=' + type + '&_allow_anonymous=true',
       fileData, {observe: 'response'})
   }
 
   private getFile(id: any): Observable<any> {
     return this.http.get(
-      "http://localhost:8080/" +"dev/file/" + id + '?_allow_anonymous=true', {
+      "http://localhost:8080/" + "dev/file/" + id + '?_allow_anonymous=true', {
         responseType: 'blob',
         observe: 'response',
       })
@@ -68,7 +68,7 @@ export class FileManagerService {
   // ******** EDIT START *************
   private getFileByPath(path: any): Observable<any> {
     return this.http.get(
-      "http://localhost:8080/" +"dev/file/downloadByPath" + '?filePath=' + path + '&_allow_anonymous=true', {
+      "http://localhost:8080/" + "dev/file/downloadByPath" + '?filePath=' + path + '&_allow_anonymous=true', {
         responseType: 'blob',
         observe: 'response',
       })

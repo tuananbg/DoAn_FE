@@ -107,11 +107,11 @@ export class SystemConfigComponent implements OnInit {
     console.log(e)
   }
 
-  handleOkModal(){
+  handleOkModal() {
     let roleId;
-    if(this.roleSelect == 'ADMIN'){
+    if (this.roleSelect == 'ADMIN') {
       roleId = 2;
-    }else {
+    } else {
       roleId = 1;
     }
     const targetKeys = this.menuItems.filter(item => item.direction === 'right').map(item => item['id']);
@@ -139,7 +139,6 @@ export class SystemConfigComponent implements OnInit {
     this.pageIndex = index;
     this.getAllMenuItem();
   }
-
 
 
 }

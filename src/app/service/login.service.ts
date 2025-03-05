@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from "rxjs";
-import { Router } from "@angular/router";
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from "rxjs";
+import {Router} from "@angular/router";
 import * as moment from "moment";
 
 @Injectable({
@@ -10,7 +10,8 @@ export class LoginService {
   token: BehaviorSubject<any> = new BehaviorSubject<any>('');
   header: any;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+  }
 
   getHeader() {
     return this.header;

@@ -1,6 +1,6 @@
-import { Activity } from './activities';
-import { Notes } from './notes';
-import { Messages } from './messages';
+import {Activity} from './activities';
+import {Notes} from './notes';
+import {Messages} from './messages';
 
 export const taskStatusList: string[] = [
   'Mới',

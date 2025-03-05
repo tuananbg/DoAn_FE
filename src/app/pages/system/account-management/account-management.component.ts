@@ -20,7 +20,7 @@ export class AccountManagementComponent implements OnInit {
 
   resultActive: boolean = true
   tableLoading: boolean = false
-  pagination: {total: number, current: number, pageSize: number} = {
+  pagination: { total: number, current: number, pageSize: number } = {
     total: 0,
     current: 0,
     pageSize: 10
@@ -56,21 +56,23 @@ export class AccountManagementComponent implements OnInit {
     {
       title: 'Ngày tạo',
       width: '140px',
-      compare: (a: any, b: any) => a.createdAt - b.createdAt ,
+      compare: (a: any, b: any) => a.createdAt - b.createdAt,
     },
   ];
 
 
   constructor(private accountService: AccountService,
-              private modal : NzModalService,
+              private modal: NzModalService,
               private spinner: NgxSpinnerService,
               private viewContainerRef: ViewContainerRef,
               private toastService: ToastService,
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.getData()
   }
+
   getData() {
     this.spinner.show().then(); // Hiển thị spinner khi bắt đầu load dữ liệu
 
@@ -97,12 +99,13 @@ export class AccountManagementComponent implements OnInit {
         }
       });
   }
-  handlePageIndexChange ($event: number) {
+
+  handlePageIndexChange($event: number) {
     this.pagination.current = $event - 1
     this.getData()
   }
 
-  handlePageSizeChange ($event: number) {
+  handlePageSizeChange($event: number) {
     this.pagination.pageSize = $event
     this.getData()
   }
@@ -124,7 +127,7 @@ export class AccountManagementComponent implements OnInit {
     });
     modalRef.afterClose.subscribe(rs => {
       this.isLoading = true;
-      if(this.isLoading){
+      if (this.isLoading) {
         this.getData();
       }
     });

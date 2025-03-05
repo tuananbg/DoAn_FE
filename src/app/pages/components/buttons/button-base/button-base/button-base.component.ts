@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzButtonShape, NzButtonSize, NzButtonType } from 'ng-zorro-antd/button';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {NzButtonShape, NzButtonSize, NzButtonType} from 'ng-zorro-antd/button';
 import {ThemeType} from "@ant-design/icons-angular";
 
 @Component({
@@ -28,7 +28,8 @@ export class ButtonBaseComponent implements OnInit {
   @Input() confirmTitleI18n = "Bạn có chắc chắn muốn gửi bản ghi?";
   @Output() clickAction = new EventEmitter();
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

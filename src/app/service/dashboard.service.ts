@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpContext, HttpHeaders, HttpParams} from "@angular/common/http";
 import {BehaviorSubject, Observable} from "rxjs";
+import {API_CONFIG} from "../config/api-config";
 
-const AUTH_API: string = "http://localhost:8080/api/v1";
+// const AUTH_API: string = "http://localhost:8080/api/v1";
 
 @Injectable({
   providedIn: 'root'
@@ -13,28 +14,27 @@ export class DashboardService {
   }
 
   getStaticticalDepartment(): Observable<any> {
-    return this.httpClient.get(
-      AUTH_API + "/department/total",
-    );
+    return this.httpClient.get(API_CONFIG.BASE_URL + "department/total",);
   }
 
   getStaticticalHeader(id: any): Observable<any> {
     return this.httpClient.get(
-      AUTH_API + "/employee/total/"+id,
+      API_CONFIG.BASE_URL + "employee/total/" + id,
     );
   }
 
   getStaticticalContract(): Observable<any> {
     return this.httpClient.get(
-      AUTH_API + "/dashboard/statisticalContract/",
+      API_CONFIG.BASE_URL + "dashboard/statisticalContract/",
     );
   }
 
   getStatisticalTask(): Observable<any> {
     return this.httpClient.get(
-      AUTH_API + "/dashboard/statisticalTask/",
+      API_CONFIG.BASE_URL + "dashboard/statisticalTask/",
     );
   }
+
   // search(payload: any, pageable: any): Observable<any> {
   //   return this.httpClient.post(
   //     AUTH_API + "/search",

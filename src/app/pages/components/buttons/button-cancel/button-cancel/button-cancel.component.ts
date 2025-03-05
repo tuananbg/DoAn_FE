@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzButtonSize, NzButtonType } from 'ng-zorro-antd/button';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {NzButtonSize, NzButtonType} from 'ng-zorro-antd/button';
 
 @Component({
   selector: 'app-button-cancel',

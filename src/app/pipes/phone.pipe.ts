@@ -1,4 +1,4 @@
-import { NgModule, Pipe, PipeTransform } from '@angular/core';
+import {NgModule, Pipe, PipeTransform} from '@angular/core';
 
 export function formatPhone(value: any) {
   return String(value).replace(/(\d{3})(\d{3})(\d{4})/, '+1($1)$2-$3');
@@ -9,7 +9,7 @@ export function formatPhone(value: any) {
 })
 export class PhonePipe implements PipeTransform {
   transform(value: number): any {
-   return formatPhone(value);
+    return formatPhone(value);
   }
 }
 
@@ -19,4 +19,5 @@ export class PhonePipe implements PipeTransform {
   exports: [PhonePipe],
   declarations: [PhonePipe],
 })
-export class PhonePipeModule { }
+export class PhonePipeModule {
+}
