@@ -40,12 +40,18 @@ export class LoginService {
     localStorage.setItem('roles', JSON.stringify(authResult.roles));
   }
 
-  isLoggedIn() {
-    if(this.getExpiration()){
-      return moment().isBefore(this.getExpiration());
+  isLoggedIn(): boolean {
+    const token = localStorage.getItem('token');
+    const expiration = localStorage.getItem('expireIn');
+
+    if (token && expiration) {
+      const now = new Date().getTime() / 1000;
+      return now < Number(expiration); // ✅ Trả về `true` nếu token còn hạn
     }
-    return false;
+
+    return false; // ❌ Trả về `false` nếu không có token hoặc token hết hạn
   }
+
 
   getExpiration() {
     const expiration = localStorage.getItem('expireIn');
