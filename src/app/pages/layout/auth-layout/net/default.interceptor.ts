@@ -26,7 +26,7 @@ export class DefaultInterceptor implements HttpInterceptor {
     let newReq = req.clone({ url });
     const token = localStorage.getItem('token');
     const expirationDate = localStorage.getItem('expireIn');
-    console.log('Interceptor - Token:', token);
+    // console.log('Interceptor - Token:', token);
     if(url.includes("/login") ||
       url.includes("/auth/change-password") ||
       url.includes("/auth/forgot-password") ||

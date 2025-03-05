@@ -1,92 +1,86 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject} from "rxjs";
-import {Router} from "@angular/router";
+import { BehaviorSubject } from "rxjs";
+import { Router } from "@angular/router";
 import * as moment from "moment";
-import {MenuItem, Role} from "../pages/system/account-management/types/account";
+
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
   token: BehaviorSubject<any> = new BehaviorSubject<any>('');
   header: any;
-  getHeader(){
+
+  constructor(private router: Router) {}
+
+  getHeader() {
     return this.header;
   }
-  constructor(private router: Router) {
-  }
 
-  setToken(){
-    if (!localStorage.getItem('token')) {
-      this.token.subscribe(val => {
-        this.header = ['Authorization', `Bearer ` +  val];
-      })
-    } else {
-      this.header = ['Authorization', `Bearer ` + localStorage.getItem('token')]
+  setToken() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.header = ['Authorization', `Bearer ${token}`];
     }
   }
 
-  comeLogin(){
-    if(!localStorage.getItem('token') || !this.isLoggedIn){
+  comeLogin() {
+    if (!this.isLoggedIn()) {
       this.router.navigate(['/auth/login']).then();
     }
   }
 
+  /** ✅ Lưu token & thông tin user vào localStorage */
   setSession(authResult: any) {
+    if (!authResult.token) return;
+
     localStorage.setItem('token', authResult.token);
-    const tmp = this.parseJwt(authResult.token);
-    if(tmp){
-      localStorage.setItem('expireIn', tmp.exp);
+    localStorage.setItem('fullName', authResult.fullName || '');
+    localStorage.setItem('employeeCode', authResult.employeeCode || '');
+    localStorage.setItem('roles', authResult.roles);
+    localStorage.setItem('email', authResult.email);
+
+    // ✅ Giải mã token để lấy thời gian hết hạn (exp)
+    const decodedToken = this.parseJwt(authResult.token);
+    if (decodedToken && decodedToken.exp) {
+      localStorage.setItem('expireIn', decodedToken.exp.toString()); // Lưu timestamp của exp
     }
-    localStorage.setItem('roles', JSON.stringify(authResult.roles));
   }
 
+  /** ✅ Kiểm tra xem user có đang đăng nhập hay không */
   isLoggedIn(): boolean {
     const token = localStorage.getItem('token');
-    const expiration = localStorage.getItem('expireIn');
+    if (!token) return false;
 
-    if (token && expiration) {
-      const now = new Date().getTime() / 1000;
-      return now < Number(expiration); // ✅ Trả về `true` nếu token còn hạn
-    }
+    const payload = this.parseJwt(token);
+    const now = Math.floor(Date.now() / 1000); // 🕒 Lấy thời gian hiện tại (giây)
 
-    return false; // ❌ Trả về `false` nếu không có token hoặc token hết hạn
+    return payload && payload.exp > now; // ✅ Token còn hạn thì trả về `true`
   }
 
-
-  getExpiration() {
-    const expiration = localStorage.getItem('expireIn');
-    if(expiration){
-      const expiresAt = JSON.parse(expiration);
-      return moment(expiresAt);
-    }
-    return null;
-  }
-
+  /** ✅ Đăng xuất và xóa dữ liệu */
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('expireIn');
     localStorage.clear();
-    this.comeLogin();
+    this.router.navigate(['/auth/login']).then(() => {
+      window.location.reload();
+    });
   }
 
-  parseJwt(token: string) {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
-  };
-
-  getListRolesMenuItem(): Role[] {
-    const serializedList = localStorage.getItem("roles");
+  /** ✅ Giải mã JWT để lấy thông tin user */
+  parseJwt(token: string): any {
     try {
-      return serializedList ? JSON.parse(serializedList) : [];
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      return JSON.parse(decodeURIComponent(atob(base64).split('').map(c =>
+        '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+      ).join('')));
     } catch (error) {
-      return [];
+      console.error("Lỗi khi giải mã JWT:", error);
+      return null;
     }
   }
 
-
+  getUserRole(): string {
+    const role = localStorage.getItem('roles');
+    return role ? role : "";  // ✅ Trả về "ADMIN" hoặc "" nếu không có role
+  }
 }

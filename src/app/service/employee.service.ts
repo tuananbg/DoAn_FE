@@ -66,6 +66,11 @@ export class EmployeeService {
         AUTH_API + "/detail" + '/' + id,
     );
   }
+  getEmployeeCode(code: String): Observable<any> {
+    return this.httpClient.get(
+      AUTH_API + "/detail/" + code,
+    );
+  }
 
   editEmployee(avatarFile: File, userDetailDTO: any): Observable<any> {
     const formData = new FormData();

@@ -13,7 +13,7 @@ export class HeaderComponent implements OnInit, DoCheck {
   visible = true;
   isCollapsed = false;
   employeeName: any;
-  userId: any;
+  employeeCode: any;
   request: any = {
     listTextSearch: [],
     code: null,
@@ -35,9 +35,9 @@ export class HeaderComponent implements OnInit, DoCheck {
   ngOnInit(): void {
     const token = localStorage.getItem('token');
     const payloadToken: any = token ? this.parseJwt(token) : null;
-    const userObject = JSON.parse(payloadToken.user);
-    this.employeeName = userObject.userDetailName;
-    this.userId = userObject.userDetailId;
+    // const userObject = JSON.parse(payloadToken.user);
+    this.employeeName =localStorage.getItem('employeeCode');
+    this.employeeCode =localStorage.getItem('fullName');
     this.notificationService.getEmployeesWithBirthdaysInCurrentMonth().subscribe(data => {
       this.employees = data;
       this.hasNotifications = this.employees.length > 0;
@@ -82,7 +82,7 @@ export class HeaderComponent implements OnInit, DoCheck {
 
   navigateToDetails = () => {
     this.visible = false;
-    this.router.navigate(['/detail-employee/' + this.userId], {state: {page: this.request}});
+    this.router.navigate(['/detail-employee/' + this.employeeCode], {state: {page: this.request}});
   };
 
   navigateToChangePass = () => {

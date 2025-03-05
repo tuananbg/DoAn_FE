@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit {
   totalBirthDayMonth:any;
   totalLateWork:any;
   totalLeaveWork:any;
-  idUserDetailId: any;
+  employeeCode: any;
 
 
   @Input() data!: SalesOrOpportunitiesByCategory;
@@ -53,8 +53,8 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     const token = localStorage.getItem('token');
     const payloadToken: any = token ? this.parseJwt(token) : null;
-    const userObject = JSON.parse(payloadToken.user);
-    this.idUserDetailId = userObject.userDetailId;
+    // const userObject = JSON.parse(payloadToken.user);
+    this.employeeCode = localStorage.getItem('employeeCode');
     this.loadStatisticalDepartment();
     this.loadStatisticalHeader();
     this.loadStatisticalContract();
@@ -86,7 +86,7 @@ export class DashboardComponent implements OnInit {
   }
 
   loadStatisticalHeader(){
-    this.dashboardService.getStaticticalHeader(this.idUserDetailId).subscribe(
+    this.dashboardService.getStaticticalHeader(this.employeeCode).subscribe(
       res => {
         if (res && res.code === "OK") {
           this.totalEmployee = res.data.totalEmployee;

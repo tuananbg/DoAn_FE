@@ -1,26 +1,32 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { LoginService } from './login.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(private router: Router) {}
 
   canActivate(): boolean {
-    console.log(localStorage)
     const token = localStorage.getItem('token'); // 🔥 Lấy token từ localStorage
-    const expiration = localStorage.getItem('expireIn'); // 🔥 Lấy thời gian hết hạn
-
-    if (token && expiration) {
-      const now = new Date().getTime() / 1000; // 🕒 Lấy thời gian hiện tại (giây)
-      if (now < Number(expiration)) {
-        return true; // ✅ Nếu token còn hạn, cho phép truy cập
-      }
+    if (!token) {
+      this.handleLogout();
+      return false;
     }
 
-    // ❌ Nếu không có token hoặc token hết hạn => Đăng xuất và chuyển hướng về login
+    // ✅ Giải mã token để kiểm tra thời gian hết hạn
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1])); // 🛠️ Giải mã JWT
+      const now = Math.floor(Date.now() / 1000); // 🕒 Lấy thời gian hiện tại (giây)
+
+      if (payload.exp && now < payload.exp) {
+        return true; // ✅ Token hợp lệ, cho phép truy cập
+      }
+    } catch (error) {
+      console.error("JWT Decode Error:", error);
+    }
+
+    // ❌ Token hết hạn hoặc lỗi => Chuyển về Login
     this.handleLogout();
     return false;
   }

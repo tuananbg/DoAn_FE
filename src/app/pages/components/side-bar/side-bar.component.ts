@@ -95,9 +95,10 @@ export class SideBarComponent implements OnInit, DoCheck {
   ngOnInit(): void {
     const token = localStorage.getItem('token');
     const payloadToken: any = token ? this.parseJwt(token) : null;
-    const userObject = JSON.parse(payloadToken.user);
-    this.employeeName = userObject.userDetailName;
-    this.userId = userObject.userDetailId;
+    // const userObject = JSON.parse(payloadToken.user);
+    this.employeeName = localStorage.getItem('employeeName');
+    this.userId = localStorage.getItem('employeeCode');
+    // this.userId = userObject.userDetailId;
     this.loadData();
   }
 
@@ -121,10 +122,10 @@ export class SideBarComponent implements OnInit, DoCheck {
   };
 
   loadData(): void {
-    this.listRolesMenuItem = this.loginService.getListRolesMenuItem();
+    this.listRolesMenuItem = this.loginService.getUserRole();
 
 
-    console.log('//', this.listRolesMenuItem[0]);
+    console.log('//', this.listRolesMenuItem);
 
   }
 

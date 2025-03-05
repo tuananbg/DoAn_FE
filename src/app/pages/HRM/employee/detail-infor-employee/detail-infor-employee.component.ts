@@ -40,6 +40,8 @@ export class DetailInforEmployeeComponent implements OnInit {
   pinned = false;
   isEditing = false;
   isPinEnabled = false;
+  employeeName: any;
+  employeeCode: any;
   userPanelSubscriptions: Subscription[] = [];
   lstDepartment: any[] = [];
   lstPosition: any[] = [];
@@ -71,9 +73,12 @@ export class DetailInforEmployeeComponent implements OnInit {
 
   ngOnInit(): void {
     const token = localStorage.getItem('token');
-    const payloadToken: any = token ? this.parseJwt(token) : null;
-    const userObject = JSON.parse(payloadToken.user);
-    this.loadUserById(userObject.userDetailId);
+    // const payloadToken: any = token ? this.parseJwt(token) : null;
+    // const userObject = JSON.parse(payloadToken.user);
+
+    this.employeeName =localStorage.getItem('employeeCode');
+    this.employeeCode =localStorage.getItem('fullName');
+    this.loadUserByCode(this.employeeCode);
     this.fetchDepartment();
     this.fetchPosition();
   }
@@ -197,9 +202,9 @@ export class DetailInforEmployeeComponent implements OnInit {
     }
   }
 
-  loadUserById = (id: number) => {
+  loadUserByCode = (employeeCode: string) => {
     this.isLoading = true;
-    this.employeeService.getEmployeeId(id).subscribe(res => {
+    this.employeeService.getEmployeeCode(employeeCode).subscribe(res => {
       if (res && res.code === "OK") {
         this.user = res.data;
         this.user.birthday = moment(res.data.birthday).format('DD/MM/YYYY');

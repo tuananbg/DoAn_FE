@@ -46,17 +46,31 @@ export class LoginComponent implements OnInit {
       return;
     }
     this.auth.loginAccount(this.form.getRawValue()).subscribe(res => {
-      if (!res.token){
+      console.log(this.form.getRawValue())
+      if (res.code !== "OK" || !res.data || !res.data.token) {
+        this.isMeassgeError = true;
+        this.meassgeError = "Đăng nhập thất bại. Vui lòng kiểm tra lại!";
         return;
       }
-      this.loginS.setSession(res);
+
+      console.log(res.data)
+      const { token, fullName, employeeCode, roles, email } = res.data;
+
+      this.loginS.setSession({
+        token,
+        fullName,
+        employeeCode,
+        roles,
+        email
+      });
+
       this.router.navigate(['/dashboard']).then();
     }, (error) => {
-      // this.toastService.openErrorToast(error.error);
       this.isMeassgeError = true;
       this.meassgeError = "Email hoặc mật khẩu không đúng!";
-    })
+    });
   }
+
 
   togglePasswordVisibility(): void {
     this.hidePassword = !this.hidePassword;
