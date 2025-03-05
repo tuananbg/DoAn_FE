@@ -43,6 +43,7 @@
                       style="width: 150px; height: 40px;"
                       [visible]="true"
                       placeholder="Tìm kiếm nhân viên"
+                      (textChange)="onSearchChanged($event)"
     ></dxo-search-panel>
     <dxo-export
       [enabled]="true"

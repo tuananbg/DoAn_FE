@@ -101,21 +101,13 @@ export class ListAttendanceManagermentComponent implements OnInit {
   };
 
   fetchData(currentPage?: number, pageSize?: number) {
-    const queryModel = {
-      employeeCode: null,
-      employeeName: null,
-      employeeEmail: null,
-      employeeGender: null,
-      positionId: null,
-      departmentId: null
-    };
     const pageable = {
       page: currentPage,
       size: pageSize,
       sort: this.request.sort,
     };
     this.spinner.show().then();
-    this.employeeService.searchEmployee(queryModel, pageable).subscribe(res => {
+    this.employeeService.searchEmployee(null, pageable).subscribe(res => {
       if (res && res.code === "OK") {
         this.lstData = res.data.data;
         this.resourcesList = res.data.data;

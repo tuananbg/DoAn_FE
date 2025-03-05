@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {BehaviorSubject, Observable} from "rxjs";
 
 const AUTH_API: string = "http://localhost:8080/api/v1/employee";
@@ -24,13 +24,18 @@ export class EmployeeService {
     }
   }
 
-  searchEmployee(payload: any, pageable: any): Observable<any> {
-    return this.httpClient.post(
-        AUTH_API + "/search",
-        payload,
+  searchEmployee(keyword: any, pageable: any): Observable<any> {
+    let params = new HttpParams({ fromObject: pageable });
+
+    if (keyword) {
+      params = params.set('keyword', keyword); // Thêm keyword vào params
+    }
+
+    return this.httpClient.get(
+        AUTH_API + "/list",
         {
           headers: new HttpHeaders({'Content-Type': 'application/json'}),
-          params: pageable,
+          params: params,
         }
     )
   }

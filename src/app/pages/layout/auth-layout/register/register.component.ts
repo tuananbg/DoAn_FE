@@ -39,7 +39,6 @@ export class RegisterComponent implements OnInit {
   lstEmployee: any[] = [];
   lstAccount: any[] = [];
   payloadAccount = {fullName: null, email: null, status: null, active: null};
-  payloadEmployee = {employeeCode: null, employeeName: null, employeeEmail: null, employeeGender: null, positionId: null, departmentId: null};
 
   constructor(private fb: FormBuilder, private http: HttpClient,
               private notification: NzNotificationService,
@@ -203,7 +202,7 @@ export class RegisterComponent implements OnInit {
 
 
   fetchEmployee() {
-    this.employeeService.searchEmployee(this.payloadEmployee, {page: 0, size: -1}).subscribe(res => {
+    this.employeeService.searchEmployee(null, {page: 0, size: -1}).subscribe(res => {
       if (res && res.code === "OK") {
         this.lstEmployee = res.data.data;
         this.lstEmployee = this.lstEmployee.map(item => ({
