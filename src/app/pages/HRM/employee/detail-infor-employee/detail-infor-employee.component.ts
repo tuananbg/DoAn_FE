@@ -67,20 +67,21 @@ export class DetailInforEmployeeComponent implements OnInit {
     private fileManagerService: FileManagerService,
     private departmentService: DepartmentService,
     private positionService: PositionService,
+    private route: ActivatedRoute,
   ) {
     this.contactId = Number(this.activatedRoute.snapshot.params['id']);
   }
 
   ngOnInit(): void {
-    const token = localStorage.getItem('token');
-    // const payloadToken: any = token ? this.parseJwt(token) : null;
-    // const userObject = JSON.parse(payloadToken.user);
+    console.log("AAAA")
+    this.route.paramMap.subscribe(params => {
 
-    this.employeeName =localStorage.getItem('employeeCode');
-    this.employeeCode =localStorage.getItem('fullName');
-    this.loadUserByCode(this.employeeCode);
-    this.fetchDepartment();
-    this.fetchPosition();
+      const employeeCode = params.get('code');
+      console.log(employeeCode)
+      if (employeeCode) {
+        this.loadUserByCode(employeeCode);
+      }
+    });
   }
 
   parseJwt(token: string): string {

@@ -13,7 +13,7 @@ import {distinctUntilChanged, Subject, Subscription} from "rxjs";
 import {Contact} from "../../../../core/contact";
 import {ScreenService} from "../../../../service/screen.service";
 import {DataService} from "../../../../service/data.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {DxButtonTypes} from "devextreme-angular/ui/button";
 import {EmployeeService} from "../../../../service/employee.service";
 import {ToastService} from "../../../../service/toast.service";
@@ -56,8 +56,9 @@ export class PanelEmployeeManagermentComponent implements OnInit, OnChanges, Aft
     name: null,
     size: 10, // -: desc | +: asc,
   };
-  isUserOffice =  false;
-  idUserDetail: any;
+  isUserOffice = false;
+  // employeeCode: string | null = null;
+  // employeeName: string | null = null;
 
   constructor(private screen: ScreenService,
               private employeeService: EmployeeService,
@@ -65,7 +66,8 @@ export class PanelEmployeeManagermentComponent implements OnInit, OnChanges, Aft
               private departmentService: DepartmentService,
               private positionService: PositionService,
               private spinner: NgxSpinnerService,
-              private router: Router) {
+              private router: Router,
+              private route: ActivatedRoute) {
     this.userPanelSubscriptions.push(
       this.screen.changed.subscribe(this.calculatePin),
       this
@@ -76,13 +78,12 @@ export class PanelEmployeeManagermentComponent implements OnInit, OnChanges, Aft
   }
 
   ngOnInit(): void {
-    const token = localStorage.getItem('token');
-    const payloadToken: any = token ? this.parseJwt(token) : null;
-    const userObject = JSON.parse(payloadToken.user);
-    this.idUserDetail = userObject.userDetailId;
-    this.calculatePin();
-    // this.fetchDepartment();
-    // this.fetchPosition();
+    this.route.paramMap.subscribe(params => {
+      const employeeCode = params.get('employeeCode');
+      if (employeeCode) {
+        this.loadUserByCode(employeeCode);
+      }
+    });
   }
 
   ngAfterViewChecked(): void {
@@ -92,7 +93,7 @@ export class PanelEmployeeManagermentComponent implements OnInit, OnChanges, Aft
   ngOnChanges(changes: SimpleChanges): void {
 
     if (changes["employeeCode"] && changes["employeeCode"].currentValue) {
-      console.log("Gọi API với employeeCode:",changes["employeeCode"].currentValue);
+      // console.log("Gọi API với employeeCode:",changes["employeeCode"].currentValue);
       this.loadUserByCode(changes["employeeCode"].currentValue);
     }
   }
@@ -102,15 +103,15 @@ export class PanelEmployeeManagermentComponent implements OnInit, OnChanges, Aft
     this.userPanelSubscriptions.forEach((sub) => sub.unsubscribe());
   }
 
-  parseJwt(token: string) {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
-  };
+  // parseJwt(token: string) {
+  //   const base64Url = token.split('.')[1];
+  //   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  //   const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
+  //     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  //   }).join(''));
+  //
+  //   return JSON.parse(jsonPayload);
+  // };
 
   // loadUserById = (id: number) => {
   //   this.isLoading = true;
@@ -128,7 +129,7 @@ export class PanelEmployeeManagermentComponent implements OnInit, OnChanges, Aft
 
   loadUserByCode = (code: string) => {
     this.isLoading = true;
-    console.log(code);
+    // console.log(code);
     this.employeeService.getEmployeeCode(code).subscribe(res => {
       if (res && res.code === "OK") {
         this.user = res.data;
@@ -227,7 +228,7 @@ export class PanelEmployeeManagermentComponent implements OnInit, OnChanges, Aft
     }
   }
 
-  goBackHone(){
+  goBackHone() {
     this.router.navigate(["/employee"]).then();
   }
 }

@@ -14,17 +14,9 @@
     </li>
     <li nz-submenu nzTitle="Hành chính nhân sự" nzIcon="usergroup-add" [nzOpen]="subMenuQLNS">
       <ul>
-        <li nz-submenu nzTitle="Quản lý nhân sự">
-          <ul>
-            <li nz-menu-item [nzMatchRouter]="true">
-              <!--              <i nz-icon nzTheme="outline"></i>-->
-              <span><a [routerLink]="'/employee'">Danh sách nhân viên</a></span>
-            </li>
-            <li nz-menu-item [nzMatchRouter]="true">
-              <!--              <i nz-icon nzTheme="outline"></i>-->
-              <span><a [routerLink]="'/infor-employee/' + userId">Xuất hồ sơ cá nhân</a></span>
-            </li>
-          </ul>
+        <li nz-menu-item [nzMatchRouter]="true">
+          <!--              <i nz-icon nzTheme="outline"></i>-->
+          <span><a [routerLink]="'/employee'">Danh sách nhân viên</a></span>
         </li>
         <li
           appCheckAuthorize

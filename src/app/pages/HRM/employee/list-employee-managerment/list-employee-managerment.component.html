@@ -5,10 +5,10 @@
   <nz-breadcrumb>
     <nz-breadcrumb nzSeparator=">">
       <nz-breadcrumb-item>
-        <a>Hành chính nhân sự</a>
+        <a [routerLink]="'/dashboard'">Trang chủ</a>
       </nz-breadcrumb-item>
       <nz-breadcrumb-item>
-        <a>Quản lý nhân sự</a>
+        <a>Hành chính nhân sự</a>
       </nz-breadcrumb-item>
       <nz-breadcrumb-item>
         <a>Danh sách nhân viên</a>
@@ -21,7 +21,7 @@
     class="grid theme-dependent"
     noDataText=""
     height="100%"
-    keyExpr="id"
+    keyExpr="employeeCode"
     [dataSource]="lstData"
     [allowColumnReordering]="true"
     [focusedRowEnabled]="true"
@@ -134,13 +134,13 @@
     ></dxi-column>
   </dx-data-grid>
 
-  <app-panel-employee-managerment
-    [employeeCode]="employeeCode"
-    [(isOpened)]="isPanelOpened"
-    (isOpenedChange)="onOpenedChange($event)"
-    (pinnedChange)="onPinnedChange()"
-  >
-  </app-panel-employee-managerment>
+<!--  <app-panel-employee-managerment-->
+<!--    [employeeCode]="employeeCode"-->
+<!--    [(isOpened)]="isPanelOpened"-->
+<!--    (isOpenedChange)="onOpenedChange($event)"-->
+<!--    (pinnedChange)="onPinnedChange()"-->
+<!--  >-->
+<!--  </app-panel-employee-managerment>-->
 
   <app-form-popup [(visible)]="isAddContactPopupOpened" (save)="handleOkModal()" titleText="Thêm nhân viên mới">
       <app-form-employee-managerment></app-form-employee-managerment>

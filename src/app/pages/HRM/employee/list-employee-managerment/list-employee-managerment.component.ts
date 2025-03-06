@@ -9,6 +9,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {EmployeeService} from "../../../../service/employee.service";
 import {FileManagerService} from "../../../../service/file-manager.service";
 import * as moment from "moment/moment";
+import {Router} from "@angular/router";
 
 
 type FilterContactStatus = ContactStatus | 'All';
@@ -48,7 +49,8 @@ export class ListEmployeeManagermentComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private employeeService: EmployeeService,
     private formBuilder: FormBuilder,
-    private fileManagerService: FileManagerService
+    private fileManagerService: FileManagerService,
+    private router: Router
   ) {
   }
 
@@ -102,7 +104,6 @@ export class ListEmployeeManagermentComponent implements OnInit {
   }
 
 
-
   addContact() {
     this.isAddContactPopupOpened = true;
     const currentDate = new Date();
@@ -113,7 +114,7 @@ export class ListEmployeeManagermentComponent implements OnInit {
     const minutes = currentDate.getMinutes().toString().padStart(2, '0');
     const genderCode = year + month + day + hours + minutes;
     this.contactNewForm.newUser = {
-      employeeCode: 'NV'+genderCode,
+      employeeCode: 'NV' + genderCode,
       employeeName: '',
       positionId: '',
       departmentId: '',
@@ -131,7 +132,7 @@ export class ListEmployeeManagermentComponent implements OnInit {
   };
 
   rowClick(e: DxDataGridTypes.RowClickEvent) {
-    console.log("Dữ liệu hàng:", e.data); // Kiểm tra dữ liệu dòng khi click
+    // Kiểm tra dữ liệu dòng khi click
     const newEmployeeCode = e.data?.employeeCode;
 
     if (!newEmployeeCode) {
@@ -140,13 +141,15 @@ export class ListEmployeeManagermentComponent implements OnInit {
     }
 
     if (newEmployeeCode !== this.employeeCode) {
-      console.log(`Cập nhật employeeCode: ${this.employeeCode} => ${newEmployeeCode}`);
+      // console.log(`Cập nhật employeeCode: ${this.employeeCode} => ${newEmployeeCode}`);
       this.employeeCode = newEmployeeCode;
     } else {
       console.log("Nhấn vào cùng một nhân viên, không cập nhật.");
     }
 
-    this.isPanelOpened = true;
+    console.log(newEmployeeCode);
+    // 🔥 Chuyển sang trang panel thay vì chỉ mở panel
+    this.router.navigate(['infor-employee/', newEmployeeCode]);
   }
 
 
@@ -169,7 +172,7 @@ export class ListEmployeeManagermentComponent implements OnInit {
     };
     await this.fetchData(this.request.currentPage, this.request.pageSize);
     this.spinner.show().then();
-    if(this.lstData.length===0){
+    if (this.lstData.length === 0) {
       return;
     }
     this.employeeService.exportEmployee(queryModel, pageable).subscribe(async response => {
