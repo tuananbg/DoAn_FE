@@ -10,7 +10,6 @@
         [type]="typeInput"
         [formControl]="ngControl ? $any(ngControl.control) : formController"
         [placeholder]="placeHolder"
-        [disabled]="isDisabled"
         (focus)="onFocus(inputRef.value)"
         (blur)="onBlur(inputRef.value)"
         (keydown)="onChange(inputRef.value)"

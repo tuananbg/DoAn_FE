@@ -21,7 +21,7 @@ export class FormTextboxComponent implements OnInit {
 
   @Input() icon: string = '';
 
-  @Input() validators: ValidationRule[] = [{ type: 'required' }];
+  @Input() validators: ValidationRule[] = [];
 
   @Input() value!: string;
 
@@ -33,5 +33,6 @@ export class FormTextboxComponent implements OnInit {
 
   ngOnInit(): void {
   }
+  @Input() isValidationEnabled = true;
 
 }

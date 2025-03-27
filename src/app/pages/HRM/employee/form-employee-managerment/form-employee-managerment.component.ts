@@ -1,18 +1,12 @@
-import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
-import {DepartmentService} from "../../../../service/department.service";
-import {PositionService} from "../../../../service/position.service";
+import {Component, Input, OnInit} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { PositionService } from "../../../../service/position.service";
+import { DepartmentService } from "../../../../service/department.service";
+import {getSizeQualifier} from "../../../../service/screen.service";
 import DevExpress from "devextreme";
 import EditorStyle = DevExpress.common.EditorStyle;
-import {LabelMode} from "devextreme/common";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {EmployeeService} from "../../../../service/employee.service";
 import {AccountService} from "../../../../service/account.service";
-
-export function getSizeQualifier(width: number) {
-  if (width <= 420) return 'xs';
-  if (width <= 992) return 'sm';
-  if (width < 1200) return 'md';
-  return 'lg';
-}
 
 @Component({
   selector: 'app-form-employee-managerment',
@@ -22,7 +16,6 @@ export function getSizeQualifier(width: number) {
 export class FormEmployeeManagermentComponent implements OnInit {
 
   lstDepartment: any[] = [];
-  lstAccount: any[] = [];
   lstPosition: any[] = [];
   idUserDetail: any;
   lstGender = [{id: 1, gender: 'Nam'}, {id: 0, gender: 'Nữ'}];
@@ -30,19 +23,23 @@ export class FormEmployeeManagermentComponent implements OnInit {
   payloadPosition = {positionCode: null, positionName: null, isActive: 1};
   payloadAccount = {fullName: null, email: null, status: null, active: null};
   newUser = {
-    employeeCode: '',
-    employeeName: '',
-    positionId: '',
-    departmentId: '',
-    birthday: new Date(),
-    phone: '',
-    email: '',
-    address: '',
-    gender: ''
+    code: '',
+    fullName: '',
+    seatCode: '',
+    dateOfBirth: new Date(),
+    gender: '',
+    placeOfBirth: '',
+    taxCode: '',
+    insuranceNumber: '',
+    accountNumber: '',
+    permanentAddress: '',
+    currentAddress: '',
+    identityNumber: '',
+    mobile: '',
+    nation: ''
   }
   avatarFile!: File;
   stylingMode: EditorStyle = 'outlined';
-
   getSizeQualifier = getSizeQualifier;
   getNewContactData = () => ({...this.newUser})
 
@@ -65,13 +62,7 @@ export class FormEmployeeManagermentComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    // const token = localStorage.getItem('token');
-    // const payloadToken: any = token ? this.parseJwt(token) : null;
-    // const userObject = JSON.parse(payloadToken.user);
-    // this.idUserDetail = userObject.userDetailId;
-    //
-    //   this.fetchAccount(this.idUserDetail);
-    // this.fetchPosition();
+    // this.fetchDepartments();
   }
   // ngOnChanges(changes: SimpleChanges): void {
   //   const {userId} = changes;
@@ -87,9 +78,9 @@ export class FormEmployeeManagermentComponent implements OnInit {
 
   valueChanged(e : any) {
     if(e.value!=null){
-      this.newUser.birthday = e.value;
+      this.newUser.dateOfBirth = e.value;
     }else{
-      this.newUser.birthday = new Date();
+      this.newUser.dateOfBirth = new Date();
     }
   }
 
@@ -128,4 +119,9 @@ export class FormEmployeeManagermentComponent implements OnInit {
       }
     });
   }
+  genderList = [
+    { label: 'Nam', value: 1 },
+    { label: 'Nữ', value: 0 }
+  ];
+
 }

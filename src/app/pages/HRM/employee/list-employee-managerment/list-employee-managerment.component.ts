@@ -106,25 +106,34 @@ export class ListEmployeeManagermentComponent implements OnInit {
 
   addContact() {
     this.isAddContactPopupOpened = true;
+
+    // Lấy thời gian hiện tại để tạo mã nhân viên
     const currentDate = new Date();
     const year = currentDate.getFullYear().toString();
     const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
     const day = currentDate.getDate().toString().padStart(2, '0');
     const hours = currentDate.getHours().toString().padStart(2, '0');
     const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-    const genderCode = year + month + day + hours + minutes;
+    // const employeeCode = `NV${year}${month}${day}${hours}${minutes}`;
+
+    // Cập nhật dữ liệu cho form nhân viên mới
     this.contactNewForm.newUser = {
-      employeeCode: 'NV' + genderCode,
-      employeeName: '',
-      positionId: '',
-      departmentId: '',
-      birthday: new Date(),
-      phone: '',
-      email: '',
-      address: '',
-      gender: ''
+      code: '',
+      fullName: '',
+      seatCode: '',
+      dateOfBirth: new Date(),
+      gender: '',
+      placeOfBirth: '',
+      taxCode: '',
+      insuranceNumber: '',
+      accountNumber: '',
+      permanentAddress: '',
+      currentAddress: '',
+      identityNumber: '',
+      mobile: '',
+      nation: 'Việt Nam'
     };
-  };
+  }
 
   refresh = () => {
     this.fetchData();
@@ -143,12 +152,12 @@ export class ListEmployeeManagermentComponent implements OnInit {
     if (newEmployeeCode !== this.employeeCode) {
       // console.log(`Cập nhật employeeCode: ${this.employeeCode} => ${newEmployeeCode}`);
       this.employeeCode = newEmployeeCode;
-    } else {
-      console.log("Nhấn vào cùng một nhân viên, không cập nhật.");
     }
+    // else {
+    //   console.log("Nhấn vào cùng một nhân viên, không cập nhật.");
+    // }
 
-    console.log(newEmployeeCode);
-    // 🔥 Chuyển sang trang panel thay vì chỉ mở panel
+    // console.log(newEmployeeCode);
     this.router.navigate(['infor-employee/', newEmployeeCode]);
   }
 
@@ -198,33 +207,37 @@ export class ListEmployeeManagermentComponent implements OnInit {
       const data = this.contactNewForm.getNewContactData();
       const avatarFile = this.contactNewForm.avatarFile;
       this.spinner.show().then();
-      this.employeeService.createEmployee(avatarFile, data).subscribe(res => {
-        if (res && res.body.code === "OK") {
-          this.toastService.openSuccessToast('Thêm mới nhân viên thành công');
+      this.employeeService.createEmployee(avatarFile,data).subscribe(res => {
+        if (res && res.body?.code === "200") {
+          this.toastService.openSuccessToast(res.body?.message || 'Thêm mới nhân viên thành công');
           this.contactNewForm.newUser = {
-            employeeCode: '',
-            employeeName: '',
-            positionId: '',
-            departmentId: '',
-            birthday: new Date(),
-            phone: '',
-            email: '',
-            address: '',
-            gender: ''
+            code: '',
+            fullName: '',
+            seatCode: '',
+            dateOfBirth: new Date(),
+            gender: '',
+            placeOfBirth: '',
+            taxCode: '',
+            insuranceNumber: '',
+            accountNumber: '',
+            permanentAddress: '',
+            currentAddress: '',
+            identityNumber: '',
+            mobile: '',
+            nation: 'Việt Nam'
           };
+
+          // Cập nhật danh sách
           this.fetchData(this.request.currentPage, this.request.pageSize);
         } else {
-          this.toastService.openErrorToast(res.body.msgCode);
-          this.spinner.hide().then();
+          this.toastService.openErrorToast(res.body?.msgCode || "Lỗi không xác định");
         }
-      }, error => {
-        this.toastService.openErrorToast(error.error.msgCode);
         this.spinner.hide().then();
-      }, () => {
+      }, error => {
+        this.toastService.openErrorToast(error.error?.msgCode || "Lỗi kết nối");
         this.spinner.hide().then();
       });
     }
   }
-
 
 }

@@ -55,7 +55,12 @@ export class InputTextV2Component implements ControlValueAccessor, OnInit {
   }
 
   setDisabledState?(isDisabled: boolean): void {
+    this.isDisabled = isDisabled;
+    if (this.inputRef) {
+      this.inputRef.nativeElement.disabled = isDisabled;
+    }
   }
+
 
   focus() {
     this.inputRef!.nativeElement.focus();
