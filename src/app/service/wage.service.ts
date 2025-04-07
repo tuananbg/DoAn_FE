@@ -26,6 +26,17 @@ export class WageService {
     )
   }
 
+  getList(keyword: any,status: string, params: any): Observable<any> {
+    if (keyword) {
+      params = params.set('keyword', keyword);
+    }
+    return this.httpClient.get(
+      `${API_CONFIG.BASE_URL}wage/list/${status}`,
+      { params }
+    );
+  }
+
+
   searchForEmployee(id: any): Observable<any> {
     return this.httpClient.get(
       API_CONFIG.BASE_URL + "wage/employee-detail/" + id,

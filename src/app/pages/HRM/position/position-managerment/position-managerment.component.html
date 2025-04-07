@@ -129,10 +129,10 @@
         <ng-template ngFor let-data let-idx="index" [ngForOf]="rowSelectionTable.data">
           <tr>
             <td class="text-center max-width-50">{{ (request.currentPage * request.pageSize) + idx + 1}}</td>
-            <td class="max-width-100" [nz-tooltip]="data.positionCode">{{data.positionCode}}</td>
+            <td class="max-width-100" [nz-tooltip]="data.code">{{data.code}}</td>
             <td class="max-width-150" [nz-tooltip]="data.positionName">{{data.positionName}}</td>
             <td class="max-width-150" [nz-tooltip]="data.departmentName">{{data.departmentName}}</td>
-            <td class="max-width-200" [nz-tooltip]="data.positionDescription">{{data.positionDescription}}</td>
+            <td class="max-width-200" [nz-tooltip]="data.description">{{data.description}}</td>
             <td class="max-width-200 text-center" [nz-tooltip]="'Không hoạt động'" *ngIf="data.isActive !== 1">
               <span class="css-badge badge badge-pill bg-danger p-3">Không hoạt động</span></td>
             <td class="max-width-200 text-center" [nz-tooltip]="'Hoạt động'" *ngIf="data.isActive === 1">

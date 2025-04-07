@@ -28,6 +28,12 @@ export class DepartmentService {
     )
   }
 
+  getListDepartment(pageable: any): Observable<any> {
+    return this.httpClient.get(
+      API_CONFIG.BASE_URL + "department/list",
+    )
+  }
+
   createDepartment(department: any): Observable<any> {
     return this.httpClient.post(
       API_CONFIG.BASE_URL + "department/create",

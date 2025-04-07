@@ -29,6 +29,8 @@ export class ListEmployeeManagermentComponent implements OnInit {
   isPanelOpened = false;
   searchForm!: FormGroup;
   isAddContactPopupOpened = false;
+  currentTabIndex = 0;
+  statusList = ['EMPLOYMENT', 'RETIRED'];
 
   employeeCode: string | null = null;
   request: any = {
@@ -38,7 +40,7 @@ export class ListEmployeeManagermentComponent implements OnInit {
     name: null,
     currentPage: 0,
     pageSize: 10,
-    // sort: 'CREATED_DATE/DESC', // -: desc | +: asc,
+    sort: 'CREATED_DATE/DESC', // -: desc | +: asc,
   };
   lstData: any[] = [];
   total = 0;
@@ -64,6 +66,12 @@ export class ListEmployeeManagermentComponent implements OnInit {
 
   searchKeyword: string | null = null; // Mặc định là null
 
+  onTabChange(index: number): void {
+    this.currentTabIndex = index;
+    this.request.currentPage = 0;
+    this.fetchData();
+  }
+
   onSearchChanged(event: any) {
     this.searchKeyword = event.value ? event.value : null; // Nếu không nhập, đặt lại null
     this.fetchData(this.request.currentPage, this.request.pageSize); // Gọi API
@@ -74,11 +82,12 @@ export class ListEmployeeManagermentComponent implements OnInit {
       page: currentPage,
       size: pageSize,
     };
+    const status = this.statusList[this.currentTabIndex];
 
     this.spinner.show().then();
     console.log("Search Keyword:", this.searchKeyword);
 
-    this.employeeService.searchEmployee(this.searchKeyword, pageable).subscribe(res => {
+    this.employeeService.getList(this.searchKeyword, status, pageable).subscribe(res => {
       if (res && res.code === "OK") {
         // Sửa cách lấy danh sách nhân viên
         this.lstData = res.data.content || [];  // Lấy từ res.data.content
@@ -207,7 +216,7 @@ export class ListEmployeeManagermentComponent implements OnInit {
       const data = this.contactNewForm.getNewContactData();
       const avatarFile = this.contactNewForm.avatarFile;
       this.spinner.show().then();
-      this.employeeService.createEmployee(avatarFile,data).subscribe(res => {
+      this.employeeService.createEmployee(avatarFile, data).subscribe(res => {
         if (res && res.body?.code === "200") {
           this.toastService.openSuccessToast(res.body?.message || 'Thêm mới nhân viên thành công');
           this.contactNewForm.newUser = {

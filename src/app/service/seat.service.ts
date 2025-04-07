@@ -3,7 +3,6 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {BehaviorSubject, Observable} from "rxjs";
 import {API_CONFIG} from "../config/api-config";
 
-// const AUTH_API: string = "http://localhost:8080/api/v1/position";
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type': 'application/json'})
 };
@@ -11,7 +10,7 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class PositionService {
+export class SeatService {
 
   token: BehaviorSubject<any> = new BehaviorSubject<any>('');
   header = ['Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiIiwic3ViIjoiaHF1YW5nYW5oMkBnbWFpbC5jb20iLCJpYXQiOjE3MDkzNzYzMjMsImV4cCI6MTcwOTQ2MjcyM30.olrDEr5ep7mXNPAYbBpchybsOIgqeIswTrX_W3evSsQ']
@@ -26,14 +25,10 @@ export class PositionService {
     }
   }
 
-  searchPosition(payload: any, pageable: any): Observable<any> {
-    return this.httpClient.post(
-      API_CONFIG.BASE_URL + "position/search",
+  searchSeat(payload: any): Observable<any> {
+    return this.httpClient.get(
+      API_CONFIG.BASE_URL + "seat/list",
       payload,
-      {
-        headers: new HttpHeaders({'Content-Type': 'application/json'}),
-        params: pageable,
-      }
     )
   }
 
@@ -51,12 +46,6 @@ export class PositionService {
     return this.httpClient.get(
       API_CONFIG.BASE_URL + "position/detail/" + id,
     );
-  }
-
-  getSelection(pageable: any): Observable<any> {
-    return this.httpClient.get(
-      API_CONFIG.BASE_URL + "position/list/selection" ,
-    )
   }
 
   editPosition(payload: any): Observable<any> {

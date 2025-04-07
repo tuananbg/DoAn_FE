@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import {PositionService} from "../../../../service/position.service";
 import {PositionManagermentFormComponent} from "../position-managerment-form/position-managerment-form.component";
 import {FileManagerService} from "../../../../service/file-manager.service";
+import {SeatService} from "../../../../service/seat.service";
 
 @Component({
   selector: 'app-position-managerment',
@@ -54,6 +55,7 @@ export class PositionManagermentComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private viewContainerRef: ViewContainerRef,
     private fileManagerService: FileManagerService,
+    private seatService: SeatService,
   ) {
 
   }
@@ -70,42 +72,35 @@ export class PositionManagermentComponent implements OnInit {
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
-  fetchData(currentPage?: number, pageSize?: number){
+  fetchData(currentPage?: number, pageSize?: number) {
     const formValue = this.searchForm.value;
     const queryModel = {
-      positionCode: !formValue.positionCode ? null : formValue.positionCode.toString(),
-      positionName: !formValue.positionName ? null : formValue.positionName.toString(),
-      isActive: formValue.isActive === 0 ? '0' : !formValue.isActive ? null : formValue.isActive.toString(),
+      code: formValue.positionCode ? formValue.positionCode.toString() : null,
+      positionName: formValue.positionName ? formValue.positionName.toString() : null,
+      departmentName: formValue.departmentName ? formValue.departmentName.toString() : null,
+      description: formValue.description ? formValue.description.toString() : null,
+      active: formValue.isActive === 0 ? '0' : formValue.isActive ? formValue.isActive.toString() : null,
     };
-    const pageable = {
-      page: currentPage,
-      size: pageSize,
-      sort: this.request.sort,
-    };
+
     this.spinner.show().then();
-    this.positionService.searchPosition(queryModel, pageable).subscribe(res => {
-      if (res && res.code === "OK") {
-        this.lstData = res.data.data;
-        this.total = res.data.dataCount;
-        this.spinner.hide().then();
-        if (this.lstData.length === 0) {
-          if (this.request.currentPage !== 0) {
-            this.request.currentPage = this.request.currentPage - 1;
-            this.fetchData(this.request.currentPage, this.request.pageSize);
-          }
-        }
-        this.spinner.hide().then();
+
+    this.seatService.searchSeat(queryModel).subscribe(res => {
+      if (res && res.code === "200") {
+        this.lstData = res.data;
+
+        this.total = this.lstData.length || 0;
       } else {
-        this.toastService.openErrorToast(res.body.msgCode);
+        this.toastService.openErrorToast(res?.message || "Có lỗi xảy ra!");
       }
       this.spinner.hide().then();
     }, error => {
-      this.toastService.openErrorToast(error.error.msgCode);
+      this.toastService.openErrorToast(error?.error?.message || "Lỗi kết nối!"); // ✅ Tránh lỗi undefined
       this.spinner.hide().then();
     }, () => {
       this.spinner.hide().then();
     });
   }
+
 
   nzOnSearch(): void {
     this.request.currentPage = 0;

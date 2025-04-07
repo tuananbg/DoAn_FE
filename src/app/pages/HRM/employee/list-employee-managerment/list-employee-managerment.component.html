@@ -17,6 +17,11 @@
   </nz-breadcrumb>
 </div>
 <div class="view-wrapper list-page crm-contact-list">
+  <nz-tabset [(nzSelectedIndex)]="currentTabIndex" (nzSelectedIndexChange)="onTabChange($event)" style="margin-bottom: 12px">
+    <nz-tab nzTitle="Đang làm việc"></nz-tab>
+    <nz-tab nzTitle="Đã nghỉ việc"></nz-tab>
+  </nz-tabset>
+
   <dx-data-grid
     class="grid theme-dependent"
     noDataText=""

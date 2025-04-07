@@ -29,7 +29,9 @@ export class PositionManagermentFormComponent implements OnInit {
   createForm!: FormGroup;
   checked = false;
   lstDepartment: any[] = [];
+  lstPosition: any[] = [];
   payloadDepartment = {name: null, status: null};
+  payloadPosition = {name: null, status: null};
   lstStatus = [
     {id: 1, name: "Hoạt động"},
     {id: 0, name: "Không hoạt động"}
@@ -43,7 +45,7 @@ export class PositionManagermentFormComponent implements OnInit {
     private positionService: PositionService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private departmentService:DepartmentService
+    private departmentService: DepartmentService
   ) {
   }
 
@@ -56,16 +58,23 @@ export class PositionManagermentFormComponent implements OnInit {
       departmentId: new FormControl(null),
       isActive: new FormControl(null, [Validators.required]),
     });
+
     this.fetchDepartment();
-    setTimeout(()=>{
-      this.createForm.get('id')?.setValue(this.idPositionForm);
-      this.createForm.get('positionCode')?.setValue(this.codeForm);
-      this.createForm.get('positionName')?.setValue(this.nameForm);
-      this.createForm.get('positionDescription')?.setValue(this.descriptionForm);
-      this.createForm.get('departmentId')?.setValue(this.departmentIdForm);
-      this.createForm.get('isActive')?.setValue(this.isActive);
+  }
+
+  patchForm() {
+    setTimeout(() => {
+      this.createForm.patchValue({
+        id: this.idPositionForm,
+        positionCode: this.codeForm,
+        positionName: this.nameForm,
+        positionDescription: this.descriptionForm,
+        departmentId: this.departmentIdForm,
+        isActive: this.isActive,
+      });
     });
   }
+
 
   handleCancelModal(): void {
     this.modal.destroy();
@@ -125,14 +134,32 @@ export class PositionManagermentFormComponent implements OnInit {
   }
 
   fetchDepartment() {
-    this.departmentService.searchDepartment(this.payloadDepartment, {page: 0, size: -1}).subscribe(res => {
-      if (res && res.code === "OK") {
-        this.lstDepartment = res.data.content;
-        this.lstDepartment.sort((a, b) => a.departmentName.localeCompare(b.departmentName));
+    this.departmentService.getListDepartment(this.payloadDepartment).subscribe(
+      (res) => {
+        if (res && res.code === "OK") {
+          this.lstDepartment = res.data || [];
+        } else {
+          console.error("Dữ liệu trả về không hợp lệ:", res);
+        }
+      },
+      (error) => {
+        console.error("Lỗi API:", error);
       }
-    }, (error: any) => {
-      console.log(error);
-    })
+    );
+  }
+  fetchPosition() {
+    this.positionService.getSelection(this.payloadPosition).subscribe(
+      (res) => {
+        if (res && res.code === "OK") {
+          this.lstPosition = res.data || [];
+        } else {
+          console.error("Dữ liệu trả về không hợp lệ:", res);
+        }
+      },
+      (error) => {
+        console.error("Lỗi API:", error);
+      }
+    );
   }
 
 }

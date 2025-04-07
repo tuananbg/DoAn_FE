@@ -38,10 +38,10 @@ export class HeaderComponent implements OnInit, DoCheck {
     // const userObject = JSON.parse(payloadToken.user);
     this.employeeName =localStorage.getItem('employeeCode');
     this.employeeCode =localStorage.getItem('fullName');
-    this.notificationService.getEmployeesWithBirthdaysInCurrentMonth().subscribe(data => {
-      this.employees = data;
-      this.hasNotifications = this.employees.length > 0;
-    });
+    // this.notificationService.getEmployeesWithBirthdaysInCurrentMonth().subscribe(data => {
+    //   this.employees = data;
+    //   this.hasNotifications = this.employees.length > 0;
+    // });
   }
 
   parseJwt(token: string): string {

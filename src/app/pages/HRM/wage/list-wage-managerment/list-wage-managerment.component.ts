@@ -43,6 +43,8 @@ export class ListWageManagermentComponent implements OnInit {
   isLoading = false;
   message: string = '';
   idWage: any;
+  currentTabIndex = 0;
+  statusList = ['ACTIVE', 'INACTIVE'];
 
 
   constructor(
@@ -67,41 +69,51 @@ export class ListWageManagermentComponent implements OnInit {
     if (this.searchFormValue) {
       this.searchForm.patchValue(this.searchFormValue);
     }
-    this.fetchData(this.request.currentPage, this.request.pageSize);
+
+    this.searchForm.get('wageName')?.valueChanges.subscribe(value => {
+      this.onSearchChanged(value);
+    });
+
+    this.fetchData();
   }
 
-  fetchData(currentPage?: number, pageSize?: number){
+  onTabChange(index: number): void {
+    this.currentTabIndex = index;
+    this.request.currentPage = 0;
+    this.fetchData();
+  }
+
+  fetchData(currentPage: number = 0, pageSize: number = 10): void {
     const formValue = this.searchForm.value;
-    const queryModel = {
-      wageName: !formValue.wageName ? null : formValue.wageName.toString(),
-      createdDate: !formValue.createdDate ? null : formValue.createdDate
-    };
-    const pageable = {
+    const status = this.statusList[this.currentTabIndex];
+    const params: any = {
       page: currentPage,
       size: pageSize,
-      sort: this.request.sort,
+      sort: ['createdDate/DESC']
     };
+    if (formValue.wageName) {
+      params.wageName = formValue.wageName.toString();
+    }
+    if (formValue.createdDate) {
+      params.createdDate = formValue.createdDate;
+    }
+
     this.spinner.show().then();
-    this.wageService.search(queryModel, pageable).subscribe(res => {
-      if (res && res.code === "OK") {
-        this.lstData = res.data.data;
-        this.total = res.data.dataCount;
-        this.spinner.hide().then();
-        if (this.lstData.length === 0) {
-          if (this.request.currentPage !== 0) {
-            this.request.currentPage = this.request.currentPage - 1;
-            this.fetchData(this.request.currentPage, this.request.pageSize);
-          }
+    this.wageService.getList(this.searchKeyword,status, params).subscribe(res => {
+      if (res && res.code === 'OK') {
+        this.lstData = res.data.content || [];
+        this.total = res.data.totalElements || 0;
+
+        if (this.lstData.length === 0 && this.request.currentPage !== 0) {
+          this.request.currentPage--;
+          this.fetchData(this.request.currentPage, this.request.pageSize);
         }
-        this.spinner.hide().then();
       } else {
-        this.toastService.openErrorToast(res.body.msgCode);
+        this.toastService.openErrorToast(res.body?.msgCode || 'Không lấy được dữ liệu');
       }
       this.spinner.hide().then();
     }, error => {
-      this.toastService.openErrorToast(error.error.msgCode);
-      this.spinner.hide().then();
-    }, () => {
+      this.toastService.openErrorToast(error.error?.msgCode || 'Lỗi hệ thống');
       this.spinner.hide().then();
     });
   }
@@ -217,6 +229,13 @@ export class ListWageManagermentComponent implements OnInit {
     }, () => {
       this.spinner.hide().then();
     });
+  }
+
+  searchKeyword: string | null = null; // Mặc định là null
+
+  onSearchChanged(event: any) {
+    this.searchKeyword = event.value ? event.value : null; // Nếu không nhập, đặt lại null
+    this.fetchData(this.request.currentPage, this.request.pageSize); // Gọi API
   }
 
 }

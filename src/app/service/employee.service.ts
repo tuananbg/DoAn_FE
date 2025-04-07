@@ -42,6 +42,22 @@ export class EmployeeService {
     )
   }
 
+  getList(keyword: any,status : string, pageable: any): Observable<any> {
+    let params = new HttpParams({ fromObject: pageable });
+
+    if (keyword) {
+      params = params.set('keyword', keyword);
+    }
+
+    return this.httpClient.get(
+      `${API_CONFIG.BASE_URL}employee/list/${status}`,  // 👈 thêm status vào URL
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        params: params
+      }
+    );
+  }
+
   createEmployee(avatarFile: File, userDetailDTO: any): Observable<any> {
     const formData = new FormData();
     if (avatarFile) {
