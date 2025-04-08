@@ -1,13 +1,10 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {ContractService} from "../../../../service/contract.service";
 import {ToastService} from "../../../../service/toast.service";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {NgxSpinnerService} from "ngx-spinner";
 import {FileManagerService} from "../../../../service/file-manager.service";
-import {
-  FormContractManagermentComponent
-} from "../../contract/form-contract-managerment/form-contract-managerment.component";
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import {WageService} from "../../../../service/wage.service";
 import {en_US, NzI18nService} from "ng-zorro-antd/i18n";
 import {FormWageManagermentComponent} from "../form-wage-managerment/form-wage-managerment.component";
@@ -29,7 +26,7 @@ export class ListWageManagermentComponent implements OnInit {
     name: null,
     currentPage: 0,
     pageSize: 10,
-    sort: 'created_date,desc', // -: desc | +: asc,
+    sort: 'createdDate/desc', // -: desc | +: asc,
   };
   lstData: any[] = [];
   total = 0;
@@ -66,16 +63,23 @@ export class ListWageManagermentComponent implements OnInit {
       wageName: new FormControl(null, [Validators.maxLength(100)]),
       createdDate: new FormControl(null)
     });
+
     if (this.searchFormValue) {
       this.searchForm.patchValue(this.searchFormValue);
     }
 
-    this.searchForm.get('wageName')?.valueChanges.subscribe(value => {
-      this.onSearchChanged(value);
-    });
+    this.searchForm.get('wageName')?.valueChanges
+      .pipe(
+        debounceTime(500),               // đợi 500ms sau khi người dùng dừng gõ
+        distinctUntilChanged()           // chỉ gọi nếu giá trị thực sự thay đổi
+      )
+      .subscribe(value => {
+        this.onSearchChanged(value);
+      });
 
-    this.fetchData();
+    this.fetchData(this.request.currentPage, this.request.pageSize);
   }
+
 
   onTabChange(index: number): void {
     this.currentTabIndex = index;
@@ -83,7 +87,7 @@ export class ListWageManagermentComponent implements OnInit {
     this.fetchData();
   }
 
-  fetchData(currentPage: number = 0, pageSize: number = 10): void {
+  fetchData(currentPage?: number , pageSize?: number): void {
     const formValue = this.searchForm.value;
     const status = this.statusList[this.currentTabIndex];
     const params: any = {

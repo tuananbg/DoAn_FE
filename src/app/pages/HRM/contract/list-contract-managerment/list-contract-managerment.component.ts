@@ -15,6 +15,8 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import { NgxSpinnerService } from "ngx-spinner";
 import { FileManagerService } from "../../../../service/file-manager.service";
 import { FormContractManagermentComponent } from "../form-contract-managerment/form-contract-managerment.component";
+import {debounceTime, distinctUntilChanged} from "rxjs/operators";
+import {en_US, NzI18nService} from "ng-zorro-antd/i18n";
 
 @Component({
   selector: 'app-list-contract-managerment',
@@ -35,6 +37,7 @@ export class ListContractManagermentComponent implements OnInit {
   isLoading = false;
   message = '';
   idContract: any;
+  searchFormValue: any;
 
   currentTabIndex = 0;
   statusList = ['ACTIVE', 'INACTIVE'];
@@ -51,14 +54,29 @@ export class ListContractManagermentComponent implements OnInit {
     private modal: NzModalService,
     private spinner: NgxSpinnerService,
     private viewContainerRef: ViewContainerRef,
-    private fileManagerService: FileManagerService
+    private fileManagerService: FileManagerService,
+    private i18n: NzI18nService,
   ) {}
 
   ngOnInit(): void {
+    this.i18n.setLocale(en_US);
     this.searchForm = this.formBuilder.group({
       contractCode: new FormControl(null, [Validators.maxLength(100)]),
       contractType: new FormControl(null)
     });
+    if (this.searchFormValue) {
+      this.searchForm.patchValue(this.searchFormValue);
+    }
+
+    this.searchForm.get('contractCode')?.valueChanges
+      .pipe(
+        debounceTime(500),               // đợi 500ms sau khi người dùng dừng gõ
+        distinctUntilChanged()           // chỉ gọi nếu giá trị thực sự thay đổi
+      )
+      .subscribe(value => {
+        this.onSearchChanged(value);
+      });
+
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
@@ -201,5 +219,12 @@ export class ListContractManagermentComponent implements OnInit {
     }, () => {
       this.spinner.hide().then();
     });
+  }
+
+  searchKeyword: string | null = null; // Mặc định là null
+
+  onSearchChanged(event: any) {
+    this.searchKeyword = event.value ? event.value : null; // Nếu không nhập, đặt lại null
+    this.fetchData(this.request.currentPage, this.request.pageSize); // Gọi API
   }
 }
