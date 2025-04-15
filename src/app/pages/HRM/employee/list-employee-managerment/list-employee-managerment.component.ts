@@ -129,7 +129,8 @@ export class ListEmployeeManagermentComponent implements OnInit {
     this.contactNewForm.newUser = {
       code: '',
       fullName: '',
-      seatCode: '',
+      departmentCode:'',
+      positionCode: '',
       dateOfBirth: new Date(),
       gender: '',
       placeOfBirth: '',
@@ -222,7 +223,8 @@ export class ListEmployeeManagermentComponent implements OnInit {
           this.contactNewForm.newUser = {
             code: '',
             fullName: '',
-            seatCode: '',
+            departmentCode: '',
+            positionCode: '',
             dateOfBirth: new Date(),
             gender: '',
             placeOfBirth: '',

@@ -20,62 +20,16 @@
       <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
         <div nz-col [nzSm]="24" [nzMd]="8" [nzLg]="8">
           <nz-form-item>
-            <nz-form-control [nzSm]="24" [nzXs]="24">
-              <app-input-text-v2 formControlName="positionCode" label="{{ 'Mã chức vụ' }}" [maxlength]="'255'"
-                                 [nzAllowClear]="true"></app-input-text-v2>
+            <nz-form-control>
+              <app-input-text-v2
+                formControlName="keyword"
+                label="Tìm kiếm"
+                [maxlength]="'255'"
+                [nzAllowClear]="true"
+              ></app-input-text-v2>
             </nz-form-control>
           </nz-form-item>
-        </div>
-        <div nz-col [nzSm]="24" [nzMd]="8" [nzLg]="8">
-          <nz-form-item>
-            <nz-form-control [nzSm]="24" [nzXs]="24">
-              <app-input-text-v2 formControlName="positionName" label="{{ 'Tên chức vụ' }}" [maxlength]="'255'"
-                                 [nzAllowClear]="true"></app-input-text-v2>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSm]="24" [nzMd]="8" [nzLg]="8">
-          <nz-form-item>
-            <nz-form-control nzErrorTip="Trạng thái" [nzSm]="24" [nzXs]="24">
-              <app-select [data]="lstStatus" [valueField]="'id'" [placeHolder]="'--Tất cả--'"
-                          [labelField]="'name'" [openSearchModal]="false" [getObjectValue]="true"
-                          [labelHorizontal]="false" formControlName="isActive" labelContent="Trạng thái">
-              </app-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
       </div>
-      <div nz-row>
-        <div nz-col nzSpan="24">
-          <div nz-row nzGutter="20" nzJustify="center">
-            <div nz-col>
-              <nz-form-item>
-                <nz-form-control>
-                  <app-button-common buttonType="default" buttonText="Nhập lại" iconTheme="outline"
-                                     [buttonClass]="'css-box-shadow'"
-                                     iconType="reload" (clickAction)="resetForm()"></app-button-common>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col>
-              <nz-form-item>
-                <nz-form-control>
-                  <app-button-base iconType="search" (clickAction)="nzOnSearch()"
-                                   [buttonClass]="'css-box-shadow'"
-                                   text="Tìm kiếm"></app-button-base>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col>
-              <nz-form-item>
-                <nz-form-control>
-                  <app-button-export (clickExport)="openExport()"
-                                     [buttonClass]="'css-box-shadow'"></app-button-export>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-          </div>
-        </div>
       </div>
     </form>
   </nz-collapse-panel>
@@ -98,6 +52,10 @@
       </div>
     </div>
     <div class="list__table">
+      <nz-tabset [(nzSelectedIndex)]="currentTabIndex" (nzSelectedIndexChange)="onTabChange($event)">
+        <nz-tab nzTitle="Đang hoạt động"></nz-tab>
+        <nz-tab nzTitle="Vô hiệu"></nz-tab>
+      </nz-tabset>
       <nz-table #rowSelectionTable nzBordered [nzData]="lstData" [nzFrontPagination]="false"
                 [nzNoResult]="'Không có kết quả tìm kiếm'" [nzScroll]="{ x: SCROLL_TABLE.SCROLL_X}">
         <thead>

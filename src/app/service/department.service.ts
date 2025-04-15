@@ -28,6 +28,21 @@ export class DepartmentService {
     )
   }
 
+  getList(keyword: string | null, status: string, params: any): Observable<any> {
+    if (keyword) {
+      params = {
+        ...params,
+        keyword: keyword
+      };
+    }
+
+    return this.httpClient.get(`${API_CONFIG.BASE_URL}department/list/${status}`, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      params: params
+    });
+  }
+
+
   getListDepartment(pageable: any): Observable<any> {
     return this.httpClient.get(
       API_CONFIG.BASE_URL + "department/list",

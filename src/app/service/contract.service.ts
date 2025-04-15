@@ -28,15 +28,16 @@ export class ContractService {
     )
   }
 
-  getList(status: string, pageable: any): Observable<any> {
+  getList(status: string, params: any): Observable<any> {
     return this.httpClient.get(
       `${API_CONFIG.BASE_URL}employee-contract/list/${status}`,
       {
         headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-        params: pageable
+        params: params
       }
     );
   }
+
 
 
   searchForEmployee(payload: any, pageable: any): Observable<any> {
@@ -52,9 +53,19 @@ export class ContractService {
 
   create(file: File, contractDTO: any): Observable<any> {
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('contractCode', contractDTO.contractCode);
-    formData.append('contractType', contractDTO.contractType);
+    if (file) {
+      formData.append('file', file);
+    }
+    formData.append('contractNumber', contractDTO.contractNumber ?? '');
+    formData.append('contractType', contractDTO.contractType ?? '');
+    formData.append('contractSignDate', contractDTO.contractSignDate ?? '');
+    formData.append('contractEffectiveDate', contractDTO.contractEffectiveDate ?? '');
+    formData.append('contractEndDate', contractDTO.contractEndDate ?? '');
+    formData.append('basicSalaryInsurance', contractDTO.basicSalaryInsurance ?? '');
+    formData.append('basicSalary', contractDTO.basicSalary ?? '');
+    formData.append('attachFile', contractDTO.attachFile ?? '');
+    formData.append('employeeCode', contractDTO.employeeCode ?? '');
+
     return this.httpClient.post(
       API_CONFIG.BASE_URL + "employee-contract/create",
       formData,
@@ -63,6 +74,7 @@ export class ContractService {
       }
     );
   }
+
 
   createForEmployee(userDetailContractDTO: any): Observable<any> {
     return this.httpClient.post(API_CONFIG.BASE_URL + "employee-contract/createForEmployee",

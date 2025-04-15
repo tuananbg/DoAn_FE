@@ -6,6 +6,7 @@ import {ToastService} from "../../../../service/toast.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {PositionService} from "../../../../service/position.service";
 import {DepartmentService} from "../../../../service/department.service";
+import {MasterDataService} from "../../../../service/masterdata.service";
 
 @Component({
   selector: 'app-position-managerment-form',
@@ -23,19 +24,24 @@ export class PositionManagermentFormComponent implements OnInit {
   @Input() isVisibleModal = false;
   @Input() dataChild = null;
   @Input() isUpdate = false;
+  @Input() departmentCodeForm?: string;
+  @Input() positionCategoryForm?: string;
+  @Input() jobGroupForm?: string;
+
+
   @Output() clickCancel = new EventEmitter();
   @Output() clickSave = new EventEmitter();
 
   createForm!: FormGroup;
   checked = false;
+
   lstDepartment: any[] = [];
-  lstPosition: any[] = [];
+  lstPositionCategory: any[] = [];
+  lstJobGroup: any[] = [];
+
   payloadDepartment = {name: null, status: null};
   payloadPosition = {name: null, status: null};
-  lstStatus = [
-    {id: 1, name: "Hoạt động"},
-    {id: 0, name: "Không hoạt động"}
-  ]
+
   isLoading = false;
 
   constructor(
@@ -45,7 +51,8 @@ export class PositionManagermentFormComponent implements OnInit {
     private positionService: PositionService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private departmentService: DepartmentService
+    private departmentService: DepartmentService,
+    private masterDataService: MasterDataService,
   ) {
   }
 
@@ -55,11 +62,19 @@ export class PositionManagermentFormComponent implements OnInit {
       positionName: new FormControl(null, [Validators.required, Validators.maxLength(100)]),
       positionCode: new FormControl(null, [Validators.required, Validators.maxLength(100)]),
       positionDescription: new FormControl(null),
-      departmentId: new FormControl(null),
-      isActive: new FormControl(null, [Validators.required]),
+      departmentCode: new FormControl(null, [Validators.required]),
+      positionCategory: new FormControl(null, [Validators.required]),
+      jobGroup: new FormControl(null),
+      isActive: new FormControl(1, [Validators.required])
     });
 
     this.fetchDepartment();
+    this.fetchPositionCategory();
+    this.fetchJobGroup();
+
+    if (this.isUpdate) {
+      this.patchForm();
+    }
   }
 
   patchForm() {
@@ -69,8 +84,10 @@ export class PositionManagermentFormComponent implements OnInit {
         positionCode: this.codeForm,
         positionName: this.nameForm,
         positionDescription: this.descriptionForm,
-        departmentId: this.departmentIdForm,
-        isActive: this.isActive,
+        departmentCode: this.departmentCodeForm ?? null,
+        positionCategory: this.positionCategoryForm ?? null,
+        jobGroup: this.jobGroupForm ?? null,
+        isActive: this.isActive ?? 1
       });
     });
   }
@@ -85,81 +102,94 @@ export class PositionManagermentFormComponent implements OnInit {
       this.createForm.controls[i].markAsDirty();
       this.createForm.controls[i].updateValueAndValidity();
     }
+
+    console.log(this.createForm);
     if (this.createForm.valid) {
       const data = this.createForm.value;
       data.id = data.id ? data.id : null;
-      data.positionCode = data.positionCode ? data.positionCode.trim() : null;
-      data.positionName = data.positionName ? data.positionName.trim() : null;
-      data.positionDescription = data.positionDescription ? data.positionDescription.trim() : null;
-      data.departmentId = data.departmentId === 0 ? 0 : !data.departmentId ? null : data.departmentId;
-      data.isActive = data.isActive === 0 ? 0 : !data.isActive ? null : data.isActive;
-      if (!this.isUpdate) {
-        this.spinner.show().then();
-        this.positionService.createPosition(data).subscribe(res => {
-          if (res && res.body.code === "OK") {
-            this.toastService.openSuccessToast('Thêm mới chức vụ thành công');
+      data.positionCode = data.positionCode?.trim() ?? null;
+      data.positionName = data.positionName?.trim() ?? null;
+      data.positionDescription = data.positionDescription?.trim() ?? null;
+      data.departmentCode = data.departmentCode ?? null;
+      data.positionCategory = data.positionCategory ?? null;
+      data.jobGroup = data.jobGroup ?? null;
+
+      console.log("data1", data)
+      this.spinner.show().then();
+
+      const request = this.isUpdate
+        ? this.positionService.editPosition(data)
+        : this.positionService.createPosition(data);
+
+
+      request.subscribe({
+        next: (res) => {
+          if (res && res.code === "201") {
+            const msg = this.isUpdate ? 'Cập nhật' : 'Thêm mới';
+            this.toastService.openSuccessToast(`${msg} chức vụ thành công`);
             this.clickSave.emit();
-            this.createForm.reset();
-            this.isLoading = true;
-            // this.clickCancel.emit();
             this.handleCancelModal();
           } else {
-            this.toastService.openErrorToast(res.body.msgCode);
-            this.spinner.hide().then();
+            this.toastService.openErrorToast(res?.body?.msgCode || 'Lỗi xử lý chức danh');
+            this.spinner.hide();
           }
-        }, error => {
-          this.toastService.openErrorToast(error.error.msgCode);
-          this.spinner.hide().then();
-        }, () => {
-          this.spinner.hide().then();
-        });
-      } else {
-        this.positionService.editPosition(data).subscribe(res => {
-          if (res && res.code === "OK") {
-            this.toastService.openSuccessToast('Cập nhật chức vụ thành công');
-            this.clickSave.emit();
-            this.clickCancel.emit();
-            this.isLoading = true;
-            this.handleCancelModal();
-          } else {
-            this.toastService.openErrorToast(res.body.msgCode);
-          }
-        }, error => {
-          this.toastService.openErrorToast(error.error.msgCode);
-        }, () => {
-          this.spinner.hide().then();
-        });
-      }
+        },
+        error: (error) => {
+          this.toastService.openErrorToast(error?.error?.msgCode || 'Lỗi hệ thống');
+          this.spinner.hide();
+        },
+        complete: () => {
+          this.spinner.hide();
+        }
+      });
+
+
     }
   }
 
   fetchDepartment() {
     this.departmentService.getListDepartment(this.payloadDepartment).subscribe(
-      (res) => {
+      res => {
         if (res && res.code === "OK") {
-          this.lstDepartment = res.data || [];
-        } else {
-          console.error("Dữ liệu trả về không hợp lệ:", res);
+          this.lstDepartment = (res.data || []).map((item: any) => ({
+            label: item.departmentName,
+            value: item.departmentCode
+          }));
         }
       },
-      (error) => {
-        console.error("Lỗi API:", error);
-      }
+      error => console.error("Lỗi API fetchDepartment:", error)
     );
   }
-  fetchPosition() {
-    this.positionService.getSelection(this.payloadPosition).subscribe(
-      (res) => {
+
+
+  fetchJobGroup() {
+    this.masterDataService.getListJobGroup().subscribe(
+      res => {
         if (res && res.code === "OK") {
-          this.lstPosition = res.data || [];
-        } else {
-          console.error("Dữ liệu trả về không hợp lệ:", res);
+          this.lstJobGroup = (res.data || []).map((item: any) => ({
+            label: item.name,
+            value: item.code
+          }));
         }
       },
-      (error) => {
-        console.error("Lỗi API:", error);
-      }
+      error => console.error("Lỗi API fetchJobGroup:", error)
     );
   }
+
+
+  fetchPositionCategory() {
+    this.masterDataService.getListPositionCategory().subscribe(
+      res => {
+        if (res && res.code === "OK") {
+          this.lstPositionCategory = (res.data || []).map((item: any) => ({
+            label: item.name,
+            value: item.code
+          }));
+        }
+      },
+      error => console.error("Lỗi API fetchPositionCategory:", error)
+    );
+  }
+
 
 }

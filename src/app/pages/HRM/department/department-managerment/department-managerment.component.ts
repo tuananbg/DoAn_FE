@@ -1,12 +1,13 @@
-import { DepartmentService } from '../../../../service/department.service';
+import {DepartmentService} from '../../../../service/department.service';
 import {Component, OnChanges, OnInit, SimpleChanges, ViewContainerRef} from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { ToastService } from 'src/app/service/toast.service';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {ToastService} from 'src/app/service/toast.service';
 import {NzModalService} from "ng-zorro-antd/modal";
 import {CreateDepartmentComponent} from "../create-department/create-department.component";
 import {NzTableSortOrder} from "ng-zorro-antd/table";
 import {LoginService} from "../../../../service/login.service";
+import {debounceTime, distinctUntilChanged} from "rxjs/operators";
 
 @Component({
   selector: 'app-department-managerment',
@@ -24,7 +25,7 @@ export class DepartmentManagermentComponent implements OnInit {
     name: null,
     currentPage: 0,
     pageSize: 10,
-    sort: 'created_Date,DESC', // -: desc | +: asc,
+    sort: 'createdDate/DESC', // -: desc | +: asc,
   };
   lstData: any[] = [];
   total = 0;
@@ -32,6 +33,8 @@ export class DepartmentManagermentComponent implements OnInit {
     {id: 1, name: "Hoạt động"},
     {id: 0, name: "Không hoạt động"}
   ]
+  currentTabIndex = 0;
+  statusList = ['ACTIVE', 'INACTIVE'];
   SCROLL_TABLE = {
     SCROLL_X: '1000px',
     SCROLL_Y: '60vh'
@@ -49,7 +52,7 @@ export class DepartmentManagermentComponent implements OnInit {
     private formBuilder: FormBuilder,
     private departmentService: DepartmentService,
     private toastService: ToastService,
-    private modal : NzModalService,
+    private modal: NzModalService,
     private spinner: NgxSpinnerService,
     private viewContainerRef: ViewContainerRef,
     private login: LoginService
@@ -59,51 +62,55 @@ export class DepartmentManagermentComponent implements OnInit {
 
   ngOnInit() {
     this.searchForm = this.formBuilder.group({
-      name: new FormControl(null, [Validators.maxLength(100)]),
+      departmentCode: new FormControl(null, [Validators.maxLength(100)]),
       status: new FormControl(null),
     });
     if (this.searchFormValue) {
       this.searchForm.patchValue(this.searchFormValue);
     }
+    this.searchForm.get('departmentCode')?.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged()
+      )
+      .subscribe(value => {
+        this.onSearchChanged(value);
+      });
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
-  fetchData(currentPage?: number, pageSize?: number){
+  fetchData(currentPage?: number, pageSize?: number) {
+    const status = this.statusList[this.currentTabIndex];
     const formValue = this.searchForm.value;
-    const queryModel = {
-      name: !formValue.name ? null : formValue.name.toString(),
-      status: formValue.status === 0 ? '0' : !formValue.status ? null : formValue.status.toString(),
-    };
+
     const pageable = {
       page: currentPage,
       size: pageSize,
       sort: this.request.sort,
     };
+
+    const keyword = formValue.departmentCode?.toString() || null;
+
     this.spinner.show().then();
-    this.departmentService.searchDepartment(queryModel, pageable).subscribe(res => {
+    this.departmentService.getList(keyword, status, pageable).subscribe(res => {
       if (res && res.code === "OK") {
         this.lstData = res.data.content;
         this.total = res.data.totalElements;
-        this.spinner.hide().then();
-        if (this.lstData.length === 0) {
-          if (this.request.currentPage !== 0) {
-            this.request.currentPage = this.request.currentPage - 1;
-            this.fetchData(this.request.currentPage, this.request.pageSize);
-          }
+
+        if (this.lstData.length === 0 && this.request.currentPage !== 0) {
+          this.request.currentPage = this.request.currentPage - 1;
+          this.fetchData(this.request.currentPage, this.request.pageSize);
         }
-        this.spinner.hide().then();
       } else {
         this.toastService.openErrorToast("Lỗi hệ thống");
       }
       this.spinner.hide().then();
     }, error => {
-      // this.toastService.openErrorToast(error.error.msgCode);
       this.toastService.openErrorToast("Lỗi hệ thống");
-      this.spinner.hide().then();
-    }, () => {
       this.spinner.hide().then();
     });
   }
+
 
   nzOnSearch(): void {
     this.request.currentPage = 0;
@@ -132,7 +139,7 @@ export class DepartmentManagermentComponent implements OnInit {
     });
     modalRef.afterClose.subscribe(rs => {
       this.isLoading = true;
-      if(this.isLoading){
+      if (this.isLoading) {
         this.nzOnSearch();
       }
     });
@@ -145,7 +152,7 @@ export class DepartmentManagermentComponent implements OnInit {
       nzWidth: '500px',
       nzViewContainerRef: this.viewContainerRef,
       nzComponentParams: {
-        idDepartment : data.departmentId,
+        idDepartment: data.departmentId,
         isUpdate: true,
         codeForm: data.departmentCode,
         nameForm: data.departmentName,
@@ -157,7 +164,7 @@ export class DepartmentManagermentComponent implements OnInit {
     });
     modalRef.afterClose.subscribe(rs => {
       this.isLoading = true;
-      if(this.isLoading){
+      if (this.isLoading) {
         this.nzOnSearch();
       }
     });
@@ -228,6 +235,13 @@ export class DepartmentManagermentComponent implements OnInit {
     // this.nzOnSearch();
   }
 
+  onTabChange(index: number): void {
+    this.currentTabIndex = index;
+    this.request.currentPage = 0;
+    this.fetchData(this.request.currentPage, this.request.pageSize);
+  }
+
+
 
   changeCurrentPage(currentPage: number) {
     this.request.currentPage = currentPage;
@@ -237,6 +251,13 @@ export class DepartmentManagermentComponent implements OnInit {
   changeItemPerPage(itemPerPage: number) {
     this.request.pageSize = itemPerPage;
     this.fetchData(this.request.currentPage, this.request.pageSize);
+  }
+
+  searchKeyword: string | null = null;
+
+  onSearchChanged(event: any) {
+    this.searchKeyword = event.value ? event.value : null; // Nếu không nhập, đặt lại null
+    this.fetchData(this.request.currentPage, this.request.pageSize); // Gọi API
   }
 
 

@@ -9,6 +9,7 @@ import {PositionService} from "../../../../service/position.service";
 import {PositionManagermentFormComponent} from "../position-managerment-form/position-managerment-form.component";
 import {FileManagerService} from "../../../../service/file-manager.service";
 import {SeatService} from "../../../../service/seat.service";
+import {debounceTime, distinctUntilChanged} from "rxjs/operators";
 
 @Component({
   selector: 'app-position-managerment',
@@ -27,14 +28,12 @@ export class PositionManagermentComponent implements OnInit {
     name: null,
     currentPage: 0,
     pageSize: 10,
-    sort: 'created_date,desc', // -: desc | +: asc,
+    sort: 'createdDate/desc', // -: desc | +: asc,
   };
   lstData: any[] = [];
   total = 0;
-  lstStatus = [
-    {id: 1, name: "Hoạt động"},
-    {id: 0, name: "Không hoạt động"}
-  ]
+  statusList = ['ACTIVE', 'INACTIVE'];
+  currentTabIndex: number = 0;
   SCROLL_TABLE = {
     SCROLL_X: '1000px',
     SCROLL_Y: '60vh'
@@ -62,44 +61,68 @@ export class PositionManagermentComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchForm = this.formBuilder.group({
-      positionCode: new FormControl(null, [Validators.maxLength(100)]),
-      positionName: new FormControl(null, [Validators.maxLength(100)]),
-      isActive: new FormControl(null),
+      keyword: new FormControl(null, [Validators.maxLength(100)]),
     });
     if (this.searchFormValue) {
       this.searchForm.patchValue(this.searchFormValue);
     }
+    this.searchForm.get('keyword')?.valueChanges
+      .pipe(
+        debounceTime(500),               // đợi 500ms sau khi người dùng dừng gõ
+        distinctUntilChanged()           // chỉ gọi nếu giá trị thực sự thay đổi
+      )
+      .subscribe(value => {
+        this.onSearchChanged(value);
+      });
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
-  fetchData(currentPage?: number, pageSize?: number) {
+  onTabChange(index: number): void {
+    this.currentTabIndex = index;
+    this.request.currentPage = 0;
+    this.fetchData(this.request.currentPage, this.request.pageSize);
+  }
+
+  fetchData(currentPage: number = 0, pageSize: number = 10): void {
     const formValue = this.searchForm.value;
+    const status = this.statusList[this.currentTabIndex]; // status = 'ACTIVE' | 'INACTIVE' | 'ALL'
+
     const queryModel = {
-      code: formValue.positionCode ? formValue.positionCode.toString() : null,
-      positionName: formValue.positionName ? formValue.positionName.toString() : null,
-      departmentName: formValue.departmentName ? formValue.departmentName.toString() : null,
-      description: formValue.description ? formValue.description.toString() : null,
-      active: formValue.isActive === 0 ? '0' : formValue.isActive ? formValue.isActive.toString() : null,
+      keyword: formValue.keyword?.trim() || null
     };
 
+    const pageable = {
+      page: currentPage,
+      size: pageSize,
+      sort: this.request.sort
+    };
+
+    const finalParams = { ...pageable, ...queryModel };
+
     this.spinner.show().then();
+    this.positionService.getList(status, finalParams).subscribe(
+      (res) => {
+        if (res && res.code === "OK") {
+          this.lstData = res.data.content || [];
+          this.total = res.data.totalElements || 0;
 
-    this.seatService.searchSeat(queryModel).subscribe(res => {
-      if (res && res.code === "200") {
-        this.lstData = res.data;
-
-        this.total = this.lstData.length || 0;
-      } else {
-        this.toastService.openErrorToast(res?.message || "Có lỗi xảy ra!");
+          // Nếu trang hiện tại không có dữ liệu thì quay lại trang trước
+          if (this.lstData.length === 0 && this.request.currentPage > 0) {
+            this.request.currentPage--;
+            this.fetchData(this.request.currentPage, this.request.pageSize);
+          }
+        } else {
+          this.toastService.openErrorToast(res?.message || 'Lỗi không xác định');
+        }
+        this.spinner.hide();
+      },
+      (error) => {
+        this.toastService.openErrorToast(error?.error?.message || 'Có lỗi xảy ra');
+        this.spinner.hide();
       }
-      this.spinner.hide().then();
-    }, error => {
-      this.toastService.openErrorToast(error?.error?.message || "Lỗi kết nối!"); // ✅ Tránh lỗi undefined
-      this.spinner.hide().then();
-    }, () => {
-      this.spinner.hide().then();
-    });
+    );
   }
+
 
 
   nzOnSearch(): void {
@@ -237,5 +260,11 @@ export class PositionManagermentComponent implements OnInit {
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
+  searchKeyword: string | null = null; // Mặc định là null
+
+  onSearchChanged(event: any) {
+    this.searchKeyword = event.value ? event.value : null; // Nếu không nhập, đặt lại null
+    this.fetchData(this.request.currentPage, this.request.pageSize); // Gọi API
+  }
 
 }

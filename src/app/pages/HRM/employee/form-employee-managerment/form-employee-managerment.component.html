@@ -1,70 +1,87 @@
 <dx-form class="plain-styled-form" [screenByWidth]="getSizeQualifier">
-  <dxi-item itemType="group">
-    <dxo-col-count-by-screen
-      [xs]="1"
-      [sm]="1"
-      [md]="1"
-      [lg]="1"
-    ></dxo-col-count-by-screen>
+  <!-- Ảnh đại diện -->
+  <dxi-item itemType="group" caption="Ảnh đại diện">
+    <dxo-col-count-by-screen [xs]="1" [sm]="1" [md]="1" [lg]="1"></dxo-col-count-by-screen>
     <dxi-item class="uploader">
       <div *dxTemplate>
-        <div id="fileuploader-container">
-          <dx-file-uploader
-            [multiple]="true"
-            selectButtonText="Chọn file ảnh"
-            labelText="Ảnh đại diện"
-            accept="image/*"
-            uploadMode="useForm"
-            (onValueChanged)="onValueChanged($event)"
-          >
-          </dx-file-uploader>
-        </div>
+        <dx-file-uploader
+          [multiple]="false"
+          selectButtonText="Chọn ảnh"
+          labelText="Ảnh đại diện"
+          accept="image/*"
+          uploadMode="useForm"
+          (onValueChanged)="onValueChanged($event)">
+        </dx-file-uploader>
       </div>
     </dxi-item>
   </dxi-item>
 
-  <dxi-item itemType="group">
-    <dxo-col-count-by-screen [xs]="1" [sm]="2" [md]="2" [lg]="2"></dxo-col-count-by-screen>
+  <!-- Thông tin cơ bản -->
+  <dxi-item itemType="group" caption="Thông tin cơ bản">
+    <dxo-col-count-by-screen [xs]="1" [sm]="2" [md]="2" [lg]="3"></dxo-col-count-by-screen>
 
     <dxi-item>
-      <app-form-textbox label="Mã nhân viên" [(value)]="newUser.code" [isEditing]="true" [validators]="[{ type: 'required' }]"> </app-form-textbox>
+      <app-form-textbox label="Mã nhân viên" [(value)]="newUser.code" [isEditing]="true"
+                        [validators]="[{ type: 'required' }]"></app-form-textbox>
     </dxi-item>
 
     <dxi-item>
-      <app-form-textbox label="Họ và tên" [(value)]="newUser.fullName" [isEditing]="true" [validators]="[{ type: 'required' }]"></app-form-textbox>
+      <app-form-textbox label="Họ và tên" [(value)]="newUser.fullName" [isEditing]="true"
+                        [validators]="[{ type: 'required' }]"></app-form-textbox>
     </dxi-item>
 
     <dxi-item>
-      <app-form-textbox label="Mã ghế" [(value)]="newUser.seatCode" [isEditing]="false" [validators]="[{ type: 'required' }]"></app-form-textbox>
+      <dx-select-box
+        [items]="lstDepartments"
+        valueExpr="departmentCode"
+        displayExpr="departmentName"
+        [(value)]="newUser.departmentCode"
+        [searchEnabled]="true"
+        placeholder="Chọn phòng ban">
+      </dx-select-box>
+    </dxi-item>
+
+    <dxi-item>
+      <dx-select-box
+        [items]="lstPositions"
+        valueExpr="positionCode"
+        displayExpr="positionName"
+        [(value)]="newUser.positionCode"
+        [searchEnabled]="true"
+        placeholder="Chọn chức vụ">
+      </dx-select-box>
     </dxi-item>
 
     <dxi-item>
       <dx-select-box
         [items]="genderList"
-        [(value)]="newUser.gender"
-        displayExpr="label"
         valueExpr="value"
+        displayExpr="label"
+        [(value)]="newUser.gender"
         [searchEnabled]="true"
-        placeholder="Chọn giới tính"
-        [value]="0"
-      ></dx-select-box>
+        placeholder="Chọn giới tính">
+      </dx-select-box>
     </dxi-item>
 
+    <dxi-item>
+      <dx-date-box
+        (onValueChanged)="valueChanged($event)"
+        label="Ngày sinh"
+        id="birth-date"
+        placeholder="Chọn ngày sinh..."
+        [stylingMode]="stylingMode"
+        displayFormat="dd/MM/yyyy"
+      >
+      </dx-date-box>
+    </dxi-item>
+  </dxi-item>
+
+  <!-- Thông tin liên hệ -->
+  <dxi-item itemType="group" caption="Thông tin liên hệ">
+    <dxo-col-count-by-screen [xs]="1" [sm]="2" [md]="2" [lg]="3"></dxo-col-count-by-screen>
 
     <dxi-item>
       <app-form-textbox label="Số điện thoại" [(value)]="newUser.mobile" [isEditing]="true"></app-form-textbox>
-    </dxi-item>
-
-    <dxi-item>
-      <app-form-textbox label="Mã số thuế" [(value)]="newUser.taxCode" [isEditing]="true"></app-form-textbox>
-    </dxi-item>
-
-    <dxi-item>
-      <app-form-textbox label="Số bảo hiểm" [(value)]="newUser.insuranceNumber" [isEditing]="true"></app-form-textbox>
-    </dxi-item>
-
-    <dxi-item>
-      <app-form-textbox label="Số tài khoản" [(value)]="newUser.accountNumber" [isEditing]="true"></app-form-textbox>
     </dxi-item>
 
     <dxi-item>
@@ -78,23 +95,22 @@
     <dxi-item>
       <app-form-textbox label="Quốc gia" [(value)]="newUser.nation" [isEditing]="true"></app-form-textbox>
     </dxi-item>
-
   </dxi-item>
 
-  <dxi-item itemType="group">
-    <dxo-col-count-by-screen [xs]="1" [sm]="2" [md]="2" [lg]="2"></dxo-col-count-by-screen>
+  <!-- Thông tin tài chính -->
+  <dxi-item itemType="group" caption="Thông tin tài chính">
+    <dxo-col-count-by-screen [xs]="1" [sm]="2" [md]="2" [lg]="3"></dxo-col-count-by-screen>
 
     <dxi-item>
-      <dx-date-box
-        (onValueChanged)="valueChanged($event)"
-        label="Ngày sinh"
-        id="birth-date"
-        placeholder="Chọn ngày sinh..."
-        [stylingMode]="stylingMode"
-        displayFormat="dd/MM/yyyy"
-      >
-      </dx-date-box>
+      <app-form-textbox label="Mã số thuế" [(value)]="newUser.taxCode" [isEditing]="true"></app-form-textbox>
     </dxi-item>
 
+    <dxi-item>
+      <app-form-textbox label="Số bảo hiểm" [(value)]="newUser.insuranceNumber" [isEditing]="true"></app-form-textbox>
+    </dxi-item>
+
+    <dxi-item>
+      <app-form-textbox label="Số tài khoản" [(value)]="newUser.accountNumber" [isEditing]="true"></app-form-textbox>
+    </dxi-item>
   </dxi-item>
 </dx-form>

@@ -25,7 +25,8 @@ export class FormEmployeeManagermentComponent implements OnInit {
   newUser = {
     code: '',
     fullName: '',
-    seatCode: '',
+    departmentCode: '',
+    positionCode:'',
     dateOfBirth: new Date(),
     gender: '',
     placeOfBirth: '',
@@ -62,7 +63,8 @@ export class FormEmployeeManagermentComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    // this.fetchDepartments();
+    this.fetchDepartments();
+    this.fetchPositions();
   }
   // ngOnChanges(changes: SimpleChanges): void {
   //   const {userId} = changes;
@@ -109,19 +111,34 @@ export class FormEmployeeManagermentComponent implements OnInit {
   //   });
   // }
 
-  onDepartmentChanged(event: any) {
-    const selectedDepartmentId = event.value;
-    this.positionService.searchPosition(this.payloadPosition, {page: 0, size: 10}).subscribe((response: any) => {
-      if (response && response.code === "OK") {
-        this.lstPosition = response.data.data;
-        this.lstPosition = this.lstPosition.filter(position => position.departmentId === selectedDepartmentId);
-        this.lstPosition.sort((a, b) => a.positionName.localeCompare(b.positionName));
-      }
-    });
-  }
   genderList = [
     { label: 'Nam', value: 1 },
     { label: 'Nữ', value: 0 }
   ];
+  lstDepartments: any[] = [];
+  lstPositions: any[] = [];
+
+  fetchDepartments() {
+    this.departmentService.getListDepartment({}).subscribe(
+      (res) => {
+        if (res && res.code === "OK") {
+          this.lstDepartments = res.data || [];
+        }
+      },
+      (error) => console.error("Lỗi lấy danh sách phòng ban:", error)
+    );
+  }
+
+  fetchPositions() {
+    this.positionService.getSelection().subscribe(
+      (res) => {
+        if (res && res.code === "200") {
+          this.lstPositions = res.data || [];
+        }
+      },
+      (error) => console.error("Lỗi lấy danh sách chức vụ:", error)
+    );
+  }
+
 
 }

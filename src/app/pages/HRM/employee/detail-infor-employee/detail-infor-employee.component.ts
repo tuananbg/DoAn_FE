@@ -217,22 +217,22 @@ export class DetailInforEmployeeComponent implements OnInit {
     });
   };
 
-  fetchDepartment() {
-    this.departmentService.searchDepartment(this.payloadDepartment, {page: 0, size: -1}).subscribe((response: any) => {
-      if (response && response.code === "OK") {
-        this.lstDepartment = response.data.content;
-        this.lstDepartment.sort((a, b) => a.departmentName.localeCompare(b.departmentName));
-      }
-    });
-  }
-
-  fetchPosition() {
-    this.positionService.searchPosition(this.payloadPosition, {page: 0, size: -1}).subscribe((response: any) => {
-      if (response && response.code === "OK") {
-        this.lstPosition = response.data.data;
-        this.lstPosition.sort((a, b) => a.positionName.localeCompare(b.positionName));
-      }
-    });
-  }
+  // fetchDepartment() {
+  //   this.departmentService.searchDepartment(this.payloadDepartment, {page: 0, size: -1}).subscribe((response: any) => {
+  //     if (response && response.code === "OK") {
+  //       this.lstDepartment = response.data.content;
+  //       this.lstDepartment.sort((a, b) => a.departmentName.localeCompare(b.departmentName));
+  //     }
+  //   });
+  // }
+  //
+  // fetchPosition() {
+  //   this.positionService.searchPosition(this.payloadPosition, {page: 0, size: -1}).subscribe((response: any) => {
+  //     if (response && response.code === "OK") {
+  //       this.lstPosition = response.data.data;
+  //       this.lstPosition.sort((a, b) => a.positionName.localeCompare(b.positionName));
+  //     }
+  //   });
+  // }
 
 }

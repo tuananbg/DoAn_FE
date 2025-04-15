@@ -1,73 +1,99 @@
-<div style="margin-top: 40px;">
-  <form nz-form [formGroup]="createForm" (keyup.enter)="handleOkModal()">
-    <div nz-row class="mt-2">
-      <div nz-col nzSpan="24">
-        <div nz-row>
-          <app-input-text-v2 [ngClass]="{'w-100': true, 'disabled-button': isUpdate}"
-                             formControlName="seatCode" [required]="true"
-                             label="Mã vị trí" nz-col nzSpan="24"
-                             [isDisabled]="true"
-                             [ngStyleCus]="{'padding-left' : '50px'}"
-                             [nzAllowClear]="true"></app-input-text-v2>
-        </div>
-        <div nz-row>
-          <nz-form-item nz-col nzSpan="24">
-            <nz-form-control>
-              <app-select
-                class="w-100"
-                [data]="lstDepartment"
-                [valueField]="'id'"
-                [labelField]="'departmentName'"
-                [placeHolder]="'--Tất cả--'"
-                [required]="true"
-                [openSearchModal]="false"
-                [getObjectValue]="true"
-                [ngStyleCus]="{'padding-left' : '30px'}"
-                [labelHorizontal]="false"
-                formControlName="departmentId"
-                labelContent="Tên phòng ban:">
-              </app-select>
-
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-row>
-          <nz-form-item nz-col nzSpan="24">
-            <nz-form-control>
-              <app-select
-                class="w-100"
-                [data]="lstPosition"
-                [valueField]="'id'"
-                [labelField]="'positionName'"
-                [placeHolder]="'--Tất cả--'"
-                [required]="true"
-                [openSearchModal]="false"
-                [getObjectValue]="true"
-                [ngStyleCus]="{'padding-left' : '30px'}"
-                [labelHorizontal]="false"
-                formControlName="positionId"
-                labelContent="Tên chức danh:">
-              </app-select>
-
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-row>
-          <nz-form-item nz-col nzSpan="24">
-            <nz-form-control>
-              <app-input-textarea-v2 formControlName="positionDescription" [maxlength]="'5000'"
-                                     label="Mô tả"
-                                     [placeholder]="'Nhập khuyến mô tả chức vụ'"
-                                     [ngClass]="'w-100'"
-                                     [ngStyleCus]="{'padding-left' : '100px'}"
-                                     [nzAllowClear]="true" [nzAutosize]="{ minRows: 2, maxRows: 10 }">
-              </app-input-textarea-v2>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
+<form *ngIf="createForm" nz-form [formGroup]="createForm" nzLayout="vertical">
+  <div nz-row [nzGutter]="16">
+    <!-- Mã chức danh -->
+    <div nz-col [nzSpan]="12">
+      <app-input-text-v2
+        formControlName="positionCode"
+        [required]="true"
+        label="Mã chức danh"
+        [nzAllowClear]="true">
+      </app-input-text-v2>
     </div>
-  </form>
+
+    <!-- Tên chức danh -->
+    <div nz-col [nzSpan]="12">
+      <app-input-text-v2
+        formControlName="positionName"
+        [required]="true"
+        label="Tên chức danh"
+        [nzAllowClear]="true">
+      </app-input-text-v2>
+    </div>
+  </div>
+
+  <div nz-row [nzGutter]="16">
+    <!-- Đơn vị (departmentCode) -->
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label [nzRequired]="true">Đơn vị</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            formControlName="departmentCode"
+            [nzOptions]="lstDepartment"
+            nzPlaceHolder="Chọn đơn vị"
+            style="width: 100%"
+            [nzShowSearch]="true"
+            [nzAllowClear]="true">
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <!-- Loại chức danh (positionCategory) -->
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label [nzRequired]="true">Loại chức danh</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            formControlName="positionCategory"
+            [nzOptions]="lstPositionCategory"
+            nzPlaceHolder="Chọn loại chức danh"
+            style="width: 100%"
+            [nzAllowClear]="true">
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+
+  <div nz-row [nzGutter]="16">
+    <!-- Cấp bậc (jobGroup) -->
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label>Cấp bậc</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            formControlName="jobGroup"
+            [nzOptions]="lstJobGroup"
+            nzPlaceHolder="Chọn cấp bậc"
+            [nzAllowClear]="true"
+            style="width: 100%">
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+
+  <!-- Mô tả -->
+  <div nz-row [nzGutter]="16">
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-control>
+          <app-input-textarea-v2
+            formControlName="positionDescription"
+            [maxlength]="'5000'"
+            label="Mô tả"
+            [placeholder]="'Nhập mô tả chức vụ'"
+            [ngClass]="'w-100'"
+            [nzAllowClear]="true"
+            [nzAutosize]="{ minRows: 2, maxRows: 10 }">
+          </app-input-textarea-v2>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+
+
   <div *nzModalFooter>
     <div class="ng-star-inserted">
       <div class="modal__footer-wrapper d-flex justify-content-center">
@@ -78,4 +104,4 @@
       </div>
     </div>
   </div>
-</div>
+</form>

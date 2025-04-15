@@ -61,14 +61,13 @@ export class ListContractManagermentComponent implements OnInit {
   ngOnInit(): void {
     this.i18n.setLocale(en_US);
     this.searchForm = this.formBuilder.group({
-      contractCode: new FormControl(null, [Validators.maxLength(100)]),
-      contractType: new FormControl(null)
+      keyword: new FormControl(null, [Validators.maxLength(100)]),
     });
     if (this.searchFormValue) {
       this.searchForm.patchValue(this.searchFormValue);
     }
 
-    this.searchForm.get('contractCode')?.valueChanges
+    this.searchForm.get('keyword')?.valueChanges
       .pipe(
         debounceTime(500),               // đợi 500ms sau khi người dùng dừng gõ
         distinctUntilChanged()           // chỉ gọi nếu giá trị thực sự thay đổi
@@ -82,19 +81,22 @@ export class ListContractManagermentComponent implements OnInit {
 
   fetchData(currentPage?: number, pageSize?: number): void {
     const formValue = this.searchForm.value;
+    const status = this.statusList[this.currentTabIndex];
+
     const queryModel = {
-      contractCode: formValue.contractCode?.toString() ?? null,
-      contractType: formValue.contractType?.toString() ?? null
+      keyword: formValue.keyword ?? "",
     };
+
     const pageable = {
       page: currentPage,
       size: pageSize,
       sort: this.request.sort
     };
-    const status = this.statusList[this.currentTabIndex];
+
+    const finalParams = { ...pageable, ...queryModel };
 
     this.spinner.show().then();
-    this.contractService.getList(status, pageable).subscribe(
+    this.contractService.getList(status, finalParams).subscribe(
       (res) => {
         if (res && res.code === "OK") {
           this.lstData = res.data.content || [];
@@ -108,7 +110,7 @@ export class ListContractManagermentComponent implements OnInit {
           this.toastService.openErrorToast(res.body?.msgCode || 'Lỗi không xác định');
         }
 
-        this.spinner.hide().then(); // ✅ di chuyển ra ngoài if
+        this.spinner.hide().then();
       },
       (error) => {
         this.toastService.openErrorToast(error.error?.msgCode || 'Có lỗi xảy ra');
@@ -116,6 +118,7 @@ export class ListContractManagermentComponent implements OnInit {
       }
     );
   }
+
 
   onTabChange(index: number): void {
     this.currentTabIndex = index;

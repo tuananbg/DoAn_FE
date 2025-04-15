@@ -212,7 +212,7 @@ export class PanelEmployeeManagermentComponent implements OnInit, OnChanges, Aft
 
   onDepartmentChanged(event: any) {
     const selectedDepartmentId = event.value;
-    this.positionService.searchPosition(this.payloadPosition, {page: 0, size: -1}).subscribe((response: any) => {
+    this.positionService.getSelection().subscribe((response: any) => {
       if (response && response.code === "OK") {
         this.lstPosition = response.data.data;
         this.lstPosition = this.lstPosition.filter(position => position.departmentId === selectedDepartmentId);

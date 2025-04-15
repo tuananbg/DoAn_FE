@@ -26,20 +26,28 @@ export class PositionService {
     }
   }
 
-  searchPosition(payload: any, pageable: any): Observable<any> {
-    return this.httpClient.post(
-      API_CONFIG.BASE_URL + "position/search",
-      payload,
-      {
-        headers: new HttpHeaders({'Content-Type': 'application/json'}),
-        params: pageable,
+  getList(status: string, params: any): Observable<any> {
+    const cleanParams: any = {};
+    Object.keys(params).forEach((key) => {
+      if (params[key] !== null && params[key] !== undefined) {
+        cleanParams[key] = params[key];
       }
-    )
+    });
+
+    return this.httpClient.get(
+      `${API_CONFIG.BASE_URL}position/list/${status}`,
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        params: cleanParams
+      }
+    );
   }
+
+
 
   createPosition(position: any): Observable<any> {
     return this.httpClient.post(
-      API_CONFIG.BASE_URL + "position",
+      API_CONFIG.BASE_URL + "position/create",
       position,
       {
         observe: 'response'
@@ -53,7 +61,7 @@ export class PositionService {
     );
   }
 
-  getSelection(pageable: any): Observable<any> {
+  getSelection(): Observable<any> {
     return this.httpClient.get(
       API_CONFIG.BASE_URL + "position/list/selection" ,
     )
@@ -82,4 +90,5 @@ export class PositionService {
       }
     );
   }
+
 }
