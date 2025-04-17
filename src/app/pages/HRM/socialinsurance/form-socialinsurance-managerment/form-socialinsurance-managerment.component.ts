@@ -31,7 +31,7 @@ export class FormSocialinsuranceManagermentComponent implements OnInit {
   createForm!: FormGroup;
   isLoading = false;
   licenseDate: any;
-  idUserDetail: any;
+  employeeCode: any;
   constructor(
     private modal: NzModalRef,
     private router: Router,
@@ -42,7 +42,7 @@ export class FormSocialinsuranceManagermentComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private i18n: NzI18nService
   ) {
-    this.idUserDetail = this.activatedRoute.snapshot.params['id'];
+    this.employeeCode = this.activatedRoute.snapshot.params['code'];
   }
 
   ngOnInit(): void {
@@ -57,7 +57,6 @@ export class FormSocialinsuranceManagermentComponent implements OnInit {
       expiredDate: new FormControl(null),
     });
     setTimeout(()=>{
-      this.createForm.get('socialInsuranceId')?.setValue(this.idSocialInsuranceForm);
       this.createForm.get('socialInsuranceCode')?.setValue(this.socialInsuranceCodeForm);
       this.createForm.get('initialPayment')?.setValue(this.initialPaymentForm);
       this.createForm.get('percent')?.setValue(this.percentForm);
@@ -85,7 +84,7 @@ export class FormSocialinsuranceManagermentComponent implements OnInit {
       data.actualPayment = data.actualPayment ?  data.actualPayment : null;
       data.licenseDate = data.licenseDate ? data.licenseDate : null;
       data.expiredDate = data.expiredDate ? data.expiredDate : null;
-      data.userDetailId = this.idUserDetail;
+      data.employeeCode = this.employeeCode;
       if (!this.isUpdate) {
         this.spinner.show().then();
         this.socialinsuranceService.create(data).subscribe(res => {

@@ -23,7 +23,7 @@ export class ProjectListManagementComponent implements OnInit {
     name: null,
     currentPage: 0,
     pageSize: 10,
-    sort: 'created_date,desc', // -: desc | +: asc,
+    sort: 'createdDate/desc', // -: desc | +: asc,
   };
   projects: any[] = [];
   idUserDetail: any;

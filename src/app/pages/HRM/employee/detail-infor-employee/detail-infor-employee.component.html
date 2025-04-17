@@ -42,22 +42,6 @@
       <div class="wrapper-app-panel">
         <div class="data-wrapper">
           <ng-container *ngIf="!isLoading">
-            <dx-toolbar class="panel-toolbar">
-              <dxi-item location="before" cssClass="accent">
-                <div *dxTemplate style="display: flex;">
-                  <div *ngIf="!isDisablePinClose"
-                       [ngClass]="user.isActive == 2 ? 'circle-button-success' : 'circle-button-danger'">
-                  </div>
-                  <app-form-textbox
-                    [(value)]="user.employeeName"
-                    [isEditing]="isEditing"
-                    [isEditText]="true"
-                  >
-                  </app-form-textbox>
-                </div>
-              </dxi-item>
-            </dx-toolbar>
-
             <dx-scroll-view class="panel-scroll">
               <dx-validation-group>
                 <div class="data-part">
@@ -90,7 +74,7 @@
                             <dxi-item cssClass="accent">
                               <app-form-textbox
                                 label="Mã nhân viên"
-                                [(value)]="employeeCode"
+                                [(value)]="user.employeeCode"
                                 [isEditing]="isEditing"
                               ></app-form-textbox>
                             </dxi-item>

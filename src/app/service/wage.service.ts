@@ -37,11 +37,12 @@ export class WageService {
   }
 
 
-  searchForEmployee(id: any): Observable<any> {
+  searchForEmployee(employeeCode: any,pageable: any): Observable<any> {
     return this.httpClient.get(
-      API_CONFIG.BASE_URL + "wage/employee-detail/" + id,
+      API_CONFIG.BASE_URL + "wage/employee-detail/" + employeeCode,
       {
         headers: new HttpHeaders({'Content-Type': 'application/json'}),
+        params: pageable,
       }
     )
   }

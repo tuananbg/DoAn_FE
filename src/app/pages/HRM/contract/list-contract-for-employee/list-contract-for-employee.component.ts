@@ -26,7 +26,7 @@ export class ListContractForEmployeeComponent implements OnInit {
     name: null,
     currentPage: 0,
     pageSize: 10,
-    sort: 'created_date,desc', // -: desc | +: asc,
+    sort: 'createdDate/desc', // -: desc | +: asc,
   };
   lstData: any[] = [];
   total = 0;
@@ -45,7 +45,7 @@ export class ListContractForEmployeeComponent implements OnInit {
   isLoading = false;
   message: string = '';
   idUserDetailContract: any;
-  idUserDetail: any;
+  employeeCode: any;
 
   @Input() isVisableButton = true;
 
@@ -63,7 +63,7 @@ export class ListContractForEmployeeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.idUserDetail = this.activatedRoute.snapshot.params['id'];
+    this.employeeCode = this.activatedRoute.snapshot.params['code'];
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
@@ -73,11 +73,8 @@ export class ListContractForEmployeeComponent implements OnInit {
       size: pageSize,
       sort: this.request.sort,
     };
-    const queryModel = {
-      userDetailId : this.idUserDetail
-    };
     this.spinner.show().then();
-    this.contractService.searchForEmployee(queryModel, pageable).subscribe(res => {
+    this.contractService.getListForEmployee(this.employeeCode, pageable).subscribe(res => {
       if (res && res.code === "OK") {
         this.lstData = res.data.data;
         this.total = res.data.dataCount;

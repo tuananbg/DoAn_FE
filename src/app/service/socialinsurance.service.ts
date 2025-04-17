@@ -16,9 +16,9 @@ export class SocialinsuranceService {
   constructor(private httpClient: HttpClient) {
   }
 
-  search(userDetailId: any, pageable: any): Observable<any> {
-    return this.httpClient.post(
-      API_CONFIG.BASE_URL + "social-insurance/search/" + userDetailId,
+  search(employeeCode: any, pageable: any): Observable<any> {
+    return this.httpClient.get(
+      API_CONFIG.BASE_URL + "social-insurance/list/employee-detail/" + employeeCode,
       {
         headers: new HttpHeaders({'Content-Type': 'application/json'}),
         params: pageable,

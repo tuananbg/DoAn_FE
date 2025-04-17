@@ -22,7 +22,7 @@ export class ListWageForEmployeeComponent implements OnInit {
     name: null,
     currentPage: 0,
     pageSize: 10,
-    sort: 'created_date,desc', // -: desc | +: asc,
+    sort: 'createdDate/desc', // -: desc | +: asc,
   };
   lstData: any[] = [];
   total = 0;
@@ -34,7 +34,7 @@ export class ListWageForEmployeeComponent implements OnInit {
   isLoading = false;
   message: string = '';
   idUserDetailWage: any;
-  idUserDetail: any;
+  employeeCode: any;
 
   @Input() isVisableButton = true;
 
@@ -50,7 +50,7 @@ export class ListWageForEmployeeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.idUserDetail = this.activatedRoute.snapshot.params['id'];
+    this.employeeCode = this.activatedRoute.snapshot.params['code'];
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
@@ -61,10 +61,10 @@ export class ListWageForEmployeeComponent implements OnInit {
       sort: this.request.sort,
     };
     const queryModel = {
-      userDetailId : this.idUserDetail
+      userDetailId : this.employeeCode
     };
     this.spinner.show().then();
-    this.wageService.searchForEmployee(this.idUserDetail).subscribe(res => {
+    this.wageService. searchForEmployee(this.employeeCode,pageable).subscribe(res => {
       if (res && res.code === "OK") {
         this.lstData = res.data.data;
         this.total = res.data.dataCount;

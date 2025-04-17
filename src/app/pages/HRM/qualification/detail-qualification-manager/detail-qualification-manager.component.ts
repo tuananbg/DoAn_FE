@@ -31,7 +31,7 @@ export class DetailQualificationManagerComponent implements OnInit {
   createForm!: FormGroup;
   isLoading = false;
   licenseDate: any;
-  idUserDetail: any;
+  employeeCode: any;
   constructor(
     private modal: NzModalRef,
     private router: Router,
@@ -42,7 +42,7 @@ export class DetailQualificationManagerComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private i18n: NzI18nService
   ) {
-    this.idUserDetail = this.activatedRoute.snapshot.params['id'];
+    this.employeeCode = this.activatedRoute.snapshot.params['code'];
   }
 
   ngOnInit(): void {
@@ -76,13 +76,12 @@ export class DetailQualificationManagerComponent implements OnInit {
     }
     if (this.createForm.valid) {
       const data = this.createForm.value;
-      data.id = data.id ? data.id : null;
       data.level = data.level ? data.level.trim() : null;
       data.name = data.name ? data.name.trim() : null;
       data.major = data.major ? data.major.trim() : null;
       data.description = data.description ?  data.description : null;
       data.licenseDate = data.licenseDate ? data.licenseDate : null;
-      data.userDetailId = this.idUserDetail;
+      data.employeeCode = this.employeeCode;
       if (!this.isUpdate) {
         this.spinner.show().then();
         this.qualificationService.create(data).subscribe(res => {

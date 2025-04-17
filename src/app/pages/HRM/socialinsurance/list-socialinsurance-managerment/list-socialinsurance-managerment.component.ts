@@ -24,7 +24,7 @@ export class ListSocialinsuranceManagermentComponent implements OnInit {
     name: null,
     currentPage: 0,
     pageSize: 10,
-    sort: 'created_date,desc', // -: desc | +: asc,
+    sort: 'createdDate/desc', // -: desc | +: asc,
   };
   lstData: any[] = [];
   total = 0;
@@ -36,7 +36,7 @@ export class ListSocialinsuranceManagermentComponent implements OnInit {
   isLoading = false;
   message: string = '';
   idSocialinsurance: any;
-
+  employeeCode: any;
   @Input() isVisableButton = true;
   constructor(
     private socialinsuranceService: SocialinsuranceService,
@@ -49,7 +49,7 @@ export class ListSocialinsuranceManagermentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.idSocialinsurance = this.activatedRoute.snapshot.params['id'];
+    this.employeeCode = this.activatedRoute.snapshot.params['code'];
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
@@ -60,7 +60,7 @@ export class ListSocialinsuranceManagermentComponent implements OnInit {
       sort: this.request.sort,
     };
     this.spinner.show().then();
-    this.socialinsuranceService.search(this.idSocialinsurance, pageable).subscribe(res => {
+    this.socialinsuranceService.search(this.employeeCode, pageable).subscribe(res => {
       if (res && res.code === "OK") {
         this.lstData = res.data.content;
         this.total = res.data.totalElements;

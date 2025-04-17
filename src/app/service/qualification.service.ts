@@ -26,12 +26,9 @@ export class QualificationService {
     }
   }
 
-  search(userDetailId: any): Observable<any> {
+  search(employeeCode: any,pageable: any): Observable<any> {
     return this.httpClient.get(
-      API_CONFIG.BASE_URL + "qualification/employee-detail/" + userDetailId,
-      {
-        headers: new HttpHeaders({'Content-Type': 'application/json'}),
-      }
+      API_CONFIG.BASE_URL + "qualification/employee-detail/" + employeeCode,
     )
   }
 

@@ -38,12 +38,20 @@ export class ContractService {
     );
   }
 
+  getListForEmployee(employeeCode: string, pageable: any): Observable<any> {
+    return this.httpClient.get(
+      API_CONFIG.BASE_URL + `employee-contract/list/employee-detail/`+ employeeCode,
+      {
+        headers: new HttpHeaders({'Content-Type': 'application/json'}),
+        params: pageable,
+      }
+    )
+  }
 
 
   searchForEmployee(payload: any, pageable: any): Observable<any> {
     return this.httpClient.post(
       API_CONFIG.BASE_URL + "employee-contract/searchForEmployee",
-      payload,
       {
         headers: new HttpHeaders({'Content-Type': 'application/json'}),
         params: pageable,

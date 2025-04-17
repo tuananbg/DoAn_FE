@@ -1,94 +1,50 @@
-//@use "../../../variables.scss" as *;
-//@use "sass:math";
-
-:host {
-  --left-panel-width: 400px;
-  --right-panel-width: 360px;
-
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  height: 100%;
+/* === TABLE FIX WIDTH, SCROLL, CĂN LỀ === */
+.table-section {
+  overflow-x: auto;
 }
 
-.dx-toolbar ::ng-deep {
-  margin-bottom: calc(var(--toolbar-margin-bottom) / 2);
-  //background-color: black !important;
-  //box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  color:  rgba(255, 255, 255, 0.35);
-  position: absolute;
-
-  .dx-toolbar-label > div {
-  @include header();
-  }
-}
-
-
-.view-wrapper {
-  padding-top: var(--content-padding);
-  padding-bottom: var(--content-padding);
-
-  .panels {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 20px;
-
-    .left {
-      flex: 1 var(--left-panel-width);
-      margin-top: 8px;
-    }
-
-    .right {
-      flex: 1 calc(100% - var(--left-panel-width) - 20px);
-      margin-top: 8px;
-      min-width: 340px;
-    }
-  }
-}
-
-.left{
-  background:  rgba(255, 255, 255, 0.35) !important;
-  padding: 20px !important;
-}
-
-.wrapper-app-panel{
+.table-section table {
   width: 100%;
-  margin: 0 auto;
-  background-color:  rgba(255, 255, 255, 0.35);
-  box-shadow: rgba(255, 255, 255, 0.35) 0px 5px 15px;
-  padding:20px;
+  min-width: 900px;
+  border-collapse: collapse;
 }
-.wrapper-title{
-  width: 100%;
-  margin: 0 auto;
+
+.table-section th,
+.table-section td {
+  text-align: center;
+  padding: 12px 8px;
+  white-space: nowrap;
+}
+
+.table-section th {
+  background-color: #f3f3f3;
+  font-weight: 600;
+}
+
+.table-section .actions-col {
+  min-width: 120px;
+}
+
+/* Căn giữa nội dung cột hành động */
+.table-section td.actions-col {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  gap: 8px;
+  align-items: center;
 }
-.wrapper-title h3{
+
+/* Nếu đang dùng devextreme grid, override bằng deep selector */
+:host ::ng-deep .dx-datagrid .dx-header-row > td,
+:host ::ng-deep .dx-datagrid .dx-data-row > td {
+  white-space: nowrap;
   text-align: center;
 }
-.wrapper-app-panel > * {
-  flex: 1;
+
+/* Fix thanh cuộn bị lệch do chiều cao hàng */
+:host ::ng-deep .dx-datagrid-rowsview .dx-scrollable-scroll {
+  height: 8px !important;
 }
-.dx-editor-filled.dx-texteditor-label-outside .dx-texteditor-label {
-  margin-top: 20px!important;
-}
-.tabs {
-  display: flex;
-  border-bottom: 2px solid #ddd;
+:host ::ng-deep .dx-toolbar-items-container {
+  background-color: #fff !important; // hoặc #f9f9f9 nếu giao diện bạn đang hơi xám
 }
 
-.tabs a {
-  padding: 10px 15px;
-  text-decoration: none;
-  color: #000;
-  border-bottom: 3px solid transparent;
-  cursor: pointer;
-}
-
-.tabs a.active {
-  font-weight: bold;
-  border-bottom: 3px solid #3ec995; /* Màu xanh giống hình */
-}

@@ -30,7 +30,7 @@ export class ListQualificationManagerComponent implements OnInit {
     name: null,
     currentPage: 0,
     pageSize: 10,
-    sort: 'created_date,desc', // -: desc | +: asc,
+    sort: 'createdDate/desc', // -: desc | +: asc,
   };
   lstData: any[] = [];
   total = 0;
@@ -48,7 +48,7 @@ export class ListQualificationManagerComponent implements OnInit {
   isLoading = false;
   message = '';
   idQualification: any;
-  idUserDetail: any;
+  employeeCode: any;
 
   @Input() isVisableButton = true;
 
@@ -63,7 +63,7 @@ export class ListQualificationManagerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.idUserDetail = this.activatedRoute.snapshot.params['id'];
+    this.employeeCode = this.activatedRoute.snapshot.params['code'];
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
@@ -74,8 +74,8 @@ export class ListQualificationManagerComponent implements OnInit {
       sort: this.request.sort,
     };
     this.spinner.show().then();
-    this.qualificationService.search(this.idUserDetail).subscribe(res => {
-      if (res && res.code === "OK") {
+    this.qualificationService.search(this.employeeCode,pageable).subscribe(res => {
+      if (res && res.code === "200") {
         this.lstData = res.data.content;
         this.total = res.data.totalElements;
         this.spinner.hide().then();

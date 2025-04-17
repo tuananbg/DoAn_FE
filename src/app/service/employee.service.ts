@@ -65,7 +65,8 @@ export class EmployeeService {
     }
     formData.append("code", userDetailDTO.code);
     formData.append("fullName", userDetailDTO.fullName);
-    formData.append("seatCode", userDetailDTO.seatCode);
+    formData.append("departmentCode", userDetailDTO.departmentCode);
+    formData.append("positionCode", userDetailDTO.positionCode);
     formData.append("dateOfBirth", userDetailDTO.dateOfBirth);
     formData.append("gender", userDetailDTO.gender);
     const formattedDate = new Date(userDetailDTO.dateOfBirth).toISOString().split("T")[0];
