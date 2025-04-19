@@ -31,7 +31,7 @@ export class DashboardService {
 
   getStatisticalTask(): Observable<any> {
     return this.httpClient.get(
-      API_CONFIG.BASE_URL + "dashboard/statisticalTask/",
+      API_CONFIG.BASE_URL + "project/dashboard",
     );
   }
 
