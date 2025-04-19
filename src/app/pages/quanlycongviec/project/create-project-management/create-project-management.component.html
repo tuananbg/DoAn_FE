@@ -139,7 +139,18 @@
           </div>
         </div>
         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32}">
-          <nz-form-item nz-col nzSpan="24">
+          <div nz-col nzSpan="8">
+            <app-select [ngClass]="'w-100'" [data]="lstStatus"
+                        [valueField]="'code'"
+                        [required]="true"
+                        [labelField]="'name'"
+                        [disabled]="isView"
+                        [placeHolder]="isView ? '' : 'Chọn trạng thái'"
+                        [openSearchModal]="false" [getObjectValue]="true"
+                        [labelHorizontal]="false" formControlName="status" labelContent="Trạng thái:">
+            </app-select>
+          </div>
+          <nz-form-item nz-col nzSpan="16">
             <nz-form-control>
                             <app-input-textarea-v2 formControlName="projectDescription" [maxlength]="'5000'"
                                                    label="Mô tả"

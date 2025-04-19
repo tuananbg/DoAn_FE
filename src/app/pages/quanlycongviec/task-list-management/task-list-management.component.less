@@ -1,20 +1,13 @@
-//@use "../../../variables.scss" as *;
-//@use "sass:math";
-
 :host {
   --side-panel-toolbar-height: 76px;
-
   width: 100%;
-  display: contents;
+  display: block;
 }
 
 .view-wrapper {
-  //position: absolute;
-  //top: 0;
-  //bottom: 0;
-  //left: 0;
-  //right: 0;
-  flex-direction: row;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 20px;
 
   .grid {
     .name-template {
@@ -30,10 +23,8 @@
       }
 
       .dx-toolbar {
-        margin-bottom: 0;
-        //margin: var(--toolbar-margin-bottom) 0;
-        padding: 0 20px;
         margin-top: 20px;
+        padding: 0 20px;
         background-color: black !important;
         box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
       }
@@ -44,9 +35,9 @@
     }
 
     .grid-header {
-    @include header();
       font-size: 24px;
       color: #ffffff;
+      font-weight: bold;
     }
   }
 
@@ -65,7 +56,35 @@
   }
 }
 
-.search-wrapper{
-  width: 280px!important;
-  margin-right: 20px!important;
+.search-wrapper {
+  width: 280px !important;
+  margin-right: 20px !important;
+}
+
+nz-tabset {
+  margin: 0 0 16px 0;
+  background-color: #ffffff;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 8px;
+  padding: 12px 16px;
+  z-index: 10;
+  position: relative;
+
+  ::ng-deep .ant-tabs-nav {
+    margin-bottom: 12px;
+  }
+
+  ::ng-deep .ant-tabs-tab {
+    font-size: 15px;
+    font-weight: 500;
+    padding: 8px 16px;
+  }
+
+  ::ng-deep .ant-tabs-ink-bar {
+    background-color: #1890ff;
+  }
+
+  ::ng-deep .ant-tabs-tab-active {
+    color: #1890ff !important;
+  }
 }

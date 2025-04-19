@@ -22,6 +22,7 @@ import {FileManagerService} from "../../../service/file-manager.service";
 import {DxDataGridTypes} from "devextreme-angular/ui/data-grid";
 import * as moment from "moment";
 import {TaskService} from "../../../service/task.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-task-list-management',
@@ -35,8 +36,19 @@ export class TaskListManagementComponent implements OnInit {
 
   isPanelOpened = false;
   searchForm!: FormGroup;
-
+  isUpdate = false;
+  isLoading = false;
   userId: number | undefined;
+  currentTabIndex = 0;
+  statusList = ['DONE', 'PROCESSING',"TODO"];
+  getStatusLabel(status: string): string {
+    switch (status) {
+      case 'TODO': return 'Cần làm';
+      case 'PROCESSING': return 'Đang xử lý';
+      case 'DONE': return 'Hoàn thành';
+      default: return status;
+    }
+  }
   request: any = {
     listTextSearch: [],
     code: null,
@@ -44,12 +56,13 @@ export class TaskListManagementComponent implements OnInit {
     name: null,
     currentPage: 0,
     pageSize: 10,
-    sort: 'createdDate/desc', // -: desc | +: asc,
+    sort: 'createDate/DESC', // -: desc | +: asc,
   };
   lstData: any[] = [];
   total = 0;
 
   constructor(
+    private router: Router,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
     private formBuilder: FormBuilder,
@@ -63,27 +76,19 @@ export class TaskListManagementComponent implements OnInit {
       name: new FormControl(null, [Validators.maxLength(100)]),
       status: new FormControl(null),
     });
-    this.fetchData();
+    this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
-  fetchData() {
+  fetchData(currentPage?: number, pageSize?: number) {
+    const pageable = {
+      page: currentPage,
+      size: pageSize,
+    };
+    const status = this.statusList[this.currentTabIndex];
     this.spinner.show().then();
-    this.taskService.search(null, null).subscribe(res => {
+    this.taskService.getList(this.searchKeyword, status, pageable).subscribe(res => {
       if (res && res.code === "OK") {
-        this.lstData = res.data.map((item: any) => {
-          if (item.taskStatus === 1) {
-            item.taskStatus = "Mới";
-          } else if (item.taskStatus === 2) {
-            item.taskStatus = "Đang xử lý";
-          } else if (item.taskStatus === 3) {
-            item.taskStatus = "Review";
-          }
-          else if (item.taskStatus === 4) {
-            item.taskStatus = "Reopen";
-          }
-          else if (item.taskStatus === 5) {
-            item.taskStatus = "Hooàn thành";
-          }
+          this.lstData = res.data.map((item: any) => {
           if (item.endDay) {
             const endDate = new Date(item.endDay);
             item.endDay = this.formatDate(endDate);
@@ -113,13 +118,25 @@ export class TaskListManagementComponent implements OnInit {
       this.spinner.hide().then();
     });
   }
+  searchKeyword: string | null = null;
 
+  onSearchChanged(event: any) {
+    this.searchKeyword = event.value ? event.value : null; // Nếu không nhập, đặt lại null
+    this.fetchData(this.request.currentPage, this.request.pageSize); // Gọi API
+  }
   formatDate(date: Date): string {
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Tháng trong JavaScript bắt đầu từ 0
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   }
+
+  onTabChange(index: number) {
+    this.currentTabIndex = index;
+    this.request.currentPage = 0; // reset về trang đầu
+    this.fetchData(this.request.currentPage, this.request.pageSize);
+  }
+
 
   refresh = () => {
     this.fetchData();
@@ -142,6 +159,9 @@ export class TaskListManagementComponent implements OnInit {
     this.dataGrid.instance.updateDimensions();
   };
 
+  onCreateTask = () => {
+    this.router.navigate(['/task/add']);
+  };
 
   async onExporting(e: any) {
     // if (this.searchForm.invalid) return;

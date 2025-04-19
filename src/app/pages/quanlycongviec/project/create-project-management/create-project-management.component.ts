@@ -37,6 +37,11 @@ export class CreateProjectManagementComponent implements OnInit, AfterViewChecke
   previewVisible = false;
   previewTitle: string | undefined = '';
   listOfOption: string[] = [];
+  lstStatus: any[] = [
+    {code: 1, name: "Sắp khởi động"},
+    {code: 2, name: "Đang thực hiện"},
+    {code: 3, name: "Hoàn thành"},
+  ];
 
   @Output() clickCancel = new EventEmitter();
   @Output() clickSave = new EventEmitter();
@@ -73,6 +78,7 @@ export class CreateProjectManagementComponent implements OnInit, AfterViewChecke
       startDay: new FormControl(null, [Validators.required]),
       endDay: new FormControl(null, [Validators.required]),
       projectDescription: new FormControl(null),
+      status: new FormControl(null),
       employees: [[]],
     });
     if (this.isUpdate || this.isView) {
@@ -116,67 +122,73 @@ export class CreateProjectManagementComponent implements OnInit, AfterViewChecke
   }
 
   submitForm() {
-    console.log("log")
+    console.log("log");
     for (const i in this.addForm.controls) {
       this.addForm.controls[i].markAsDirty();
       this.addForm.controls[i].updateValueAndValidity();
     }
+
     if (this.addForm.valid) {
       const data = this.addForm.getRawValue();
       data.projectCode = data.projectCode.trim();
       data.projectName = data.projectName.trim();
       data.projectDescription = data.projectDescription.trim();
-      data.projectManagerCode = data.projectManagerCode ? data.projectManagerCode : null;
-      data.startDay = data.startDay ? data.startDay : null;
-      data.endDay = data.endDay ? data.endDay : null;
       data.clientName = data.clientName.trim();
-      // data.employees = data.employees ? data.employees : null;
-      // const avatarFile = this.fileList[0].originFileObj;
+      data.projectManagerCode = data.projectManagerCode || null;
+      data.startDay = data.startDay || null;
+      data.endDay = data.endDay || null;
+      data.status = data.status || null;
+
+      const handleSuccess = (msg: string) => {
+        this.toastService.openSuccessToast(msg);
+        this.clickSave.emit();
+        this.addForm.reset();
+        if (!this.continueAdd) {
+          this.goBack();
+        } else {
+          this.continueAdd = false;
+        }
+      };
+
+      const handleError = (res: any) => {
+        this.toastService.openErrorToast(res?.msgCode || 'Đã xảy ra lỗi!');
+      };
+
       if (this.isUpdate) {
         data.startDay = new Date(data.startDay);
         data.endDay = new Date(data.endDay);
-        this.projectService.editProject( data).subscribe(res => {
-          if (res && res.code === "OK") {
-            this.toastService.openSuccessToast("Cập nhật thành công");
-            this.clickSave.emit();
-            this.addForm.reset();
-            this.goBack();
-          } else {
-            this.toastService.openErrorToast(res.msgCode);
-            this.addForm.controls.code.setErrors({'error': true});
+
+        this.projectService.editProject(data).subscribe({
+          next: res => {
+            if (res.code === '201' || res.code === 'OK') {
+              handleSuccess("Cập nhật thành công");
+            } else {
+              handleError(res);
+            }
+          },
+          error: err => {
+            handleError(err?.error);
+            console.error(err);
           }
-        }, error => {
-          console.log(error);
         });
       } else {
-        this.projectService.create( data).subscribe(res => {
-          if (res && res.code === "OK") {
-            this.toastService.openSuccessToast("Thêm mới thành công");
-            this.clickSave.emit();
-            this.addForm.reset();
-            if (!this.continueAdd) {
-              this.goBack();
+        this.projectService.create(data).subscribe({
+          next: res => {
+            if (res.code === '201' || res.code === 'OK') {
+              handleSuccess("Thêm mới thành công");
             } else {
-              const currentDate = new Date();
-              const year = currentDate.getFullYear().toString();
-              const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-              const day = currentDate.getDate().toString().padStart(2, '0');
-              const hours = currentDate.getHours().toString().padStart(2, '0');
-              const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-              const genderCode = year + month + day + hours + minutes;
-              this.addForm.get('projectCode').setValue('DA'+genderCode);
-              this.continueAdd = false;
+              handleError(res);
             }
-          } else {
-            this.toastService.openErrorToast(res.msgCode);
-            this.addForm.controls.code.setErrors({'error': true});
+          },
+          error: err => {
+            handleError(err?.error);
+            console.error(err);
           }
-        }, error => {
-          console.log(error);
         });
       }
     }
   }
+
 
 
   cancelConfirm() {

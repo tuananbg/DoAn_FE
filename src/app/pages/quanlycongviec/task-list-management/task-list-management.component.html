@@ -14,6 +14,7 @@
   </nz-breadcrumb>
 </div>
 <div class="view-wrapper list-page crm-contact-list">
+
   <dx-data-grid
     class="grid theme-dependent"
     noDataText=""
@@ -36,104 +37,75 @@
     <dxo-sorting mode="multiple"></dxo-sorting>
     <dxo-header-filter [visible]="true"></dxo-header-filter>
     <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
-    <dxo-search-panel class="search-wrapper"
-                      style="width: 150px; height: 40px;"
-                      [visible]="true"
-                      placeholder="Tìm kiếm công việc"
+    <dxo-search-panel
+      class="search-wrapper"
+      style="width: 150px; height: 40px;"
+      [visible]="true"
+      placeholder="Tìm kiếm công việc"
     ></dxo-search-panel>
     <dxo-export
       [enabled]="true"
       [allowExportSelectedData]="true"
       [formats]="['xlsx']"
-    >
-    </dxo-export>
+    ></dxo-export>
 
     <dxo-toolbar>
       <dxi-item location="before">
-        <div class="grid-header"><i class="fa-solid fa-list-check" style="margin-right: 7px;"></i>Tổng hợp công việc</div>
+        <div class="grid-header">
+          <i class="fa-solid fa-list-check" style="margin-right: 7px;"></i>
+          Tổng hợp công việc
+        </div>
       </dxi-item>
-      <dxi-item
-        location="after"
-        locateInMenu="auto"
-        showText="inMenu"
-        widget="dxButton"
-        [options]="{
-                      text: 'Refresh',
-                      icon: 'refresh',
-                      onClick: refresh,
-                      stylingMode: 'text'
-                    }"
-      ></dxi-item>
+
       <dxi-item location="after" locateInMenu="auto">
         <div class="separator"></div>
       </dxi-item>
+
       <dxi-item name="exportButton"></dxi-item>
+
       <dxi-item location="after" locateInMenu="auto">
         <div class="separator"></div>
       </dxi-item>
+
       <dxi-item name="columnChooserButton" locateInMenu="auto"></dxi-item>
       <dxi-item name="searchPanel" locateInMenu="auto"></dxi-item>
-    </dxo-toolbar>
 
-    <dxi-column
-      dataField="taskCode"
-      caption="Mã công việc"
-      sortOrder="desc"
-      [hidingPriority]="5"
-      [minWidth]="150"
-    ></dxi-column>
-    <dxi-column
-      dataField="taskName"
-      caption="Tên công việc"
-      sortOrder="asc"
-      [hidingPriority]="5"
-      [minWidth]="150"
-    ></dxi-column>
-    <dxi-column
-      dataField="taskStatus"
-      caption="Trạng thái"
-      [hidingPriority]="5"
-      [minWidth]="150"
-    ></dxi-column>
-    <dxi-column
-      dataField="startDay"
-      caption="Từ ngày"
-      [hidingPriority]="5"
-      [minWidth]="150"
-      [format]="{ type: 'date', format: 'dd/MM/yyyy' }"
-    ></dxi-column>
-    <dxi-column
-      dataField="endDay"
-      caption="Đến ngày"
-      [hidingPriority]="5"
-      [minWidth]="150"
-      [format]="{ type: 'date', format: 'dd/MM/yyyy' }"
-    ></dxi-column>
-    <dxi-column
-      dataField="priorityName"
-      caption="Độ ưu tiên"
-      [hidingPriority]="5"
-      [minWidth]="100"
-    ></dxi-column>
-    <dxi-column
-      dataField="projectName"
-      caption="Tên dự án"
-      [hidingPriority]="5"
-      [minWidth]="100"
-    ></dxi-column>
+      <!-- ✅ Nút tạo mới công việc -->
+      <dxi-item location="after" locateInMenu="auto" widget="dxButton"
+                [options]="{
+                text: 'Tạo mới công việc',
+                icon: 'add',
+                type: 'default',
+                onClick: onCreateTask
+              }">
+      </dxi-item>
+
+      <dxi-item location="after" locateInMenu="auto" widget="dxButton"
+                [options]="{
+                text: 'Refresh',
+                icon: 'refresh',
+                onClick: refresh,
+                stylingMode: 'text'
+              }">
+      </dxi-item>
+    </dxo-toolbar>
+      <nz-tabset [(nzSelectedIndex)]="currentTabIndex" (nzSelectedIndexChange)="onTabChange($event)">
+        <nz-tab nzTitle="Cần làm"></nz-tab>
+        <nz-tab nzTitle="Đang xử lý"></nz-tab>
+        <nz-tab nzTitle="Hoàn thành"></nz-tab>
+      </nz-tabset>
+    <!-- Các cột -->
+    <dxi-column dataField="taskCode" caption="Mã công việc" [minWidth]="150" sortOrder="desc"></dxi-column>
+    <dxi-column dataField="taskName" caption="Tên công việc" [minWidth]="150"></dxi-column>
+    <dxi-column dataField="taskStatus" caption="Trạng thái" [minWidth]="150"></dxi-column>
+    <dxi-column dataField="startDay" caption="Từ ngày" [minWidth]="150" [format]="{ type: 'date', format: 'dd/MM/yyyy' }"></dxi-column>
+    <dxi-column dataField="endDay" caption="Đến ngày" [minWidth]="150" [format]="{ type: 'date', format: 'dd/MM/yyyy' }"></dxi-column>
+    <dxi-column dataField="priorityName" caption="Độ ưu tiên" [minWidth]="100"></dxi-column>
+    <dxi-column dataField="projectName" caption="Tên dự án" [minWidth]="100"></dxi-column>
   </dx-data-grid>
 
-<!--  <app-panel-employee-managerment-->
-<!--    [userId]="userId"-->
-<!--    [(isOpened)]="isPanelOpened"-->
-<!--    (isOpenedChange)="onOpenedChange($event)"-->
-<!--    (pinnedChange)="onPinnedChange()"-->
-<!--  >-->
-<!--  </app-panel-employee-managerment>-->
 
-<!--  <app-form-popup [(visible)]="isAddContactPopupOpened" (save)="handleOkModal()" titleText="Thêm nhân viên mới">-->
-<!--    <app-form-employee-managerment></app-form-employee-managerment>-->
-<!--  </app-form-popup>-->
+
 
 </div>
 

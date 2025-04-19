@@ -37,26 +37,17 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
   addForm: any;
   addFormTimeSheet: any;
   lstEmployee: any[] = [];
+  lstProject:any[] =[];
   lstTaskStatus: any[] = [
-    {code: 1, name: "Mới"},
+    {code: 1, name: "Chưa làm"},
     {code: 2, name: "Đang xử lý"},
-    {code: 3, name: "Review"},
-    {code: 4, name: "Reopen"},
-    {code: 5, name: "Hoàn thành"},
+    {code: 3, name: "Hoàn thành"},
   ];
   lstPriority: any[] = [
-    {code: 1, name: "Low"},
-    {code: 2, name: "Normal"},
-    {code: 3, name: "High"},
+    {code: 1, name: "Thấp"},
+    {code: 2, name: "Trung bình"},
+    {code: 3, name: "Cao"},
   ];
-  payloadEmployee = {
-    employeeCode: null,
-    employeeName: null,
-    employeeEmail: null,
-    employeeGender: null,
-    positionId: null,
-    departmentId: null
-  };
   startDayErrorMessage = '';
   endDayErrorMessage = '';
   avatarFile!: File;
@@ -103,23 +94,25 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
 
   ngOnInit() {
     this.i18n.setLocale(en_US);
-    this.loadProject();
+    // this.loadProject();
     this.checkIsViewOrUpdate();
-    const currentDate = new Date();
-    const year = currentDate.getFullYear().toString();
-    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-    const day = currentDate.getDate().toString().padStart(2, '0');
-    const hours = currentDate.getHours().toString().padStart(2, '0');
-    const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-    const genderCode = year + month + day + hours + minutes;
+    // const currentDate = new Date();
+    // const year = currentDate.getFullYear().toString();
+    // const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+    // const day = currentDate.getDate().toString().padStart(2, '0');
+    // const hours = currentDate.getHours().toString().padStart(2, '0');
+    // const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+    // const genderCode = year + month + day + hours + minutes;
     this.addForm = this.formBuilder.group({
-      taskCode: 'T' + genderCode,
+      taskCode: new FormControl(null, [Validators.required]),
       taskName: new FormControl(null, [Validators.required, Validators.maxLength(500)]),
       taskDescription: new FormControl(null),
       taskStatus: new FormControl(null, [Validators.required]),
       startDay: new FormControl(null, [Validators.required]),
       endDay: new FormControl(null, [Validators.required]),
-      followId: new FormControl(null, [Validators.required]),
+      employeeCode: new FormControl(null, [Validators.required]),
+      managerCode:new FormControl(null, [Validators.required]),
+      projectCode: new FormControl(null, [Validators.required]),
       priority: new FormControl(null, [Validators.required]),
       duration: new FormControl(null),
       communication: new FormControl(null),
@@ -141,6 +134,7 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
     this.fetchData();
     setTimeout(() => {
       this.fetchEmployee();
+      this.fetchProject();
     })
   }
 
@@ -156,16 +150,16 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  loadProject() {
-    this.projectService.getProjectId(this.idProject).subscribe(res => {
-      if (res && res.code === "OK") {
-        const dataProject = res.data;
-        this.projectName = dataProject.projectName;
-      } else {
-        this.toastService.openErrorToast(res.msgCode);
-      }
-    });
-  }
+  // loadProject() {
+  //   this.projectService.getProjectId(this.idProject).subscribe(res => {
+  //     if (res && res.code === "OK") {
+  //       const dataProject = res.data;
+  //       this.projectName = dataProject.projectName;
+  //     } else {
+  //       this.toastService.openErrorToast(res.msgCode);
+  //     }
+  //   });
+  // }
 
   checkIsViewOrUpdate() {
     if (this.router.url.includes("/view")) {
@@ -185,19 +179,18 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
     }
     if (this.addForm.valid) {
       const data = this.addForm.getRawValue();
-      data.id = Number(this.idTask) || null;
       data.taskCode = data.taskCode.trim() || null;
       data.taskName = data.taskName.trim() || null;
       data.taskDescription = data.taskDescription.trim() || null;
-      data.followId = data.followId ? data.followId : null;
+      data.managerCode = data.managerCode ? data.managerCode : null;
       data.startDay = data.startDay ? data.startDay : null;
       data.endDay = data.endDay ? data.endDay : null;
       data.taskStatus = data.taskStatus ? data.taskStatus : null;
-      data.projectId = Number(this.idProject) ? Number(this.idProject) : null;
+      data.projectCode = data.projectCode ? data.projectCode : null;
       data.priority = data.priority ? data.priority : null;
       data.duration = data.duration ? data.duration : null;
       data.communication = data.communication ? data.communication : null;
-      data.employees = data.employees ? data.employees : null;
+      data.employeeCode = data.employeeCode ? data.employeeCode : null;
       if (this.isUpdate) {
         data.startDay = new Date(data.startDay);
         data.endDay = new Date(data.endDay);
@@ -224,14 +217,6 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
             if (!this.continueAdd) {
               this.goBack();
             } else {
-              const currentDate = new Date();
-              const year = currentDate.getFullYear().toString();
-              const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-              const day = currentDate.getDate().toString().padStart(2, '0');
-              const hours = currentDate.getHours().toString().padStart(2, '0');
-              const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-              const genderCode = year + month + day + hours + minutes;
-              this.addForm.get('taskCode').setValue('T' + genderCode);
               this.continueAdd = false;
             }
           } else {
@@ -265,15 +250,31 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
   }
 
   fetchEmployee() {
-    this.employeeService.searchEmployee(this.payloadEmployee, {page: 0, size: -1}).subscribe(res => {
+    this.employeeService.getListSelect().subscribe(res => {
       if (res && res.code === "OK") {
-        this.lstEmployee = res.data.data;
-        this.listOfOption = this.lstEmployee.map(res => `${res.employeeName} - ${res.employeeCode}`);
+        this.lstEmployee = res.data;
+        this.listOfOption =  this.lstEmployee.map(res => `${res.employeeName} - ${res.employeeCode}`);
         this.lstEmployee = this.lstEmployee.map(item => ({
           ...item,
           employeeName: item.employeeName + " - " + item.employeeCode
         }));
         this.lstEmployee.sort((a, b) => a.employeeName.localeCompare(b.employeeName));
+      }
+    }, (error: any) => {
+      console.log(error);
+    })
+  }
+
+  fetchProject() {
+    this.projectService.getListSelect().subscribe(res => {
+      if (res && res.code === "OK") {
+        this.lstProject = res.data;
+        this.listOfOption =  this.lstProject.map(res => `${res.projectName} - ${res.projectCode}`);
+        this.lstProject = this.lstProject.map(item => ({
+          ...item,
+          projectName: item.projectName + " - " + item.projectCode
+        }));
+        this.lstProject.sort((a, b) => a.projectName.localeCompare(b.projectName));
       }
     }, (error: any) => {
       console.log(error);

@@ -52,7 +52,8 @@ export class ProjectService {
     formData.append('projectManagerCode', projectDTO.projectManagerCode);
     formData.append('startDay', projectDTO.startDay);
     formData.append('endDay', projectDTO.endDay);
-    formData.append('clientCode', projectDTO.clientCode);
+    formData.append('clientName', projectDTO.clientName);
+    formData.append('status', projectDTO.status);
     return this.httpClient.post(
       API_CONFIG.BASE_URL + "project/create",
       formData,
@@ -62,6 +63,15 @@ export class ProjectService {
   getProjectId(id: number): Observable<any> {
     return this.httpClient.get(
       API_CONFIG.BASE_URL + "project/detail/" + id,
+    );
+  }
+
+  getListSelect(): Observable<any> {
+    return this.httpClient.get(
+      `${API_CONFIG.BASE_URL}project/select`,
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      }
     );
   }
 
@@ -75,7 +85,8 @@ export class ProjectService {
     formData.append('projectManagerCode', projectDTO.projectManagerCode);
     formData.append('startDay', projectDTO.startDay);
     formData.append('endDay', projectDTO.endDay);
-    formData.append('clientCode', projectDTO.clientCode);
+    formData.append('clientName', projectDTO.clientName);
+    formData.append('status', projectDTO.status);
     return this.httpClient.put(
       API_CONFIG.BASE_URL + "project",
       formData,
