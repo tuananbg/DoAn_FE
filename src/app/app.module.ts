@@ -168,6 +168,7 @@ import { DxSortableModule } from 'devextreme-angular/ui/sortable';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { PopUpImgComponent } from './pages/components/pop-up-img/pop-up-img.component';
 import {NzInputNumberModule} from "ng-zorro-antd/input-number";
+import {MatIconModule} from "@angular/material/icon";
 
 registerLocaleData(en);
 const antDesignIcons = AllIcons as {
@@ -349,6 +350,7 @@ const INTERCEPTOR_PROVIDES = [
     NzCheckboxModule,
     CKEditorModule,
     NzInputNumberModule,
+    MatIconModule,
   ],
   providers: [{provide: NZ_I18N, useValue: [en_US]},
     { provide: NZ_ICONS, useValue: icons },

@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
 
 
   form: FormGroup = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
+    account: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
   });
 
@@ -45,6 +45,7 @@ export class LoginComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
+    console.log("click")
     this.auth.loginAccount(this.form.getRawValue()).subscribe(res => {
       console.log(this.form.getRawValue())
       if (res.code !== "OK" || !res.data || !res.data.token) {
