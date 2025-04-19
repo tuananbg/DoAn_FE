@@ -28,14 +28,10 @@ export class CreateProjectManagementComponent implements OnInit, AfterViewChecke
   lstEmployee: any[] = [];  payloadEmployee = {
     employeeCode: null,
     employeeName: null,
-    employeeEmail: null,
-    employeeGender: null,
-    positionId: null,
-    departmentId: null
   };
   startDayErrorMessage = '';
   endDayErrorMessage = '';
-  avatarFile!: File;
+  // avatarFile!: File;
   fileList: NzUploadFile[] = [];
   previewImage: string | undefined = '';
   previewVisible = false;
@@ -62,18 +58,18 @@ export class CreateProjectManagementComponent implements OnInit, AfterViewChecke
   ngOnInit() {
     this.i18n.setLocale(en_US);
     this.checkIsViewOrUpdate();
-    const currentDate = new Date();
-    const year = currentDate.getFullYear().toString();
-    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-    const day = currentDate.getDate().toString().padStart(2, '0');
-    const hours = currentDate.getHours().toString().padStart(2, '0');
-    const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-    const genderCode = year + month + day + hours + minutes;
+    // const currentDate = new Date();
+    // const year = currentDate.getFullYear().toString();
+    // const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+    // const day = currentDate.getDate().toString().padStart(2, '0');
+    // const hours = currentDate.getHours().toString().padStart(2, '0');
+    // const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+    // const genderCode = year + month + day + hours + minutes;
     this.addForm = this.formBuilder.group({
-      projectCode: 'DA'+genderCode,
+      projectCode: new FormControl(null, [Validators.required, Validators.maxLength(250)]),
       projectName: new FormControl(null, [Validators.required, Validators.maxLength(250)]),
-      customerName: new FormControl(null, [Validators.required, Validators.maxLength(250)]),
-      projectManagerId: new FormControl(null, [Validators.required]),
+      clientName: new FormControl(null, [Validators.required, Validators.maxLength(250)]),
+      projectManagerCode: new FormControl(null, [Validators.required]),
       startDay: new FormControl(null, [Validators.required]),
       endDay: new FormControl(null, [Validators.required]),
       projectDescription: new FormControl(null),
@@ -120,26 +116,26 @@ export class CreateProjectManagementComponent implements OnInit, AfterViewChecke
   }
 
   submitForm() {
+    console.log("log")
     for (const i in this.addForm.controls) {
       this.addForm.controls[i].markAsDirty();
       this.addForm.controls[i].updateValueAndValidity();
     }
     if (this.addForm.valid) {
       const data = this.addForm.getRawValue();
-      data.id = this.idProject;
       data.projectCode = data.projectCode.trim();
       data.projectName = data.projectName.trim();
       data.projectDescription = data.projectDescription.trim();
-      data.projectManagerId = data.projectManagerId ? data.projectManagerId : null;
+      data.projectManagerCode = data.projectManagerCode ? data.projectManagerCode : null;
       data.startDay = data.startDay ? data.startDay : null;
       data.endDay = data.endDay ? data.endDay : null;
-      data.customerName = data.customerName.trim();
-      data.employees = data.employees ? data.employees : null;
-      const avatarFile = this.fileList[0].originFileObj;
+      data.clientName = data.clientName.trim();
+      // data.employees = data.employees ? data.employees : null;
+      // const avatarFile = this.fileList[0].originFileObj;
       if (this.isUpdate) {
         data.startDay = new Date(data.startDay);
         data.endDay = new Date(data.endDay);
-        this.projectService.editProject(avatarFile!, data).subscribe(res => {
+        this.projectService.editProject( data).subscribe(res => {
           if (res && res.code === "OK") {
             this.toastService.openSuccessToast("Cập nhật thành công");
             this.clickSave.emit();
@@ -153,7 +149,7 @@ export class CreateProjectManagementComponent implements OnInit, AfterViewChecke
           console.log(error);
         });
       } else {
-        this.projectService.create(avatarFile!, data).subscribe(res => {
+        this.projectService.create( data).subscribe(res => {
           if (res && res.code === "OK") {
             this.toastService.openSuccessToast("Thêm mới thành công");
             this.clickSave.emit();
@@ -202,9 +198,9 @@ export class CreateProjectManagementComponent implements OnInit, AfterViewChecke
   }
 
   fetchEmployee() {
-    this.employeeService.searchEmployee(this.payloadEmployee, {page: 0, size: -1}).subscribe(res => {
+    this.employeeService.getListSelect().subscribe(res => {
       if (res && res.code === "OK") {
-        this.lstEmployee = res.data.data;
+        this.lstEmployee = res.data;
         this.listOfOption =  this.lstEmployee.map(res => `${res.employeeName} - ${res.employeeCode}`);
         this.lstEmployee = this.lstEmployee.map(item => ({
           ...item,

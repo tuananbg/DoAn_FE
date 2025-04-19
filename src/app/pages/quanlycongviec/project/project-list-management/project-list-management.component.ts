@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {NgxSpinnerService} from "ngx-spinner";
 import {ToastService} from "../../../../service/toast.service";
 import {ProjectService} from "../../../../service/project.service";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-project-list-management',
@@ -16,6 +17,8 @@ export class ProjectListManagementComponent implements OnInit {
 
   isLoading = false;
   isUpdate = false;
+  currentTabIndex = 0;
+  statusList = ['ACTIVE', 'INACTIVE'];
   request: any = {
     listTextSearch: [],
     code: null,
@@ -23,10 +26,11 @@ export class ProjectListManagementComponent implements OnInit {
     name: null,
     currentPage: 0,
     pageSize: 10,
-    sort: 'createdDate/desc', // -: desc | +: asc,
+    sort: 'createDate/DESC', // -: desc | +: asc,
   };
   projects: any[] = [];
   idUserDetail: any;
+  searchForm!: FormGroup;
 
 
   onEdit(id: any): void {
@@ -37,24 +41,46 @@ export class ProjectListManagementComponent implements OnInit {
               private spinner: NgxSpinnerService,
               private toastService: ToastService,
               private projectService: ProjectService,
+              private formBuilder: FormBuilder,
               private activatedRoute: ActivatedRoute,
   ) {
     this.idUserDetail = this.activatedRoute.snapshot.params['id'];
   }
 
-  ngOnInit(): void {
+  onTabChange(index: number): void {
+    this.currentTabIndex = index;
+    this.request.currentPage = 0;
     this.loadData();
   }
 
-  loadData() {
-    this.idUserDetail = this.idUserDetail ? this.idUserDetail : null;
+  searchKeyword: string | null = null; // Mặc định là null
+
+  onSearchChanged(event: any) {
+    this.searchKeyword = event.value ? event.value : null; // Nếu không nhập, đặt lại null
+    this.loadData(this.request.currentPage, this.request.pageSize); // Gọi API
+  }
+
+  ngOnInit(): void {
+    this.searchForm = this.formBuilder.group({
+      name: new FormControl(null, [Validators.maxLength(100)]),
+      status: new FormControl(null),
+    });
+    this.loadData(this.request.currentPage, this.request.pageSize);
+  }
+
+  loadData(currentPage?: number, pageSize?: number) {
+    const pageable = {
+      page: currentPage,
+      size: pageSize,
+    };
+    const status = this.statusList[this.currentTabIndex];
     this.spinner.show().then();
 
-    this.projectService.search(this.idUserDetail).subscribe({
+    this.projectService.getList(this.searchKeyword, status, pageable).subscribe({
       next: (res) => {
         console.log(res);
         if (res && res.code === "OK") {
-          this.projects = res.data;
+          this.projects = res.data.content || [];
           this.projects.sort((a, b) => (a.createdDate > b.createdDate ? -1 : a.createdDate < b.createdDate ? 1 : 0));
         }
         this.spinner.hide().then();
@@ -70,8 +96,7 @@ export class ProjectListManagementComponent implements OnInit {
     });
   }
 
-
-  openCreateModal(): void {
+    openCreateModal(): void {
     this.isUpdate = false
     this.router.navigate(['/project/add'], {
       state: {

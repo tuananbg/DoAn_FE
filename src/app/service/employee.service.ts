@@ -50,10 +50,19 @@ export class EmployeeService {
     }
 
     return this.httpClient.get(
-      `${API_CONFIG.BASE_URL}employee/list/${status}`,  // 👈 thêm status vào URL
+      `${API_CONFIG.BASE_URL}employee/list/${status}`,
       {
         headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
         params: params
+      }
+    );
+  }
+
+  getListSelect(): Observable<any> {
+    return this.httpClient.get(
+      `${API_CONFIG.BASE_URL}employee/select`,
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
       }
     );
   }

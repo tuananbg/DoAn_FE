@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {BehaviorSubject, Observable} from "rxjs";
 import {API_CONFIG} from "../config/api-config";
 
@@ -27,17 +27,32 @@ export class ProjectService {
     )
   }
 
-  create(avatarFile: File, projectDTO: any): Observable<any> {
+  getList(keyword: any,status : string, pageable: any): Observable<any> {
+    let params = new HttpParams({fromObject: pageable});
+
+    if (keyword) {
+      params = params.set('keyword', keyword);
+    }
+
+    return this.httpClient.get(
+      `${API_CONFIG.BASE_URL}project/list/${status}`,
+      {
+        headers: new HttpHeaders({'Content-Type': 'application/json'}),
+        params: params
+      }
+    )
+  }
+
+  create( projectDTO: any): Observable<any> {
     const formData = new FormData();
-    formData.append('avatarFile', avatarFile);
+    // formData.append('avatarFile', avatarFile);
     formData.append('projectCode', projectDTO.projectCode);
     formData.append('projectName', projectDTO.projectName);
     formData.append('projectDescription', projectDTO.projectDescription);
-    formData.append('projectManagerId', projectDTO.projectManagerId);
+    formData.append('projectManagerCode', projectDTO.projectManagerCode);
     formData.append('startDay', projectDTO.startDay);
     formData.append('endDay', projectDTO.endDay);
-    formData.append('customerName', projectDTO.customerName);
-    formData.append('employees', projectDTO.employees);
+    formData.append('clientCode', projectDTO.clientCode);
     return this.httpClient.post(
       API_CONFIG.BASE_URL + "project/create",
       formData,
@@ -50,18 +65,17 @@ export class ProjectService {
     );
   }
 
-  editProject(avatarFile: File, projectDTO: any): Observable<any> {
+  editProject( projectDTO: any): Observable<any> {
     const formData = new FormData();
-    formData.append('id', projectDTO.id);
-    formData.append('avatarFile', avatarFile);
+    // formData.append('id', projectDTO.id);
+    // formData.append('avatarFile', avatarFile);
     formData.append('projectCode', projectDTO.projectCode);
     formData.append('projectName', projectDTO.projectName);
     formData.append('projectDescription', projectDTO.projectDescription);
-    formData.append('projectManagerId', projectDTO.projectManagerId);
+    formData.append('projectManagerCode', projectDTO.projectManagerCode);
     formData.append('startDay', projectDTO.startDay);
     formData.append('endDay', projectDTO.endDay);
-    formData.append('customerName', projectDTO.customerName);
-    formData.append('employees', projectDTO.employees);
+    formData.append('clientCode', projectDTO.clientCode);
     return this.httpClient.put(
       API_CONFIG.BASE_URL + "project",
       formData,
