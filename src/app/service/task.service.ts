@@ -12,15 +12,21 @@ export class TaskService {
   constructor(private httpClient: HttpClient) {
   }
 
-  search(userDetailId: any, projectId: any): Observable<any> {
-    if (userDetailId != null && projectId != null) {
-      return this.httpClient.post(API_CONFIG.BASE_URL + "task/search" + "?userDetailId=" + userDetailId + "&&projectId=" + projectId,
+  search(employeeCode: any, projectId: any): Observable<any> {
+    if (employeeCode != null && projectId != null) {
+      return this.httpClient.post(API_CONFIG.BASE_URL + "task/list" + "?employeeCode=" + employeeCode + "&&projectId=" + projectId,
         null,
       )
     }
     return this.httpClient.post(API_CONFIG.BASE_URL + "task/search",
       null,
     )
+  }
+
+  getListForProject( projectId: any): Observable<any> {
+      return this.httpClient.get(
+        `${API_CONFIG.BASE_URL}project/detail/task/${projectId}`,
+        )
   }
 
   getList(keyword: any,status : string, pageable: any): Observable<any> {

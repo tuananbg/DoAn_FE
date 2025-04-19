@@ -14,6 +14,8 @@ import {differenceInCalendarDays} from "date-fns";
 import {TaskService} from "../../../service/task.service";
 import {TimeSheetService} from "../../../service/timesheet.service";
 import {NgxSpinnerService} from "ngx-spinner";
+import { format } from 'date-fns';
+
 
 @Component({
   selector: 'app-task-form-management',
@@ -183,8 +185,8 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
       data.taskName = data.taskName.trim() || null;
       data.taskDescription = data.taskDescription.trim() || null;
       data.managerCode = data.managerCode ? data.managerCode : null;
-      data.startDay = data.startDay ? data.startDay : null;
-      data.endDay = data.endDay ? data.endDay : null;
+      data.startDay = data.startDay ? format(new Date(data.startDay), 'yyyy-MM-dd HH:mm:ss') : null;
+      data.endDay = data.endDay ? format(new Date(data.endDay), 'yyyy-MM-dd HH:mm:ss') : null;
       data.taskStatus = data.taskStatus ? data.taskStatus : null;
       data.projectCode = data.projectCode ? data.projectCode : null;
       data.priority = data.priority ? data.priority : null;
@@ -195,7 +197,7 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
         data.startDay = new Date(data.startDay);
         data.endDay = new Date(data.endDay);
         this.taskService.edit(data).subscribe(res => {
-          if (res && res.code === "OK") {
+          if (res && res.code === "201") {
             this.toastService.openSuccessToast("Cập nhật thành công");
             this.clickSave.emit();
             this.addForm.reset();
@@ -210,7 +212,7 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
         });
       } else {
         this.taskService.create(data).subscribe(res => {
-          if (res && res.code === "OK") {
+          if (res && res.code === "201") {
             this.toastService.openSuccessToast("Thêm mới thành công");
             this.clickSave.emit();
             this.addForm.reset();

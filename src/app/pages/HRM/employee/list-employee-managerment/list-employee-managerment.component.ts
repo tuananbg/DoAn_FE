@@ -202,7 +202,7 @@ export class ListEmployeeManagermentComponent implements OnInit {
         this.toastService.openErrorToast(responseJson.msgCode);
       } else {
         const currentDate = moment(new Date()).format('DDMMYYYY');
-        this.fileManagerService.downloadFile(response, 'danhsachnhanvien_' + currentDate + '.xlsx');
+        this.fileManagerService.downloadFile(response, 'HRM_Danh sach nhan vien_' + currentDate + '.xlsx');
       }
     }, error => {
       this.toastService.openErrorToast(error);

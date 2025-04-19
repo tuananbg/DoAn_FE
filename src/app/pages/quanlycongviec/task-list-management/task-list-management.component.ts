@@ -34,6 +34,7 @@ export class TaskListManagementComponent implements OnInit {
 
   @ViewChild(FormEmployeeManagermentComponent, {static: false}) contactNewForm!: FormEmployeeManagermentComponent;
 
+  isActive = true;
   isPanelOpened = false;
   searchForm!: FormGroup;
   isUpdate = false;
@@ -49,6 +50,24 @@ export class TaskListManagementComponent implements OnInit {
       default: return status;
     }
   }
+  mapTaskStatus(status: string | number): string {
+    const statusMap: any = {
+      '1': 'Chưa làm',
+      '2': 'Đang xử lý',
+      '3': 'Hoàn thành'
+    };
+    return statusMap[status] || 'Không rõ';
+  }
+
+  mapPriority(priority: number): string {
+    const map: any = {
+      1: 'Thấp',
+      2: 'Trung bình',
+      3: 'Cao'
+    };
+    return map[priority] || 'Không rõ';
+  }
+
   request: any = {
     listTextSearch: [],
     code: null,
@@ -73,63 +92,66 @@ export class TaskListManagementComponent implements OnInit {
 
   ngOnInit() {
     this.searchForm = this.formBuilder.group({
-      name: new FormControl(null, [Validators.maxLength(100)]),
-      status: new FormControl(null),
+      keyword: new FormControl(null, [Validators.maxLength(100)]),
     });
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
-  fetchData(currentPage?: number, pageSize?: number) {
-    const pageable = {
-      page: currentPage,
-      size: pageSize,
-    };
+  fetchData(currentPage: number = 0, pageSize: number = 10): void {
+    const pageable = { page: currentPage, size: pageSize };
     const status = this.statusList[this.currentTabIndex];
+
     this.spinner.show().then();
-    this.taskService.getList(this.searchKeyword, status, pageable).subscribe(res => {
-      if (res && res.code === "OK") {
-          this.lstData = res.data.map((item: any) => {
-          if (item.endDay) {
-            const endDate = new Date(item.endDay);
-            item.endDay = this.formatDate(endDate);
-          }
-          if (item.startDay) {
-            const startDate = new Date(item.startDay);
-            item.startDay = this.formatDate(startDate);
-          }
-          return item;
-        });
-        this.spinner.hide().then();
-        if (this.lstData.length === 0) {
-          if (this.request.currentPage !== 0) {
-            this.request.currentPage = this.request.currentPage - 1;
-            this.fetchData();
-          }
+
+    this.taskService.getList(this.searchKeyword, status, pageable).subscribe({
+      next: (res) => {
+        if (res && res.code === "OK" && res.data && res.data.content) {
+          this.lstData = res.data.content.map((item: any) => ({
+            id: item.id,
+            taskCode: item.taskCode,
+            taskName: item.taskName,
+            taskStatus: this.mapTaskStatus(item.status), // chuyển code sang label
+            startDay: item.startDay ? this.formatDate(item.startDay) : '',
+            endDay: item.endDay ? this.formatDate(item.endDay) : '',
+            priorityName: this.mapPriority(item.priority),
+            projectName: item.projectName || '',
+          }));
+        } else {
+          this.lstData = [];
+          this.toastService.openErrorToast(res?.msgCode || "Không thể lấy dữ liệu");
         }
+      },
+      error: (err) => {
+        this.toastService.openErrorToast(err?.error?.msgCode || "Lỗi server");
+      },
+      complete: () => {
         this.spinner.hide().then();
-      } else {
-        this.toastService.openErrorToast(res.body.msgCode);
       }
-      this.spinner.hide().then();
-    }, error => {
-      this.toastService.openErrorToast(error.error.msgCode);
-      this.spinner.hide().then();
-    }, () => {
-      this.spinner.hide().then();
     });
   }
+
+
   searchKeyword: string | null = null;
 
   onSearchChanged(event: any) {
     this.searchKeyword = event.value ? event.value : null; // Nếu không nhập, đặt lại null
     this.fetchData(this.request.currentPage, this.request.pageSize); // Gọi API
   }
-  formatDate(date: Date): string {
+
+  nzOnSearch(): void {
+    this.request.currentPage = 0;
+    this.fetchData(this.request.currentPage, this.request.pageSize);
+  }
+
+  formatDate(dateStr: string): string {
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return ''; // Kiểm tra ngày hợp lệ
     const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Tháng trong JavaScript bắt đầu từ 0
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   }
+
 
   onTabChange(index: number) {
     this.currentTabIndex = index;

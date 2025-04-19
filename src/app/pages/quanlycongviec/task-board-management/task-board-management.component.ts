@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
-import {TaskForm, TaskStatus, taskStatusList} from "../../../core/task";
+import {Component, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
+import {TaskForm, TaskStatus} from "../../../core/task";
 import {DxSortableComponent, DxSortableTypes} from "devextreme-angular/ui/sortable";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -43,7 +43,7 @@ export class TaskBoardManagementComponent implements OnInit, OnChanges {
     sort: 'createdDate/desc', // -: desc | +: asc,
   };
   idProject: any;
-  idUserDetail: any;
+  employeeCode: any;
   projectName!: string;
 
   constructor(private router: Router,
@@ -59,10 +59,10 @@ export class TaskBoardManagementComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     const token = localStorage.getItem('token');
     const payloadToken: any = token ? this.parseJwt(token) : null;
-    const userObject = JSON.parse(payloadToken.user);
-    this.idUserDetail = userObject.userDetailId;
+    this.employeeCode = payloadToken?.sub ?? null;
+    console.log("employeeCode", this.employeeCode);
     this.loadData();
-    this.loadProject();
+    // this.loadProject();
   }
 
   parseJwt(token: string): string {
@@ -75,31 +75,49 @@ export class TaskBoardManagementComponent implements OnInit, OnChanges {
     return JSON.parse(jsonPayload);
   };
 
-  loadData() {
+  loadData(): void {
     this.spinner.show().then();
-    this.taskService.search(this.idUserDetail, this.idProject).subscribe(res => {
-      if (res && res.code === "OK") {
-        this.kanbanDataSource = res.data;
-        this.spinner.hide().then();
-      } else {
-        this.toastService.openErrorToast(res.msgCode);
-        this.spinner.hide().then();
-      }
-      this.spinner.hide().then();
-    })
-  }
 
-  loadProject(){
-    this.projectService.getProjectId(this.idProject).subscribe(res => {
-      if (res && res.code === "OK") {
-        const dataProject = res.data;
-        this.projectName = dataProject.projectName;
-
-      } else {
-        this.toastService.openErrorToast(res.msgCode);
+    this.taskService.getListForProject(this.idProject).subscribe({
+      next: (res) => {
+        if (res && res.code === "OK") {
+          this.kanbanDataSource = res.data;
+        } else {
+          this.toastService.openErrorToast(res.msgCode || "Không thể tải dữ liệu công việc");
+        }
+        this.spinner.hide().then();
+      },
+      error: (err) => {
+        console.error(err);
+        this.toastService.openErrorToast("Không kết nối được đến máy chủ");
+        this.spinner.hide().then();
       }
     });
   }
+
+
+  // loadProject(): void {
+  //   this.spinner.show().then();
+  //
+  //   this.projectService.getProjectId(this.idProject).subscribe({
+  //     next: (res) => {
+  //       if (res && res.code === "OK") {
+  //         this.projectName = res.data.projectName;
+  //       } else {
+  //         this.toastService.openErrorToast(res.msgCode || "Không thể lấy thông tin dự án");
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.error(err);
+  //       this.toastService.openErrorToast("Không kết nối được đến máy chủ");
+  //     },
+  //     complete: () => {
+  //       this.spinner.hide().then();
+  //     }
+  //   });
+  // }
+
+
 
   refresh() {
     this.sortable.instance.update();
@@ -150,11 +168,9 @@ export class TaskBoardManagementComponent implements OnInit, OnChanges {
     toData.taskForm.splice(toIndex, 0, itemData);
 
     const statusMap: { [key: string]: number } = {
-      "Mới": 1,
+      "Chưa làm": 1,
       "Đang xử lý": 2,
-      "Review": 3,
-      "Reopen": 4,
-      "Hoàn thành": 5
+      "Hoàn thành": 3
     };
 
     const statusName: string = e.toData.name;

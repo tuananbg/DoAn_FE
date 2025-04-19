@@ -78,7 +78,6 @@ export class ProjectListManagementComponent implements OnInit {
 
     this.projectService.getList(this.searchKeyword, status, pageable).subscribe({
       next: (res) => {
-        console.log(res);
         if (res && res.code === "OK") {
           this.projects = res.data.content || [];
           this.projects.sort((a, b) => (a.createdDate > b.createdDate ? -1 : a.createdDate < b.createdDate ? 1 : 0));
