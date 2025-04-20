@@ -15,7 +15,7 @@ export class SideBarComponent implements OnInit, DoCheck {
   subMenuQLHT: boolean = false
   subMenuQLCV: boolean = false
   employeeName: any;
-  userId: any;
+  employeeCode: any;
   listRolesMenuItem: any;
   isVisibleAdmin: any;
 
@@ -97,7 +97,7 @@ export class SideBarComponent implements OnInit, DoCheck {
     const payloadToken: any = token ? this.parseJwt(token) : null;
     // const userObject = JSON.parse(payloadToken.user);
     this.employeeName = localStorage.getItem('employeeName');
-    this.userId = localStorage.getItem('employeeCode');
+    this.employeeCode = localStorage.getItem('employeeCode');
     // this.userId = userObject.userDetailId;
     this.loadData();
   }
@@ -118,7 +118,7 @@ export class SideBarComponent implements OnInit, DoCheck {
   }
 
   navigateToDetails = () => {
-    this.router.navigate(['/infor-employee/' + this.userId], {state: {page: this.request}});
+    this.router.navigate(['/infor-employee/' + this.employeeCode], {state: {page: this.request}});
   };
 
   loadData(): void {

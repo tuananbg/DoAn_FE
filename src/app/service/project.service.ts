@@ -76,20 +76,18 @@ export class ProjectService {
   }
 
   editProject( projectDTO: any): Observable<any> {
-    const formData = new FormData();
-    // formData.append('id', projectDTO.id);
-    // formData.append('avatarFile', avatarFile);
-    formData.append('projectCode', projectDTO.projectCode);
-    formData.append('projectName', projectDTO.projectName);
-    formData.append('projectDescription', projectDTO.projectDescription);
-    formData.append('projectManagerCode', projectDTO.projectManagerCode);
-    formData.append('startDay', projectDTO.startDay);
-    formData.append('endDay', projectDTO.endDay);
-    formData.append('clientName', projectDTO.clientName);
-    formData.append('status', projectDTO.status);
+    // const formData = new FormData();
+    // formData.append('projectCode', projectDTO.projectCode);
+    // formData.append('projectName', projectDTO.projectName);
+    // formData.append('projectDescription', projectDTO.projectDescription);
+    // formData.append('projectManagerCode', projectDTO.projectManagerCode);
+    // formData.append('startDay', projectDTO.startDay);
+    // formData.append('endDay', projectDTO.endDay);
+    // formData.append('clientName', projectDTO.clientName);
+    // formData.append('status', projectDTO.status);
     return this.httpClient.put(
-      API_CONFIG.BASE_URL + "project",
-      formData,
+      API_CONFIG.BASE_URL + "project/update",
+      projectDTO,
     );
   }
 

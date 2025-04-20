@@ -152,13 +152,13 @@ import { ActionComponentDirective } from './shared/directives/action-component.d
 import {ChangePasswordComponent} from "./pages/layout/auth-layout/change-password/change-password.component";
 import {NzPaginationModule} from "ng-zorro-antd/pagination";
 import { FormAccountManagementComponent } from './pages/system/form-account-management/form-account-management.component';
-import { TaskBoardManagementComponent } from './pages/quanlycongviec/task-board-management/task-board-management.component';
-import { TaskListManagementComponent } from './pages/quanlycongviec/task-list-management/task-list-management.component';
+import { TaskBoardManagementComponent } from './pages/quanlycongviec/project/task-board-management/task-board-management.component';
+import { TaskListManagementComponent } from './pages/quanlycongviec/taskAll/task-list-management/task-list-management.component';
 import { ProjectListManagementComponent } from './pages/quanlycongviec/project/project-list-management/project-list-management.component';
-import { TaskDetailManagementComponent } from './pages/quanlycongviec/task-detail-management/task-detail-management.component';
+import { TaskDetailManagementComponent } from './pages/quanlycongviec/task-employee/task-detail-management/task-detail-management.component';
 import { TaskKanbanCardComponent } from './pages/components/task-kanban-card/task-kanban-card.component';
-import { TaskFormManagementComponent } from './pages/quanlycongviec/task-form-management/task-form-management.component';
-import { TaskListGridComponent } from './pages/quanlycongviec/task-list-grid/task-list-grid.component';
+import { TaskFormManagementComponent } from './pages/quanlycongviec/taskAll/task-form-management/task-form-management.component';
+import { TaskListGridComponent } from './pages/quanlycongviec/task-employee/task-list-grid/task-list-grid.component';
 import { StatusIndicatorComponent } from './pages/components/status-indicator/status-indicator.component';
 import { CreateProjectManagementComponent } from './pages/quanlycongviec/project/create-project-management/create-project-management.component';
 import {NzCheckboxModule} from "ng-zorro-antd/checkbox";

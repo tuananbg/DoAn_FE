@@ -65,8 +65,7 @@
       <ul>
         <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/project'">Dự án</a></span></li>
         <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/task-list'">Danh sách công việc</a></span></li>
-        <li nz-menu-item [nzMatchRouter]="true"><span><a
-          [routerLink]="['/project-person', userId]">Việc của tôi</a></span></li>
+        <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="['/project-person', employeeCode]">Việc của tôi</a></span></li>
       </ul>
     </li>
     <li appCheckAuthorize nz-submenu nzTitle="Quản trị hệ thống" nzIcon="database" [nzOpen]="subMenuQLHT">

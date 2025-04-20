@@ -1,27 +1,27 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {forkJoin, Observable} from "rxjs";
-import {DataService} from "../../../service/data.service";
-import {ScreenService} from "../../../service/screen.service";
+import {DataService} from "../../../../service/data.service";
+import {ScreenService} from "../../../../service/screen.service";
 import {map} from "rxjs/operators";
 import {DxTabsTypes} from "devextreme-angular/ui/tabs";
 import notify from "devextreme/ui/notify";
 import {DxTextBoxTypes} from "devextreme-angular/ui/text-box";
-import {TaskBoardManagementComponent} from "../task-board-management/task-board-management.component";
+import {TaskBoardManagementComponent} from "../../project/task-board-management/task-board-management.component";
 import {TaskFormManagementComponent} from "../task-form-management/task-form-management.component";
-import {TaskListGridComponent} from "../task-list-grid/task-list-grid.component";
-import {TaskForm} from "../../../core/task";
+import {TaskListGridComponent} from "../../task-employee/task-list-grid/task-list-grid.component";
+import {TaskForm} from "../../../../core/task";
 import {DxDataGridComponent} from "devextreme-angular";
 import {
   FormEmployeeManagermentComponent
-} from "../../HRM/employee/form-employee-managerment/form-employee-managerment.component";
+} from "../../../HRM/employee/form-employee-managerment/form-employee-managerment.component";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {ToastService} from "../../../service/toast.service";
+import {ToastService} from "../../../../service/toast.service";
 import {NgxSpinnerService} from "ngx-spinner";
-import {EmployeeService} from "../../../service/employee.service";
-import {FileManagerService} from "../../../service/file-manager.service";
+import {EmployeeService} from "../../../../service/employee.service";
+import {FileManagerService} from "../../../../service/file-manager.service";
 import {DxDataGridTypes} from "devextreme-angular/ui/data-grid";
 import * as moment from "moment";
-import {TaskService} from "../../../service/task.service";
+import {TaskService} from "../../../../service/task.service";
 import {Router} from "@angular/router";
 
 @Component({

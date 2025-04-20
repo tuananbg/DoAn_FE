@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {DxDataGridComponent} from "devextreme-angular";
-import {TaskForm, taskPriorityList, taskStatusList} from "../../../core/task";
+import {TaskForm, taskPriorityList, taskStatusList} from "../../../../core/task";
 import {Router} from "@angular/router";
 import {DxTabsTypes} from "devextreme-angular/ui/tabs";
 import {DxDataGridTypes} from "devextreme-angular/ui/data-grid";

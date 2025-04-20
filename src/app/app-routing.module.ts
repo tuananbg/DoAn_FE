@@ -39,15 +39,19 @@ import {
 } from "./pages/quanlycongviec/project/project-list-management/project-list-management.component";
 import {
   TaskBoardManagementComponent
-} from "./pages/quanlycongviec/task-board-management/task-board-management.component";
-import {TaskListManagementComponent} from "./pages/quanlycongviec/task-list-management/task-list-management.component";
+} from "./pages/quanlycongviec/project/task-board-management/task-board-management.component";
+import {TaskListManagementComponent} from "./pages/quanlycongviec/taskAll/task-list-management/task-list-management.component";
 import {
   CreateProjectManagementComponent
 } from "./pages/quanlycongviec/project/create-project-management/create-project-management.component";
-import {TaskFormManagementComponent} from "./pages/quanlycongviec/task-form-management/task-form-management.component";
+import {TaskFormManagementComponent} from "./pages/quanlycongviec/taskAll/task-form-management/task-form-management.component";
 import {
   PanelEmployeeManagermentComponent
 } from "./pages/HRM/employee/panel-employee-managerment/panel-employee-managerment.component";
+import {TaskListGridComponent} from "./pages/quanlycongviec/task-employee/task-list-grid/task-list-grid.component";
+import {
+  TaskDetailManagementComponent
+} from "./pages/quanlycongviec/task-employee/task-detail-management/task-detail-management.component";
 
 const routes: Routes = [
   {
@@ -138,10 +142,10 @@ const routes: Routes = [
         path: 'project',
         component: ProjectListManagementComponent,
       },
-      {
-        path: 'project-person/:id',
-        component: ProjectListManagementComponent
-      },
+      // {
+      //   path: 'project-person/:id',
+      //   component: ProjectListManagementComponent
+      // },
       {
         path: 'project/add',
         component: CreateProjectManagementComponent
@@ -165,6 +169,14 @@ const routes: Routes = [
       {
         path: 'task/update/:taskCode',
         component: TaskFormManagementComponent
+      },
+      {
+        path: 'project-person/:employeeCode',
+        component: TaskListGridComponent
+      },
+      {
+        path: 'task-person/:employeeCode/:projectCode',
+        component: TaskDetailManagementComponent
       },
     ]
   },

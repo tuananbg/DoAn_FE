@@ -1,11 +1,11 @@
 import {Component, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
-import {TaskForm, TaskStatus} from "../../../core/task";
+import {TaskForm, TaskStatus} from "../../../../core/task";
 import {DxSortableComponent, DxSortableTypes} from "devextreme-angular/ui/sortable";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NgxSpinnerService} from "ngx-spinner";
-import {ToastService} from "../../../service/toast.service";
-import {ProjectService} from "../../../service/project.service";
-import {TaskService} from "../../../service/task.service";
+import {ToastService} from "../../../../service/toast.service";
+import {ProjectService} from "../../../../service/project.service";
+import {TaskService} from "../../../../service/task.service";
 
 
 type Board = {

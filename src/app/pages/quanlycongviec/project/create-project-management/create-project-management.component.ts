@@ -71,7 +71,7 @@ export class CreateProjectManagementComponent implements OnInit, AfterViewChecke
     // const minutes = currentDate.getMinutes().toString().padStart(2, '0');
     // const genderCode = year + month + day + hours + minutes;
     this.addForm = this.formBuilder.group({
-      projectCode: new FormControl(null, [Validators.required, Validators.maxLength(250)]),
+      projectCode: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.maxLength(250)]),
       projectName: new FormControl(null, [Validators.required, Validators.maxLength(250)]),
       clientName: new FormControl(null, [Validators.required, Validators.maxLength(250)]),
       projectManagerCode: new FormControl(null, [Validators.required]),
@@ -93,7 +93,6 @@ export class CreateProjectManagementComponent implements OnInit, AfterViewChecke
               uid: '-1',
               name: this.data.customerAvatar,
               status: 'done',
-              // url: 'http://localhost:8080/api/v1/project/'+ this.data.customerAvatar // Đường dẫn đến ảnh đã tải lên
             }
           ];
         } else {
@@ -155,12 +154,9 @@ export class CreateProjectManagementComponent implements OnInit, AfterViewChecke
       };
 
       if (this.isUpdate) {
-        data.startDay = new Date(data.startDay);
-        data.endDay = new Date(data.endDay);
-
         this.projectService.editProject(data).subscribe({
           next: res => {
-            if (res.code === '201' || res.code === 'OK') {
+            if (res.code === '202' || res.code === 'OK') {
               handleSuccess("Cập nhật thành công");
             } else {
               handleError(res);
