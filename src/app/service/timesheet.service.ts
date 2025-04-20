@@ -13,14 +13,13 @@ export class TimeSheetService {
   }
 
   search(taskCode: any): Observable<any> {
-    return this.httpClient.post(API_CONFIG.BASE_URL + "timesheet/search" + "?taskId=" + taskCode,
-      null,
-    )
+    return this.httpClient.get
+    (`${API_CONFIG.BASE_URL}comment/list/${taskCode}`,)
   }
 
   create(timeSheetDTO: any): Observable<any> {
     return this.httpClient.post(
-      API_CONFIG.BASE_URL + "timesheet/create",
+      API_CONFIG.BASE_URL + "comment/create",
       timeSheetDTO,
     );
   }

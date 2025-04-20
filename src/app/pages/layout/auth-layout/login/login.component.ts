@@ -45,25 +45,18 @@ export class LoginComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    console.log("click")
     this.auth.loginAccount(this.form.getRawValue()).subscribe(res => {
       console.log(this.form.getRawValue())
       if (res.code !== "OK" || !res.data || !res.data.token) {
+        console.log("click")
         this.isMeassgeError = true;
-        this.meassgeError = "Đăng nhập thất bại. Vui lòng kiểm tra lại!";
+        this.toastService.openErrorToast(res?.msgCode || 'Đã xảy ra lỗi!');
         return;
       }
-
       console.log(res.data)
       const { token, fullName, employeeCode, roles, email } = res.data;
 
-      this.loginS.setSession({
-        token,
-        fullName,
-        employeeCode,
-        roles,
-        email
-      });
+      this.loginS.setSession({token, fullName, employeeCode, roles, email});
 
       this.router.navigate(['/dashboard']).then();
     }, (error) => {

@@ -53,21 +53,23 @@
                         [valueField]="'employeeCode'"
                         [required]="true"
                         [labelField]="'employeeName'"
-                        [placeHolder]="isView ? '' : 'Chọn tên người thực hiện'"
+                        [placeHolder]="isView ? '' : 'Chọn tên người giám sát'"
                         [openSearchModal]="false" [getObjectValue]="true"
-                        [labelHorizontal]="false" formControlName="employeeCode" labelContent="Người thực hiện">
+                        [labelHorizontal]="false" formControlName="managerCode" labelContent="Người giám sát">
             </app-select>
           </div>
+
           <div nz-col nzSpan="8">
             <app-select [ngClass]="'w-100'" [data]="lstEmployee"
                         [valueField]="'employeeCode'"
                         [required]="true"
                         [labelField]="'employeeName'"
-                        [placeHolder]="isView ? '' : 'Chọn tên người giám sát'"
+                        [placeHolder]="isView ? '' : 'Chọn tên người thực hiện'"
                         [openSearchModal]="false" [getObjectValue]="true"
-                        [labelHorizontal]="false" formControlName="managerCode" labelContent="Người thực hiện">
+                        [labelHorizontal]="false" formControlName="employeeCode" labelContent="Người thực hiện">
             </app-select>
           </div>
+
           <div nz-col nzSpan="8">
             <app-select [ngClass]="'w-100'" [data]="lstPriority"
                         [valueField]="'code'"
@@ -111,12 +113,9 @@
                              (changeDate)="onChangeEndDay($event)" [errorTip]="endDayErrorMessage"
                              [span]="24"></app-date-picker>
           </div>
-
-
-
         </div>
-        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32}">
-          <div nz-col [nzSm]="24" [nzMd]="24" [nzLg]="24">
+        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
+          <div nz-col [nzSm]="24" [nzMd]="12" [nzLg]="12">
             <nz-tabset [nzSelectedIndex]="0">
               <nz-tab nzTitle="Mô tả" [tabIndex]="0">
                 <app-input-textarea-v2
@@ -125,44 +124,32 @@
                   [placeholder]="'Nhập mô tả công việc'"
                   [maxlength]="'2000'"
                   [nzAllowClear]="true"
-                  [nzAutosize]="{ minRows: 4, maxRows: 10 }"
-                  [ngClass]="'w-100'">
+                  [nzAutosize]="{ minRows: 2, maxRows: 5 }"
+                  class="w-100">
                 </app-input-textarea-v2>
               </nz-tab>
-
-
-              <nz-tab nzTitle="Timesheet" [tabIndex]="1">
+            </nz-tabset>
+          </div>
+        </div>
+        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32}">
+          <div nz-col [nzSm]="24" [nzMd]="24" [nzLg]="24">
+            <nz-tabset [nzSelectedIndex]="0">
+              <nz-tab nzTitle="Thông tin trao đổi" [tabIndex]="0">
                 <form nz-form [formGroup]="addFormTimeSheet" nzLayout="vertical" (ngSubmit)="submitTimeSheetForm()">
-                  <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32}">
-                    <div nz-col nzSpan="8">
-                      <app-date-picker formControlName="dayTimeSheet" placeHolder="dd/mm/yyyy"
-                                       [format]="'dd/MM/yyyy'"
-                                       labelContent="Ngày khai báo"
-                                       [ngClass]="'w-150'"
-                                       [required]="true"
-                                       [disableDateFromToday]="isDisableDateFromToday"
-                                       [span]="24"></app-date-picker>
-                    </div>
-                    <div nz-col nzSpan="8">
-                      <app-input-text-v2 formControlName="durationTimeSheet"
-                                         label="{{ 'Khoảng thời gian (giờ)'}}"
-                                         [placeHolder]="'Nhập khoảng thời gian'"
-                                         [typeInput]="'number'"
-                                         [required]="true"
-                                         [nzAllowClear]="true" [maxlength]="'250'">
-                      </app-input-text-v2>
-                    </div>
-                    <div nz-col nzSpan="8" class="d-flex" style="justify-content: right; align-items: center">
-                      <button style="width: 140px;" nz-button nzType="primary" type="submit">Lưu Time Sheet</button>
+                  <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
+                    <div nz-col nzSpan="24">
+                      <div style="text-align: right;">
+                        <button style="width: 140px;" nz-button nzType="primary" type="submit">Bình luận</button>
+                      </div>
                     </div>
                   </div>
                   <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32}">
                     <div nz-col nzSpan="24">
-                      <app-input-textarea-v2 formControlName="timeSheetDescription" [maxlength]="'5000'"
-                                             label="Mô tả"
-                                             [placeholder]="'Nhập khuyến mô tả'"
+                      <app-input-textarea-v2 formControlName="content" [maxlength]="'5000'"
+                                             label="Nội dung"
+                                             [placeholder]="'Nhập nội dung trao đổi'"
                                              [ngClass]="'w-100'"
-                                             [nzAllowClear]="true" [nzAutosize]="{ minRows: 6, maxRows: 10 }">
+                                             [nzAllowClear]="true" [nzAutosize]="{ minRows: 2, maxRows: 4 }">
                       </app-input-textarea-v2>
                     </div>
                   </div>
@@ -174,16 +161,13 @@
                       <thead>
                       <tr class="ant-header-customize">
                         <th nzWidth="150px" class="text-center">
-                          Ngày
+                          Người tạo
                         </th>
-                        <th nzWidth="100px" class="text-center">
-                          Số giờ
+                        <th nzWidth="300px" class="text-center">
+                          Nội dung
                         </th>
-                        <th nzWidth="200px" class="text-center">
-                          Mô tả
-                        </th>
-                        <th nzWidth="100px" class="text-center">
-                          Hành động
+                        <th nzWidth="150px" class="text-center">
+                          Thời gian
                         </th>
                       </tr>
                       </thead>
@@ -191,33 +175,17 @@
                       <ng-template ngFor let-data let-idx="index" [ngForOf]="rowSelectionTable.data">
                         <tr>
                           <td class="max-width-150 text-center"
-                              [nz-tooltip]="data.dayTimeSheet | date: 'dd/MM/yyyy'">{{data.dayTimeSheet | date: 'dd/MM/yyyy'}}</td>
-                          <td class="max-width-100 text-center"
-                              [nz-tooltip]="data.durationTimeSheet">{{data.durationTimeSheet}}</td>
-                          <td class="max-width-200"
-                              [nz-tooltip]="data.timeSheetDescription">{{data.timeSheetDescription}}</td>
-                          <td class="text-center max-width-150">
-                            <div class="action">
-                              <app-button-icon class="action__margin" [isDelete]="true"
-                                               [tooltipTitle]="'Xóa'"
-                                               (click)="openModalDelete(data)"></app-button-icon>
-                            </div>
-                          </td>
+                              [nz-tooltip]="data.employeeName">{{data.employeeName}}</td>
+                          <td class="max-width-300 text-center"
+                              [nz-tooltip]="data.content">{{data.content}}</td>
+                          <td class="max-width-150 text-center"
+                              [nz-tooltip]="data.createDate | date: 'dd/MM/yyyy'">{{data.createDate | date: 'dd/MM/yyyy'}}</td>
                         </tr>
                       </ng-template>
                       </tbody>
                     </nz-table>
                   </div>
                 </nz-collapse>
-              </nz-tab>
-              <nz-tab nzTitle="Thông tin trao đổi" [tabIndex]="2">
-                <nz-form-item nz-col nzSpan="24">
-                  <nz-form-control>
-                    <ckeditor [editor]="Editor" formControlName="communication"
-                              [ngStyle]="{'min-height': '300px'}">
-                    </ckeditor>
-                  </nz-form-control>
-                </nz-form-item>
               </nz-tab>
             </nz-tabset>
           </div>

@@ -8,7 +8,9 @@
 
     <form [formGroup]="form" (ngSubmit)="login()">
       <label class="login-label">Đăng nhập bằng Email hoặc tài khoản đã tạo</label>
-
+      <div *ngIf="isMeassgeError" class="text-danger" style="margin-top: 8px; text-align: center;">
+        {{ meassgeError }}
+      </div>
       <div class="field-group">
         <mat-form-field appearance="outline" class="full-width">
           <mat-icon matPrefix>person</mat-icon>

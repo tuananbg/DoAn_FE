@@ -36,8 +36,8 @@ export class HeaderComponent implements OnInit, DoCheck {
     const token = localStorage.getItem('token');
     const payloadToken: any = token ? this.parseJwt(token) : null;
     // const userObject = JSON.parse(payloadToken.user);
-    this.employeeName =localStorage.getItem('employeeCode');
-    this.employeeCode =localStorage.getItem('fullName');
+    this.employeeCode =localStorage.getItem('employeeCode');
+    this.employeeName =localStorage.getItem('fullName');
     // this.notificationService.getEmployeesWithBirthdaysInCurrentMonth().subscribe(data => {
     //   this.employees = data;
     //   this.hasNotifications = this.employees.length > 0;

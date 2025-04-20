@@ -35,6 +35,7 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
   data: any;
   addForm: any;
   addFormTimeSheet: any;
+  createBy:any;
   lstEmployee: any[] = [];
   lstProject:any[] =[];
   lstTaskStatus: any[] = [
@@ -93,18 +94,19 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
 
   ngOnInit() {
     this.i18n.setLocale(en_US);
+    this.createBy =localStorage.getItem('employeeCode');
     // this.loadProject();
     this.checkIsViewOrUpdate();
-    console.log("update",this.isUpdate)
+    console.log("createBy",this.createBy)
     this.addForm = this.formBuilder.group({
       taskCode: new FormControl({ value: '', disabled: true }, [Validators.required]),
       taskName: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.maxLength(500)]),
-      taskDescription: new FormControl({ value: '', disabled: true }),
-      taskStatus: new FormControl({ value: '', disabled: true }, [Validators.required]),
+      taskDescription: new FormControl(),
+      taskStatus: new FormControl( [Validators.required]),
       startDay: new FormControl(null, [Validators.required]),
       endDay: new FormControl(null, [Validators.required]),
-      employeeCode: new FormControl({ value: '', disabled: true }, [Validators.required]),
-      managerCode:new FormControl({ value: '', disabled: true }, [Validators.required]),
+      employeeCode: new FormControl( [Validators.required]),
+      managerCode:new FormControl([Validators.required]),
       projectCode: new FormControl({ value: '', disabled: true }, [Validators.required]),
       priority: new FormControl(null, [Validators.required]),
       duration: new FormControl(null),
@@ -132,16 +134,13 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
     })
   }
 
-
   ngAfterViewChecked(): void {
     this.changeDetectorRef.detectChanges();
   }
 
   buildFormTimeSheet() {
     this.addFormTimeSheet = this.formBuilder.group({
-      dayTimeSheet: new FormControl(null),
-      durationTimeSheet: new FormControl(null),
-      timeSheetDescription: new FormControl(null, [Validators.maxLength(1000)]),
+      content: new FormControl(null, [Validators.maxLength(1000)]),
     });
   }
 
@@ -184,14 +183,14 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
       data.taskStatus = data.taskStatus ? data.taskStatus : null;
       data.projectCode = data.projectCode ? data.projectCode : null;
       data.priority = data.priority ? data.priority : null;
-      data.duration = data.duration ? data.duration : null;
-      data.communication = data.communication ? data.communication : null;
+      // data.duration = data.duration ? data.duration : null;
+      // data.communication = data.communication ? data.communication : null;
       data.employeeCode = data.employeeCode ? data.employeeCode : null;
       if (this.isUpdate) {
-        data.startDay = new Date(data.startDay);
-        data.endDay = new Date(data.endDay);
+        // data.startDay = new Date(data.startDay);
+        // data.endDay = new Date(data.endDay);
         this.taskService.edit(data).subscribe(res => {
-          if (res && res.code === "201") {
+          if (res && res.code === "202") {
             this.toastService.openSuccessToast("Cập nhật thành công");
             this.clickSave.emit();
             this.addForm.reset();
@@ -336,12 +335,12 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
   }
 
   submitTimeSheetForm(): void {
+    console.log("click")
     if (this.addFormTimeSheet.valid) {
       const data = this.addFormTimeSheet.value;
       data.taskCode = this.taskCode;
-      data.dayTimeSheet = data.dayTimeSheet ? data.dayTimeSheet : null;
-      data.durationTimeSheet = data.durationTimeSheet ? data.durationTimeSheet : null;
-      data.timeSheetDescription = data.timeSheetDescription ? data.timeSheetDescription : null;
+      data.content = data.content ? data.content : null;
+      data.employeeCode = this.createBy ;
       this.timeSheetService.create(data).subscribe(res => {
         if (res && res.code === "OK") {
           this.toastService.openSuccessToast('Lưu thành công');

@@ -59,7 +59,7 @@ export class TaskService {
 
   edit(taskDTO: any): Observable<any> {
     return this.httpClient.put(
-      API_CONFIG.BASE_URL + "task",
+      API_CONFIG.BASE_URL + "task/update",
       taskDTO,
     );
   }
