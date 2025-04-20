@@ -18,6 +18,7 @@ export class ListAttendanceOtComponent implements OnInit {
   isActive = true;
   searchForm!: FormGroup;
   searchFormValue: any;
+  employeeCode: any;
   request: any = {
     listTextSearch: [],
     code: null,
@@ -50,7 +51,7 @@ export class ListAttendanceOtComponent implements OnInit {
     startTime: null,
     endTime: null,
     totalTime: null,
-    followId: null,
+    followCode: null,
     descriptionOt: null
   };
   lstEmployee: any[] = [];
@@ -78,13 +79,14 @@ export class ListAttendanceOtComponent implements OnInit {
 
   ngOnInit(): void {
     this.i18n.setLocale(en_US);
-    const token = localStorage.getItem('token');
-    const payloadToken: any = token ? this.parseJwt(token) : null;
-    const userObject = JSON.parse(payloadToken.user);
-    this.idUserDetailId = userObject.userDetailId;
+    // const token = localStorage.getItem('token');
+    // const payloadToken: any = token ? this.parseJwt(token) : null;
+    // const userObject = JSON.parse(payloadToken.user);
+    // this.idUserDetailId = userObject.userDetailId;
+    this.employeeCode = localStorage.getItem('employeeCode');
     this.searchForm = this.formBuilder.group({
       startDay: new FormControl(null),
-      employeeId: new FormControl(null),
+      employeeCode: new FormControl(null),
       isActive: new FormControl(null),
     });
     if (this.searchFormValue) {
@@ -94,15 +96,15 @@ export class ListAttendanceOtComponent implements OnInit {
     this.fetchEmployee();
   }
 
-  parseJwt(token: string): string {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
-  };
+  // parseJwt(token: string): string {
+  //   const base64Url = token.split('.')[1];
+  //   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  //   const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
+  //     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  //   }).join(''));
+  //
+  //   return JSON.parse(jsonPayload);
+  // };
 
   fetchData(currentPage?: number, pageSize?: number){
     const formValue = this.searchForm.value;
@@ -151,7 +153,7 @@ export class ListAttendanceOtComponent implements OnInit {
     this.searchForm.patchValue({
       isActive: null,
       startDay: null,
-      employeeId: null,
+      employeeCode: null,
     });
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
@@ -169,7 +171,7 @@ export class ListAttendanceOtComponent implements OnInit {
       startTime: data.startTime,
       endTime: data.endTime,
       totalTime: data.totalTime,
-      followId: data.followId,
+      followCode: data.followCode,
       descriptionOt: data.descriptionOt
     };
     this.isVisible = true;
@@ -293,9 +295,10 @@ export class ListAttendanceOtComponent implements OnInit {
   }
 
   fetchEmployee() {
-    this.employeeService.searchEmployee(this.payloadEmployee, {page: 0, size: -1}).subscribe(res => {
+    this.employeeService.getListSelect().subscribe(res => {
       if (res && res.code === "OK") {
-        this.lstEmployee = res.data.data;
+        this.lstEmployee = res.data;
+        this.lstEmployee =  this.lstEmployee.map(res => `${res.employeeName} - ${res.employeeCode}`);
         this.lstEmployee = this.lstEmployee.map(item => ({
           ...item,
           employeeName: item.employeeName + " - " + item.employeeCode

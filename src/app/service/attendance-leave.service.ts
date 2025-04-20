@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {BehaviorSubject, Observable} from "rxjs";
 import {API_CONFIG} from "../config/api-config";
 
@@ -17,13 +17,16 @@ export class AttendanceLeaveService {
 
   }
 
-  searchAttendanceLeave(payload: any, pageable: any): Observable<any> {
-    return this.httpClient.post(
-      API_CONFIG.BASE_URL + "leave/search",
-      payload,
+  searchAttendanceLeave(keyword: any,status : string, pageable: any): Observable<any> {
+    let params = new HttpParams({fromObject: pageable});
+    if (keyword) {
+      params = params.set('keyword', keyword);
+    }
+    return this.httpClient.get(
+      `${API_CONFIG.BASE_URL}leave/list/${status}`,
       {
         headers: new HttpHeaders({'Content-Type': 'application/json'}),
-        params: pageable,
+        params: params
       }
     )
   }

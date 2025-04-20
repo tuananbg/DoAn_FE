@@ -56,11 +56,11 @@
     </div>
     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
       <div nz-col nzSpan="24">
-        <app-select [ngClass]="'w-100'" [data]="lstEmployee" [valueField]="'id'" [placeHolder]="'--Tất cả--'"
+        <app-select [ngClass]="'w-100'" [data]="lstEmployee" [valueField]="'employeeCode'" [placeHolder]="'--Tất cả--'"
                     [required]="true"
                     [labelField]="'employeeName'" [openSearchModal]="false" [getObjectValue]="true"
                     [ngStyleCus]="{'padding-left' : '39px'}"
-                    [labelHorizontal]="false" formControlName="followId" labelContent="Người theo dõi:">
+                    [labelHorizontal]="false" formControlName="followCode" labelContent="Người theo dõi:">
         </app-select>
       </div>
     </div>

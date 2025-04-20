@@ -22,7 +22,8 @@ export class FormAttendanceOtComponent implements OnInit, OnChanges {
   @Output() clickCancel = new EventEmitter();
   @Output() clickSave = new EventEmitter();
 
-  idUserDetailId: any;
+  // idUserDetailId: any;
+  employeeCode: any;
   endTimeErrorMessage = '';
   startTimeErrorMessage = '';
   lstEmployee: any[] = [];
@@ -59,31 +60,31 @@ export class FormAttendanceOtComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    const token = localStorage.getItem('token');
-    const payloadToken: any = token ? this.parseJwt(token) : null;
-    const userObject = JSON.parse(payloadToken.user);
-    this.idUserDetailId = userObject.userDetailId;
+    this.employeeCode = localStorage.getItem('employeeCode');
+    // const payloadToken: any = token ? this.parseJwt(token) : null;
+    // const userObject = JSON.parse(payloadToken.user);
+    // this.idUserDetailId = userObject.userDetailId;
     this.createForm = this.formBuilder.group({
       startDay: new FormControl(null, [Validators.required]),
       startTime: new FormControl(null, [Validators.required]),
       endTime: new FormControl(null, [Validators.required]),
       totalTime: new FormControl(null),
-      employeeId: new FormControl(null),
-      followId: new FormControl(null, [Validators.required]),
+      employeeCode: new FormControl(null),
+      followCode: new FormControl(null, [Validators.required]),
       descriptionOt: new FormControl(null, [Validators.maxLength(5000)])
     })
     this.fetchEmployee();
   }
 
-  parseJwt(token: string): string {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
-  };
+  // parseJwt(token: string): string {
+  //   const base64Url = token.split('.')[1];
+  //   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  //   const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
+  //     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  //   }).join(''));
+  //
+  //   return JSON.parse(jsonPayload);
+  // };
 
 
   handleOkModal() {
@@ -97,8 +98,8 @@ export class FormAttendanceOtComponent implements OnInit, OnChanges {
       data.startDay = data.startDay ? data.startDay : null;
       data.startTime = data.startTime ? data.startTime : null;
       data.totalTime = data.totalTime ? data.totalTime : null;
-      data.employeeId = this.idUserDetailId ? this.idUserDetailId : null;
-      data.followId = data.followId ? data.followId : null;
+      data.employeeCode = this.employeeCode ? this.employeeCode : null;
+      data.followCode = data.followCode ? data.followCode : null;
       data.descriptionOt = data.descriptionOt ? data.descriptionOt.trim() : null;
       if (!this.isUpdate) {
         this.spinner.show().then();
@@ -208,9 +209,10 @@ export class FormAttendanceOtComponent implements OnInit, OnChanges {
   }
 
   fetchEmployee() {
-    this.employeeService.searchEmployee(null, {page: 0, size: -1}).subscribe(res => {
+    this.employeeService.getListSelect().subscribe(res => {
       if (res && res.code === "OK") {
-        this.lstEmployee = res.data.data;
+        this.lstEmployee = res.data;
+        this.lstEmployee =  this.lstEmployee.map(res => `${res.employeeName} - ${res.employeeCode}`);
         this.lstEmployee = this.lstEmployee.map(item => ({
           ...item,
           employeeName: item.employeeName + " - " + item.employeeCode

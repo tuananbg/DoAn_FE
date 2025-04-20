@@ -37,10 +37,10 @@
         <div nz-col [nzSm]="24" [nzMd]="8" [nzLg]="8">
           <nz-form-item nz-col nzSpan="24">
             <nz-form-control>
-              <app-select [ngClass]="'w-100'" [data]="lstEmployee" [valueField]="'id'" [placeHolder]="'--Tất cả--'"
+              <app-select [ngClass]="'w-100'" [data]="lstEmployee" [valueField]="'employeeCode'" [placeHolder]="'--Tất cả--'"
                           [labelField]="'employeeName'" [openSearchModal]="false" [getObjectValue]="true"
                           [ngStyleCus]="{'padding-left' : '5px'}"
-                          [labelHorizontal]="false" formControlName="employeeId" labelContent="Người gửi đơn:">
+                          [labelHorizontal]="false" formControlName="employeeCode" labelContent="Người gửi đơn:">
               </app-select>
             </nz-form-control>
           </nz-form-item>

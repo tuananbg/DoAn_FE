@@ -7,8 +7,8 @@
   [nzFooter]="footerTpl"
   (nzOnClose)="close()"
 >
-  <form nz-form *nzDrawerContent [formGroup]="createForm" (keyup.enter)="handleOkModal()">
-    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
+  <form nz-form *ngIf="createForm" [formGroup]="createForm" (keyup.enter)="handleOkModal()">
+  <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
       <div nz-col nzSpan="24">
         <app-select [ngClass]="'w-100'" [data]="lstLeaveCategory" [valueField]="'name'" [placeHolder]="'--Tất cả--'"
                     [required]="true"
@@ -56,21 +56,11 @@
     </div>
     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
       <div nz-col nzSpan="24">
-        <app-select [ngClass]="'w-100'" [data]="lstEmployee" [valueField]="'id'" [placeHolder]="'--Tất cả--'"
+        <app-select [ngClass]="'w-100'" [data]="lstEmployee" [valueField]="'employeeCode'" [placeHolder]="'--Tất cả--'"
                     [required]="true"
                     [labelField]="'employeeName'" [openSearchModal]="false" [getObjectValue]="true"
                     [ngStyleCus]="{'padding-left' : '22px'}"
-                    [labelHorizontal]="false" formControlName="reviewerId" labelContent="Người duyệt:">
-        </app-select>
-      </div>
-    </div>
-    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
-      <div nz-col nzSpan="24">
-        <app-select [ngClass]="'w-100'" [data]="lstEmployee" [valueField]="'id'" [placeHolder]="'--Tất cả--'"
-                    [required]="true"
-                    [labelField]="'employeeName'" [openSearchModal]="false" [getObjectValue]="true"
-                    [ngStyleCus]="{'padding-left' : '5px'}"
-                    [labelHorizontal]="false" formControlName="trackerId" labelContent="Người theo dõi:">
+                    [labelHorizontal]="false" formControlName="reviewerCode" labelContent="Người duyệt:">
         </app-select>
       </div>
     </div>

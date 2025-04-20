@@ -107,6 +107,11 @@
       </div>
     </div>
     <div class="list__table">
+      <nz-tabset [(nzSelectedIndex)]="currentTabIndex" (nzSelectedIndexChange)="onTabChange($event)" style="margin-bottom: 15px;">
+        <nz-tab nzTitle="Cần làm"></nz-tab>
+        <nz-tab nzTitle="Đang xử lý"></nz-tab>
+        <nz-tab nzTitle="Hoàn thành"></nz-tab>
+      </nz-tabset>
       <nz-table #rowSelectionTable nzBordered [nzData]="lstData" [nzFrontPagination]="false"
                 [nzNoResult]="'Không có kết quả tìm kiếm'" [nzScroll]="{ x: SCROLL_TABLE.SCROLL_X}">
         <thead>
@@ -171,21 +176,21 @@
                 <app-button-icon class="action__margin" [isCheckCircle] = "true"
                                  [tooltipTitle]="'Duyệt đơn'"
                                  [loading]="isLoading"
-                                 [disabled] ="data.reviewerId != idUserDetailId"
+                                 [disabled] ="data.reviewerId != employeeCode"
                                  (clickAction)="openUpdateActiveModal(data)"></app-button-icon>
                 <app-button-icon class="action__margin" [isUnCheckCircle]="true"
                                  [tooltipTitle]="'Từ chối'"
                                  [loading]="isLoading"
-                                 [disabled] ="data.reviewerId != idUserDetailId"
+                                 [disabled] ="data.reviewerId != employeeCode"
                                  (clickAction)="openUpdateActiveFalseModal(data)">
                 </app-button-icon>
                 <app-button-icon class="action__margin" [isEdit] = "true"
                                  [tooltipTitle]="'Sửa đơn'"
                                  [loading]="isLoading"
-                                 [disabled] ="data.employeeId != idUserDetailId"
+                                 [disabled] ="data.employeeId != employeeCode"
                                  (clickAction)="openUpdateModal(data)"></app-button-icon>
                 <app-button-icon class="action__margin" [isDelete]="true"
-                                 [disabled] ="data.employeeId != idUserDetailId"
+                                 [disabled] ="data.employeeId != employeeCode"
                                  [tooltipTitle]="'Xóa đơn'" (click)="openModalDelete(data)"></app-button-icon>
               </div>
             </td>

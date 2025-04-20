@@ -27,6 +27,8 @@ export class ListAttendanceLeaveComponent implements OnInit {
     pageSize: 10,
     sort: 'createdDate/desc', // -: desc | +: asc,
   };
+  currentTabIndex = 0;
+  statusList = ["TODO", 'PROCESSING','DONE'];
   lstData: any[] = [];
   total = 0;
   lstIsActive = [
@@ -47,6 +49,7 @@ export class ListAttendanceLeaveComponent implements OnInit {
   isVisible: any;
   isUpdate = false;
   idChild: any;
+  listOfOption: string[] = [];
   objectChild = {
       leaveCategory: null,
       startDay: null,
@@ -66,7 +69,7 @@ export class ListAttendanceLeaveComponent implements OnInit {
     departmentId: null
   };
   isDisabled: any;
-  idUserDetailId: any;
+  employeeCode: any;
   constructor(
     private formBuilder: FormBuilder,
     private attendanceLeaveService: AttendanceLeaveService,
@@ -81,15 +84,12 @@ export class ListAttendanceLeaveComponent implements OnInit {
 
   ngOnInit(): void {
     this.i18n.setLocale(en_US);
-    const token = localStorage.getItem('token');
-    const payloadToken: any = token ? this.parseJwt(token) : null;
-    const userObject = JSON.parse(payloadToken.user);
-    this.idUserDetailId = userObject.userDetailId;
+    this.employeeCode = localStorage.getItem('employeeCode');
     this.searchForm = this.formBuilder.group({
       isActive: new FormControl(null, [Validators.maxLength(100)]),
       startDay: new FormControl(null, [Validators.maxLength(100)]),
       endDay: new FormControl(null),
-      employeeId: new FormControl(null),
+      employeeCode: new FormControl(null),
     });
     if (this.searchFormValue) {
       this.searchForm.patchValue(this.searchFormValue);
@@ -98,33 +98,23 @@ export class ListAttendanceLeaveComponent implements OnInit {
     this.fetchEmployee();
   }
 
-  parseJwt(token: string): string {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
-  };
+  // parseJwt(token: string): string {
+  //   const base64Url = token.split('.')[1];
+  //   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  //   const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
+  //     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  //   }).join(''));
+  //
+  //   return JSON.parse(jsonPayload);
+  // };
 
   fetchData(currentPage?: number, pageSize?: number){
-    const formValue = this.searchForm.value;
-    const queryModel = {
-      isActive: formValue.isActive === 0 ? '0' : !formValue.isActive ? null : formValue.isActive.toString(),
-      startDay: !formValue.startDay ? null : formValue.startDay,
-      endDay: !formValue.endDay ? null : formValue.endDay,
-      employeeId: !formValue.employeeId ? null : formValue.employeeId,
-    };
-    const pageable = {
-      page: currentPage,
-      size: pageSize,
-      sort: this.request.sort,
-    };
+    const pageable = { page: currentPage, size: pageSize };
+    const status = this.statusList[this.currentTabIndex];
     this.spinner.show().then();
-    this.attendanceLeaveService.searchAttendanceLeave(queryModel, pageable).subscribe(res => {
+    this.attendanceLeaveService.searchAttendanceLeave(this.searchKeyword, status, pageable).subscribe(res => {
       if (res && res.code === "OK") {
-        this.lstData = res.data.data;
+        this.lstData = res.data;
         this.total = res.data.dataCount;
         this.spinner.hide().then();
         if (this.lstData.length === 0) {
@@ -245,6 +235,18 @@ export class ListAttendanceLeaveComponent implements OnInit {
     this.nzOnSearch();
   }
 
+  onTabChange(index: number): void {
+    this.currentTabIndex = index;
+    this.request.currentPage = 0;
+    this.fetchData();
+  }
+
+  searchKeyword: string | null = null; // Mặc định là null
+
+  onSearchChanged(event: any) {
+    this.searchKeyword = event.value ? event.value : null; // Nếu không nhập, đặt lại null
+    this.fetchData(this.request.currentPage, this.request.pageSize); // Gọi API
+  }
 
   changeCurrentPage(currentPage: number) {
     this.request.currentPage = currentPage;
@@ -343,9 +345,10 @@ export class ListAttendanceLeaveComponent implements OnInit {
   }
 
   fetchEmployee() {
-    this.employeeService.searchEmployee(this.payloadEmployee, {page: 0, size: -1}).subscribe(res => {
+    this.employeeService.getListSelect().subscribe(res => {
       if (res && res.code === "OK") {
-        this.lstEmployee = res.data.data;
+        this.lstEmployee = res.data;
+        this.lstEmployee =  this.lstEmployee.map(res => `${res.employeeName} - ${res.employeeCode}`);
         this.lstEmployee = this.lstEmployee.map(item => ({
           ...item,
           employeeName: item.employeeName + " - " + item.employeeCode
