@@ -53,7 +53,9 @@
     </div>
     <div class="list__table">
       <nz-tabset [(nzSelectedIndex)]="currentTabIndex" (nzSelectedIndexChange)="onTabChange($event)">
-        <nz-tab nzTitle="Đang hoạt động"></nz-tab>
+        <nz-tab nzTitle="Hiệu lực"></nz-tab>
+        <nz-tab nzTitle="Sắp hết hạn"></nz-tab>
+        <nz-tab nzTitle="Hết hạn"></nz-tab>
         <nz-tab nzTitle="Vô hiệu"></nz-tab>
       </nz-tabset>
 
@@ -65,13 +67,31 @@
             STT
           </th>
           <th nzWidth="150px" class="text-center">
-            Mã hợp đồng
+            Mã nhân viên
           </th>
-          <th nzWidth="250px" class="text-center">
+          <th nzWidth="150px" class="text-center">
+            Tên nhân viên
+          </th>
+          <th nzWidth="150px" class="text-center">
+            Số hợp đồng
+          </th>
+          <th nzWidth="150px" class="text-center">
             Loại hợp đồng
           </th>
-          <th nzWidth="350px" class="text-center">
-            File mềm
+          <th nzWidth="250px" class="text-center">
+            File đính kèm
+          </th>
+          <th nzWidth="150px" class="text-center">
+            Ngày hiệu lực
+          </th>
+          <th nzWidth="150px" class="text-center">
+            Ngày hết hiệu lực
+          </th>
+          <th nzWidth="150px" class="text-center">
+            Thời hạn
+          </th>
+          <th nzWidth="150px" class="text-center">
+            Trạng thái
           </th>
           <th nzWidth="100px" class="text-center">
             Hành động
@@ -82,14 +102,24 @@
         <ng-template ngFor let-data let-idx="index" [ngForOf]="rowSelectionTable.data">
           <tr>
             <td class="text-center max-width-50">{{ (request.currentPage * request.pageSize) + idx + 1}}</td>
-            <td class="max-width-150" [nz-tooltip]="data.contractCode">{{data.contractCode}}</td>
-            <td class="max-width-250 text-center" [nz-tooltip]="data.contractType">
-              {{data.contractType}}
-            <td class="max-width-350" [nz-tooltip]="data.attachFile">
-              <a style="color: #1abc9c; font-weight: bold"
+            <td class="max-width-150" [nz-tooltip]="data.employeeCode">{{data.employeeCode}}</td>
+            <td class="max-width-150" [nz-tooltip]="data.employeeName">{{data.employeeName}}</td>
+            <td class="max-width-150" [nz-tooltip]="data.contractNumber">{{data.contractNumber}}</td>
+            <td class="max-width-150 text-center" [nz-tooltip]="data.contractType">{{data.contractType}}</td>
+            <td class="max-width-250" [nz-tooltip]="data.attachFile"><a style="color: #1abc9c; font-weight: bold"
                  (click)="handleClick(data.attachFile)">{{data.attachFile}}</a>
             </td>
-            <td class="text-center max-width-150">
+            <td class="max-width-150" [nz-tooltip]="data.effectiveDate | date:'dd/MM/yyyy'">
+              {{ data.effectiveDate | date:'dd/MM/yyyy' }}
+            </td>
+            <td class="max-width-150" [nz-tooltip]="data.expiredDate | date:'dd/MM/yyyy'">
+              {{ data.expiredDate | date:'dd/MM/yyyy' }}
+            </td>
+
+            <td class="max-width-150" [nz-tooltip]="data.contractTerm">{{data.contractTerm}}</td>
+            <td class="max-width-150" [nz-tooltip]="data.contractStatus">{{data.contractStatus}}</td>
+
+            <td class="text-center max-width-100">
               <div class="action">
                 <app-button-icon class="action__margin" [isEdit]="true"
                                  [tooltipTitle]="'Cập nhật hợp đồng'"

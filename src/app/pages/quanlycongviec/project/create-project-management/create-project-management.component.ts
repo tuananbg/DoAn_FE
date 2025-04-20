@@ -93,7 +93,7 @@ export class CreateProjectManagementComponent implements OnInit, AfterViewChecke
               uid: '-1',
               name: this.data.customerAvatar,
               status: 'done',
-              url: 'http://localhost:8080/api/v1/project/'+ this.data.customerAvatar // Đường dẫn đến ảnh đã tải lên
+              // url: 'http://localhost:8080/api/v1/project/'+ this.data.customerAvatar // Đường dẫn đến ảnh đã tải lên
             }
           ];
         } else {

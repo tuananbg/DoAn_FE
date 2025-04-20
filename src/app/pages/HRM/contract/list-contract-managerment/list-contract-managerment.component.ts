@@ -40,7 +40,7 @@ export class ListContractManagermentComponent implements OnInit {
   searchFormValue: any;
 
   currentTabIndex = 0;
-  statusList = ['ACTIVE', 'INACTIVE'];
+  statusList = ['EFFECTIVE', 'ABOUT_TO_EXPIRE','EXPIRED','TERMINATED'];
 
   SCROLL_TABLE = {
     SCROLL_X: '1000px',

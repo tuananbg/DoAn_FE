@@ -85,9 +85,9 @@
             <td class="text-center max-width-200">{{ (request.currentPage * request.pageSize) + idx + 1}}</td>
             <td class="max-width-150" [nz-tooltip]="data.departmentCode">{{data.departmentCode}}</td>
             <td class="max-width-150" [nz-tooltip]="data.departmentName">{{data.departmentName}}</td>
-            <td class="max-width-100 text-center" [nz-tooltip]="'Không hoạt động'" *ngIf="data.isActive === 0">
+            <td class="max-width-100 text-center" [nz-tooltip]="'Không hoạt động'" *ngIf="data.status === 0">
               <span class="css-badge badge badge-pill bg-danger p-3">Không hoạt động</span></td>
-            <td class="max-width-100 text-center" [nz-tooltip]="'Hoạt động'" *ngIf="data.isActive === 1">
+            <td class="max-width-100 text-center" [nz-tooltip]="'Hoạt động'" *ngIf="data.status === 1">
               <span class="css-badge badge badge-pill bg-success p-3">Hoạt động</span></td>
             <td class="text-center max-width-150">
               <div class="action">

@@ -56,6 +56,7 @@
   <dx-data-grid
     class="grid theme-dependent"
     noDataText=""
+
     height="100%"
     keyExpr="id"
     [dataSource]="lstData"
@@ -72,10 +73,31 @@
 
     <dxi-column dataField="taskCode" caption="Mã công việc" [minWidth]="150" sortOrder="desc"></dxi-column>
     <dxi-column dataField="taskName" caption="Tên công việc" [minWidth]="150"></dxi-column>
-    <dxi-column dataField="taskStatus" caption="Trạng thái" [minWidth]="150"></dxi-column>
+    <dxi-column dataField="projectName" caption="Tên dự án" [minWidth]="100"></dxi-column>
+    <dxi-column dataField="employeeName" caption="Người thực hiện" [minWidth]="100"></dxi-column>
+    <dxi-column dataField="managerName" caption="Quản lý" [minWidth]="100"></dxi-column>
+    <dxi-column
+      dataField="taskStatus"
+      caption="Trạng thái"
+      [minWidth]="150"
+      [lookup]="{
+    dataSource: lstTaskStatus,
+    valueExpr: 'code',
+    displayExpr: 'name'
+  }"
+    ></dxi-column>
     <dxi-column dataField="startDay" caption="Từ ngày" [minWidth]="150"></dxi-column>
     <dxi-column dataField="endDay" caption="Đến ngày" [minWidth]="150"></dxi-column>
-    <dxi-column dataField="priorityName" caption="Độ ưu tiên" [minWidth]="100"></dxi-column>
-    <dxi-column dataField="projectName" caption="Tên dự án" [minWidth]="100"></dxi-column>
+    <dxi-column
+      dataField="priority"
+      caption="Độ ưu tiên"
+      [minWidth]="100"
+      [lookup]="{
+    dataSource: lstPriority,
+    valueExpr: 'code',
+    displayExpr: 'name'
+  }"
+    ></dxi-column>
+
   </dx-data-grid>
 </div>

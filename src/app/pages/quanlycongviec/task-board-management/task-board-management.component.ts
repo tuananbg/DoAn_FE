@@ -82,6 +82,7 @@ export class TaskBoardManagementComponent implements OnInit, OnChanges {
       next: (res) => {
         if (res && res.code === "OK") {
           this.kanbanDataSource = res.data;
+          // this.router.navigate(['/project'], { state: { reload: true } });
         } else {
           this.toastService.openErrorToast(res.msgCode || "Không thể tải dữ liệu công việc");
         }

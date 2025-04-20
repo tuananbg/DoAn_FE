@@ -7,12 +7,12 @@
     >
         <dxi-column caption="Dự án"
                     dataField="projectName"
-                    [width]="200"
+                    [width]="100"
         > </dxi-column>
 
         <dxi-column
                 alignment="left"
-                caption="Số lượng nhiệm vụ"
+                caption="Tổng nhiệm vụ"
                 dataField="numberOfTasks"
                 dataType="number"
                 sortOrder="desc"
@@ -23,23 +23,22 @@
 
         <dxi-column
                 alignment="left"
-                caption="Phần trăm"
-                dataField="percentage"
-                name="percentN"
-                format="percent"
+                caption="Số nhiệm vụ hoàn thành"
+                dataField="numberOfTasksDone"
+                dataType="number"
                 [hidingPriority]="1"
-                [width]="150"
+                [width]="200"
         >
         </dxi-column>
 
         <dxi-column
                 alignment="left"
-                caption=""
+                caption=" "
                 dataField="percentage"
                 name="percentB"
                 cellTemplate="salesBullet"
                 cssClass="sales-bullet"
-                [width]="150"
+                [width]="200"
         >
         </dxi-column>
 

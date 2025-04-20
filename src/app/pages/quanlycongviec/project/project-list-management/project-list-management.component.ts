@@ -19,6 +19,7 @@ export class ProjectListManagementComponent implements OnInit {
   isUpdate = false;
   currentTabIndex = 0;
   statusList = ['ACTIVE', 'INACTIVE'];
+  backgroundImageUrl: string = '';
   request: any = {
     listTextSearch: [],
     code: null,
@@ -76,10 +77,10 @@ export class ProjectListManagementComponent implements OnInit {
     const status = this.statusList[this.currentTabIndex];
     this.spinner.show().then();
 
-    this.projectService.getList(this.searchKeyword, status, pageable).subscribe({
+    this.projectService.getList().subscribe({
       next: (res) => {
         if (res && res.code === "OK") {
-          this.projects = res.data.content || [];
+          this.projects = res.data || [];
           this.projects.sort((a, b) => (a.createdDate > b.createdDate ? -1 : a.createdDate < b.createdDate ? 1 : 0));
         }
         this.spinner.hide().then();
@@ -112,5 +113,6 @@ export class ProjectListManagementComponent implements OnInit {
       }
     })
   }
+
 
 }

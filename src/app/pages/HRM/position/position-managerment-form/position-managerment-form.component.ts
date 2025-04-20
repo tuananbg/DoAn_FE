@@ -124,13 +124,15 @@ export class PositionManagermentFormComponent implements OnInit {
 
       request.subscribe({
         next: (res) => {
-          if (res && res.code === "201") {
+          console.log("data",res)
+          const code = res?.body?.code;
+          if (code === "201") {
             const msg = this.isUpdate ? 'Cập nhật' : 'Thêm mới';
             this.toastService.openSuccessToast(`${msg} chức vụ thành công`);
             this.clickSave.emit();
             this.handleCancelModal();
           } else {
-            this.toastService.openErrorToast(res?.body?.msgCode || 'Lỗi xử lý chức danh');
+            this.toastService.openErrorToast(res?.body?.msgCode || 'Lỗi xử lý chức vụ');
             this.spinner.hide();
           }
         },

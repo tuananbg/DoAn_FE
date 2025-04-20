@@ -41,7 +41,7 @@ export class TaskListManagementComponent implements OnInit {
   isLoading = false;
   userId: number | undefined;
   currentTabIndex = 0;
-  statusList = ['DONE', 'PROCESSING',"TODO"];
+  statusList = ["TODO", 'PROCESSING','DONE'];
   getStatusLabel(status: string): string {
     switch (status) {
       case 'TODO': return 'Cần làm';
@@ -50,23 +50,34 @@ export class TaskListManagementComponent implements OnInit {
       default: return status;
     }
   }
-  mapTaskStatus(status: string | number): string {
-    const statusMap: any = {
-      '1': 'Chưa làm',
-      '2': 'Đang xử lý',
-      '3': 'Hoàn thành'
-    };
-    return statusMap[status] || 'Không rõ';
-  }
+  lstTaskStatus: any[] = [
+    {code: 1, name: "Chưa làm"},
+    {code: 2, name: "Đang xử lý"},
+    {code: 3, name: "Hoàn thành"},
+  ];
+  lstPriority: any[] = [
+    {code: 1, name: "Thấp"},
+    {code: 2, name: "Trung bình"},
+    {code: 3, name: "Cao"},
+  ];
 
-  mapPriority(priority: number): string {
-    const map: any = {
-      1: 'Thấp',
-      2: 'Trung bình',
-      3: 'Cao'
-    };
-    return map[priority] || 'Không rõ';
-  }
+  // mapTaskStatus(status: string | number): string {
+  //   const statusMap: any = {
+  //     '1': 'Chưa làm',
+  //     '2': 'Đang xử lý',
+  //     '3': 'Hoàn thành'
+  //   };
+  //   return statusMap[status] || 'Không rõ';
+  // }
+  //
+  // mapPriority(priority: number): string {
+  //   const map: any = {
+  //     1: 'Thấp',
+  //     2: 'Trung bình',
+  //     3: 'Cao'
+  //   };
+  //   return map[priority] || 'Không rõ';
+  // }
 
   request: any = {
     listTextSearch: [],
@@ -110,10 +121,12 @@ export class TaskListManagementComponent implements OnInit {
             id: item.id,
             taskCode: item.taskCode,
             taskName: item.taskName,
-            taskStatus: this.mapTaskStatus(item.status), // chuyển code sang label
+            employeeName: item.employeeName,
+            managerName: item.managerName,
+            taskStatus: item.status, // chuyển code sang label
             startDay: item.startDay ? this.formatDate(item.startDay) : '',
             endDay: item.endDay ? this.formatDate(item.endDay) : '',
-            priorityName: this.mapPriority(item.priority),
+            priority: item.priority,
             projectName: item.projectName || '',
           }));
         } else {
@@ -212,6 +225,10 @@ export class TaskListManagementComponent implements OnInit {
     //   this.spinner.hide().then();
     // });
     // e.cancel = true;
+  }
+  onTaskUpdated(e: any) {
+    console.log('Cập nhật task:', e.data); // e.data sẽ có taskStatus, priority (giá trị là code)
+    // this.taskService.update(e.data).subscribe(...);
   }
 
 }

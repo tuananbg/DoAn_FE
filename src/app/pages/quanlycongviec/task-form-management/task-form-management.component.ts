@@ -1,7 +1,4 @@
 import {AfterViewChecked, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {TaskForm, taskPriorityList, taskStatusList} from "../../../core/task";
-import {getSizeQualifier, ScreenService} from "../../../service/screen.service";
-import {DxButtonTypes} from "devextreme-angular/ui/button";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import {NzUploadFile} from "ng-zorro-antd/upload";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -238,13 +235,7 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
   }
 
   goBack() {
-    this.router.navigate(['/task-board/', this.idProject],
-      {
-        state: {
-          response: this.responsePagination,
-          isCreate: false,
-        },
-      }).then();
+    this.router.navigate(['/task-list']);
   }
 
   onCancelConfirm() {

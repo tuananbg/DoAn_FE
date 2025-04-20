@@ -218,7 +218,7 @@ export class ListEmployeeManagermentComponent implements OnInit {
       const avatarFile = this.contactNewForm.avatarFile;
       this.spinner.show().then();
       this.employeeService.createEmployee(avatarFile, data).subscribe(res => {
-        if (res && res.body?.code === "200") {
+        if (res && res.body?.code === "201") {
           this.toastService.openSuccessToast(res.body?.message || 'Thêm mới nhân viên thành công');
           this.contactNewForm.newUser = {
             code: '',

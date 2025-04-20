@@ -27,18 +27,18 @@ export class ProjectService {
     )
   }
 
-  getList(keyword: any,status : string, pageable: any): Observable<any> {
-    let params = new HttpParams({fromObject: pageable});
-
-    if (keyword) {
-      params = params.set('keyword', keyword);
-    }
+  getList(): Observable<any> {
+    // let params = new HttpParams({fromObject: pageable});
+    //
+    // if (keyword) {
+    //   params = params.set('keyword', keyword);
+    // }
 
     return this.httpClient.get(
-      `${API_CONFIG.BASE_URL}project/list/${status}`,
+      `${API_CONFIG.BASE_URL}project/list`,
       {
         headers: new HttpHeaders({'Content-Type': 'application/json'}),
-        params: params
+        // params: params
       }
     )
   }

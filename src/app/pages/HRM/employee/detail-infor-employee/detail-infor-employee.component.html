@@ -28,11 +28,19 @@
       <dxi-item location="before" [text]="contactName"></dxi-item>
       <dxi-item location="after" locateInMenu="auto" style="margin-right: 10px;">
         <dx-button
-          text="Chỉnh sửa"
+          text="Tải xuống PDF"
           type="default"
           stylingMode="contained"
           (click)="onExportPdf()"
         ></dx-button>
+        <dx-button *ngIf="isUserOffice"
+                   text="Chỉnh sửa"
+                   icon="edit"
+                   stylingMode="contained"
+                   type="default"
+                   (onClick)="toggleEdit()"
+        >
+        </dx-button>
       </dxi-item>
     </dx-toolbar>
     <div id="contentToConvert" style="padding: 30px 40px;">
