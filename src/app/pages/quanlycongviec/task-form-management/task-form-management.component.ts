@@ -26,7 +26,7 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
     extraPlugins: [MyCustomUploadAdapterPlugin]
   };
   idProject: any;
-  idTask: any;
+  taskCode: any;
   responsePagination: any;
   isUpdate = false;
   isView = false;
@@ -87,39 +87,34 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
     private i18n: NzI18nService,
     private readonly changeDetectorRef: ChangeDetectorRef
   ) {
-    this.idProject = this.activatedRoute.snapshot.params['projectId'];
-    this.idTask = this.activatedRoute.snapshot.params['taskId'];
+    // this.idProject = this.activatedRoute.snapshot.params['projectId'];
+    this.taskCode = this.activatedRoute.snapshot.params['taskCode'];
   }
 
   ngOnInit() {
     this.i18n.setLocale(en_US);
     // this.loadProject();
     this.checkIsViewOrUpdate();
-    // const currentDate = new Date();
-    // const year = currentDate.getFullYear().toString();
-    // const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-    // const day = currentDate.getDate().toString().padStart(2, '0');
-    // const hours = currentDate.getHours().toString().padStart(2, '0');
-    // const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-    // const genderCode = year + month + day + hours + minutes;
+    console.log("update",this.isUpdate)
     this.addForm = this.formBuilder.group({
-      taskCode: new FormControl(null, [Validators.required]),
-      taskName: new FormControl(null, [Validators.required, Validators.maxLength(500)]),
-      taskDescription: new FormControl(null),
-      taskStatus: new FormControl(null, [Validators.required]),
+      taskCode: new FormControl({ value: '', disabled: true }, [Validators.required]),
+      taskName: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.maxLength(500)]),
+      taskDescription: new FormControl({ value: '', disabled: true }),
+      taskStatus: new FormControl({ value: '', disabled: true }, [Validators.required]),
       startDay: new FormControl(null, [Validators.required]),
       endDay: new FormControl(null, [Validators.required]),
-      employeeCode: new FormControl(null, [Validators.required]),
-      managerCode:new FormControl(null, [Validators.required]),
-      projectCode: new FormControl(null, [Validators.required]),
+      employeeCode: new FormControl({ value: '', disabled: true }, [Validators.required]),
+      managerCode:new FormControl({ value: '', disabled: true }, [Validators.required]),
+      projectCode: new FormControl({ value: '', disabled: true }, [Validators.required]),
       priority: new FormControl(null, [Validators.required]),
       duration: new FormControl(null),
       communication: new FormControl(null),
       employees: [[]],
     });
     if (this.isUpdate || this.isView) {
-      this.taskService.getTaskId(this.idTask).subscribe(res => {
+      this.taskService.getTaskCode(this.taskCode).subscribe(res => {
         if (res && res.code === "OK") {
+          console.log("data",res.data)
           const dataProject = res.data;
           this.data = dataProject;
           this.addForm.patchValue(dataProject);
@@ -136,6 +131,7 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
       this.fetchProject();
     })
   }
+
 
   ngAfterViewChecked(): void {
     this.changeDetectorRef.detectChanges();
@@ -161,9 +157,10 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
   // }
 
   checkIsViewOrUpdate() {
+    console.log('checkIsViewOrUpdate',this.router.url);
     if (this.router.url.includes("/view")) {
       this.isView = true;
-    } else if (this.router.url.includes("/detail")) {
+    } else if (this.router.url.includes("/update")) {
       this.isUpdate = true;
     } else {
       this.isView = false;
@@ -341,7 +338,7 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
   submitTimeSheetForm(): void {
     if (this.addFormTimeSheet.valid) {
       const data = this.addFormTimeSheet.value;
-      data.taskId = this.idTask;
+      data.taskCode = this.taskCode;
       data.dayTimeSheet = data.dayTimeSheet ? data.dayTimeSheet : null;
       data.durationTimeSheet = data.durationTimeSheet ? data.durationTimeSheet : null;
       data.timeSheetDescription = data.timeSheetDescription ? data.timeSheetDescription : null;
@@ -358,8 +355,8 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
   }
 
   fetchData() {
-    if(this.idTask!=null){
-      this.timeSheetService.search(this.idTask).subscribe(res => {
+    if(this.taskCode!=null){
+      this.timeSheetService.search(this.taskCode).subscribe(res => {
         if (res && res.code === "OK") {
           this.lstData = res.data;
         } else {

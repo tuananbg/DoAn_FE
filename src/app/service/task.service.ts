@@ -51,9 +51,9 @@ export class TaskService {
     );
   }
 
-  getTaskId(id: number): Observable<any> {
+  getTaskCode(taskCode: number): Observable<any> {
     return this.httpClient.get(
-      API_CONFIG.BASE_URL + "task/detail/" + id,
+      `${API_CONFIG.BASE_URL}task/detail/${taskCode}`,
     );
   }
 

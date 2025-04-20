@@ -26,7 +26,6 @@
           <div nz-col [nzSm]="24" [nzMd]="8" [nzLg]="8">
             <app-input-text-v2 formControlName="taskCode" [required]="true"
                                label="{{ 'Mã công việc'}}"
-                               [disabled]="isView"
                                [nzAllowClear]="true" [maxlength]="'250'">
             </app-input-text-v2>
           </div>
@@ -34,7 +33,6 @@
             <app-input-text-v2 formControlName="taskName" [required]="true"
                                label="{{ 'Tên công việc'}}"
                                [placeHolder]="isView ? '' : 'Nhập tên công việc'"
-                               [disabled]="isView"
                                [nzAllowClear]="true" [maxlength]="'250'">
             </app-input-text-v2>
           </div>
@@ -43,7 +41,6 @@
                         [valueField]="'projectCode'"
                         [required]="true"
                         [labelField]="'projectName'"
-                        [disabled]="isView"
                         [placeHolder]="isView ? '' : 'Chọn tên dự án'"
                         [openSearchModal]="false" [getObjectValue]="true"
                         [labelHorizontal]="false" formControlName="projectCode" labelContent="Dự án">
@@ -56,7 +53,6 @@
                         [valueField]="'employeeCode'"
                         [required]="true"
                         [labelField]="'employeeName'"
-                        [disabled]="isView"
                         [placeHolder]="isView ? '' : 'Chọn tên người thực hiện'"
                         [openSearchModal]="false" [getObjectValue]="true"
                         [labelHorizontal]="false" formControlName="employeeCode" labelContent="Người thực hiện">
@@ -67,8 +63,7 @@
                         [valueField]="'employeeCode'"
                         [required]="true"
                         [labelField]="'employeeName'"
-                        [disabled]="isView"
-                        [placeHolder]="isView ? '' : 'Chọn tên người thực hiện'"
+                        [placeHolder]="isView ? '' : 'Chọn tên người giám sát'"
                         [openSearchModal]="false" [getObjectValue]="true"
                         [labelHorizontal]="false" formControlName="managerCode" labelContent="Người thực hiện">
             </app-select>
@@ -78,7 +73,6 @@
                         [valueField]="'code'"
                         [required]="true"
                         [labelField]="'name'"
-                        [disabled]="isView"
                         [placeHolder]="isView ? '' : 'Chọn độ ưu tiên'"
                         [openSearchModal]="false" [getObjectValue]="true"
                         [labelHorizontal]="false" formControlName="priority" labelContent="Độ ưu tiên:">
@@ -92,7 +86,6 @@
                         [valueField]="'code'"
                         [required]="true"
                         [labelField]="'name'"
-                        [disabled]="isView"
                         [placeHolder]="isView ? '' : 'Chọn trạng thái'"
                         [openSearchModal]="false" [getObjectValue]="true"
                         [labelHorizontal]="false" formControlName="taskStatus" labelContent="Trạng thái:">
@@ -154,7 +147,6 @@
                       <app-input-text-v2 formControlName="durationTimeSheet"
                                          label="{{ 'Khoảng thời gian (giờ)'}}"
                                          [placeHolder]="'Nhập khoảng thời gian'"
-                                         [disabled]="isView"
                                          [typeInput]="'number'"
                                          [required]="true"
                                          [nzAllowClear]="true" [maxlength]="'250'">

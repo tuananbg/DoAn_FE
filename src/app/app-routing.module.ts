@@ -163,7 +163,7 @@ const routes: Routes = [
         component: TaskFormManagementComponent
       },
       {
-        path: 'task/detail/:projectId/:taskId',
+        path: 'task/update/:taskCode',
         component: TaskFormManagementComponent
       },
     ]

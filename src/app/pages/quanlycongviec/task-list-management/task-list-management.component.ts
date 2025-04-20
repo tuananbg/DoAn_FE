@@ -179,9 +179,10 @@ export class TaskListManagementComponent implements OnInit {
   };
 
   rowClick(e: DxDataGridTypes.RowClickEvent) {
-    const {data} = e;
-    this.userId = data.id;
-    this.isPanelOpened = true;
+    // Kiểm tra dữ liệu dòng khi click
+    const taskCode = e.data?.taskCode;
+    console.log("data",e.data)
+    this.router.navigate(['/task/update', taskCode]);
   }
 
   onOpenedChange = (value: boolean) => {
@@ -225,10 +226,6 @@ export class TaskListManagementComponent implements OnInit {
     //   this.spinner.hide().then();
     // });
     // e.cancel = true;
-  }
-  onTaskUpdated(e: any) {
-    console.log('Cập nhật task:', e.data); // e.data sẽ có taskStatus, priority (giá trị là code)
-    // this.taskService.update(e.data).subscribe(...);
   }
 
 }

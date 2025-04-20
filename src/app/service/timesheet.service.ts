@@ -12,8 +12,8 @@ export class TimeSheetService {
   constructor(private httpClient: HttpClient) {
   }
 
-  search(taskId: any): Observable<any> {
-    return this.httpClient.post(API_CONFIG.BASE_URL + "timesheet/search" + "?taskId=" + taskId,
+  search(taskCode: any): Observable<any> {
+    return this.httpClient.post(API_CONFIG.BASE_URL + "timesheet/search" + "?taskId=" + taskCode,
       null,
     )
   }
