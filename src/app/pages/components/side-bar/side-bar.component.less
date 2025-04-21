@@ -1,50 +1,101 @@
 .wrapper {
   padding-top: 40px;
   height: 100vh;
-  transition: width .25s;
+  transition: width 0.25s;
   overflow-x: hidden;
   overflow-y: scroll;
   background-color: white;
-  box-shadow: rgba(112, 112, 112, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
   z-index: 100;
+
   .sidebar-item {
-    background-color: #e9ffff;
+    background: linear-gradient(135deg, #48a4e4 0%, #4091d5 100%);
+    color: white;
     padding: 30px 0 70px 0;
     height: 100%;
+
+    // Tất cả menu con & item mặc định
+    .ant-menu-item,
+    .ant-menu-submenu-title {
+      color: white !important;
+      font-weight: normal;
+
+      a {
+        color: white !important;
+      }
+    }
+
+    // Item đang được chọn
+    .ant-menu-item-selected {
+      background-color: #3459aa !important;
+      font-weight: bold !important;
+      color: white !important;
+
+      a {
+        color: white !important;
+        font-weight: bold !important;
+      }
+    }
+
+    // Hover vào item (không thay đổi màu chữ)
+    .ant-menu-item:hover,
+    .ant-menu-submenu-title:hover {
+      background-color: #3f92d2 !important;
+      color: white !important;
+      font-weight: normal;
+
+      a {
+        color: white !important;
+      }
+    }
+
+    // Icon trong menu giữ màu trắng
+    i {
+      color: white !important;
+    }
   }
-  .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected{
-    background-color: #e9ffff;
-    font-weight: bold;
-  }
+
+  // Nút toggle sidebar nếu có
   .toggle-sidebar-button {
     position: absolute;
     bottom: 0;
-    transition: width .25s;
+    transition: width 0.25s;
     background-color: white;
+    color: white;
     border: none;
+
+    i {
+      color: #ffffff;
+      font-weight: bold;
+    }
   }
 }
-.toggle-sidebar-button i{
-  //color: #ffffff;
-  color: black;
-  font-weight: bold;
-}
+
+// Scrollbar ẩn đi
 .scrollable-area {
   width: 100%;
-  height: 100vh; /* hoặc kích thước tùy chọn */
+  height: 100vh;
   overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 0.1px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+  }
+}
+::ng-deep .sidebar-item .ant-menu-submenu-title {
+  color: white !important;
+
+  span,
+  i,
+  a {
+    color: white !important;
+  }
 }
 
-/* Tùy chỉnh thanh cuộn dọc */
-.scrollable-area::-webkit-scrollbar {
-  width: 0.1px; /* Đặt kích thước rất nhỏ */
-}
-
-.scrollable-area::-webkit-scrollbar-track {
-  background-color: transparent; /* Đặt màu nền trong suốt */
-}
-
-.scrollable-area::-webkit-scrollbar-thumb {
-  background-color: transparent; /* Đặt màu thumb trong suốt */
-}
 
