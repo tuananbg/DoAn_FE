@@ -201,8 +201,18 @@ export class ListEmployeeManagermentComponent implements OnInit {
         const responseJson = JSON.parse(responseData);
         this.toastService.openErrorToast(responseJson.msgCode);
       } else {
-        const currentDate = moment(new Date()).format('DDMMYYYY');
-        this.fileManagerService.downloadFile(response, 'HRM_Danh sach nhan vien_' + currentDate + '.xlsx');
+        const contentDisposition = response.headers.get('Content-Disposition');
+        let fileName = 'export.xlsx'; // fallback
+
+        if (contentDisposition) {
+          const match = contentDisposition.match(/filename\*=UTF-8''(.+)/);
+          if (match && match[1]) {
+            fileName = decodeURIComponent(match[1]);
+          }
+        }
+
+        this.fileManagerService.downloadFile(response, fileName);
+
       }
     }, error => {
       this.toastService.openErrorToast(error);

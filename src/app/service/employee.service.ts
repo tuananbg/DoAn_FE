@@ -131,8 +131,7 @@ export class EmployeeService {
   }
 
   exportEmployee(payload: any, pageable: any): Observable<any> {
-    return this.httpClient.post(API_CONFIG.BASE_URL + "employee/export",
-      pageable,
+    return this.httpClient.get(API_CONFIG.BASE_URL + "employee/download-xlsx",
       {
         responseType: 'blob',
         observe: 'response',
