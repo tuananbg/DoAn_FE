@@ -1,5 +1,23 @@
-button{
+button {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#btnExport {
+  background-color: #3579c2;  /* Giống btnCreate */
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  transition: 0.3s ease;
+
+  &:hover {
+    background-color:#2259a9;
+  }
+
+  svg {
+    margin-right: 7px;
+    fill: white; /* đảm bảo icon trắng đồng bộ */
+  }
 }

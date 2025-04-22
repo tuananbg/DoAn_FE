@@ -28,7 +28,6 @@
               <nz-form-control [nzSm]="24" [nzXs]="24">
                 <app-input-text-v2 formControlName="projectCode" [required]="true"
                                    label="{{ 'Mã dự án'}}"
-                                   [disabled]="isView"
                                    [nzAllowClear]="true" [maxlength]="'250'">
                 </app-input-text-v2>
               </nz-form-control>
@@ -38,7 +37,6 @@
             <app-input-text-v2 formControlName="projectName" [required]="true"
                                label="{{ 'Tên dự án'}}"
                                [placeHolder]="isView ? '' : 'Nhập tên dự án'"
-                               [disabled]="isView"
                                [nzAllowClear]="true" [maxlength]="'250'">
             </app-input-text-v2>
           </div>
@@ -46,7 +44,6 @@
             <app-input-text-v2 formControlName="clientName"
                                [placeHolder]="isView ? '' : 'Nhập tên khách hàng'"
                                label="{{ 'Khách hàng'}}"
-                               [disabled]="isView"
                                [required]="true"
                                [nzAllowClear]="true"
                                [maxlength]="'250'">
@@ -91,7 +88,6 @@
                         [valueField]="'code'"
                         [required]="true"
                         [labelField]="'name'"
-                        [disabled]="isView"
                         [placeHolder]="isView ? '' : 'Chọn trạng thái'"
                         [openSearchModal]="false" [getObjectValue]="true"
                         [labelHorizontal]="false" formControlName="status" labelContent="Trạng thái:">
@@ -102,7 +98,7 @@
                             <app-input-textarea-v2 formControlName="projectDescription" [maxlength]="'5000'"
                                                    label="Mô tả"
                                                    [placeholder]="'Nhập nội dung mô tả'"
-                                                   [nzAllowClear]="true" [nzAutosize]="{ minRows: 6, maxRows: 10 }">
+                                                   [nzAllowClear]="true" [nzAutosize]="{ minRows: 2, maxRows: 5 }">
                             </app-input-textarea-v2>
               <ckeditor [editor]="Editor" formControlName="projectDescription"
                         [ngStyle]="{'min-height': '300px'}">

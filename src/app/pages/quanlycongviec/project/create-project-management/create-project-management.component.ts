@@ -71,7 +71,7 @@ export class CreateProjectManagementComponent implements OnInit, AfterViewChecke
     // const minutes = currentDate.getMinutes().toString().padStart(2, '0');
     // const genderCode = year + month + day + hours + minutes;
     this.addForm = this.formBuilder.group({
-      projectCode: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.maxLength(250)]),
+      projectCode: new FormControl({ value: '', disabled: this.isUpdate }, [Validators.required, Validators.maxLength(250)]),
       projectName: new FormControl(null, [Validators.required, Validators.maxLength(250)]),
       clientName: new FormControl(null, [Validators.required, Validators.maxLength(250)]),
       projectManagerCode: new FormControl(null, [Validators.required]),
@@ -110,6 +110,7 @@ export class CreateProjectManagementComponent implements OnInit, AfterViewChecke
   }
 
   checkIsViewOrUpdate() {
+
     if (this.router.url.includes("/view")) {
       this.isView = true;
     } else if (this.router.url.includes("/detail")) {
