@@ -63,7 +63,7 @@
                 [nzNoResult]="'Không có kết quả tìm kiếm'" [nzScroll]="{ x: SCROLL_TABLE.SCROLL_X}">
         <thead>
         <tr class="ant-header-customize">
-          <th nzWidth="50px" class="text-center">
+          <th nzWidth="100px" class="text-center">
             STT
           </th>
           <th nzWidth="150px" class="text-center">
@@ -101,7 +101,7 @@
         <tbody>
         <ng-template ngFor let-data let-idx="index" [ngForOf]="rowSelectionTable.data">
           <tr>
-            <td class="text-center max-width-50">{{ (request.currentPage * request.pageSize) + idx + 1}}</td>
+            <td class="text-center max-width-100">{{ (request.currentPage * request.pageSize) + idx + 1}}</td>
             <td class="max-width-150" [nz-tooltip]="data.employeeCode">{{data.employeeCode}}</td>
             <td class="max-width-150" [nz-tooltip]="data.employeeName">{{data.employeeName}}</td>
             <td class="max-width-150" [nz-tooltip]="data.contractNumber">{{data.contractNumber}}</td>

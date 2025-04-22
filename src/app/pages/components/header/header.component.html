@@ -12,16 +12,16 @@
       />
     </a>
     <span class="toolbar-header"><i (click)="toggleCollapsed()" class="fa-solid fa-bars" style="margin-right: 7px;"></i>Hệ thống quản lý nhân sự</span>
-    <span class="toolbar-child"><a href="https://nodo.vn/" style="color: #1F1F1F;" target="_blank">
+    <span class="toolbar-child"><a href="http://dtdi.vn/" style="color: #1F1F1F;" target="_blank">
       <i class="fa-solid fa-house-user" style="margin-right: 3px;"></i>Giới thiệu</a></span>
     <div class="menu-divider"></div>
-    <span class="toolbar-child"><a style="color: #1F1F1F;" (click)="showPopup()">
-      <i class="fa-solid fa-phone" style="margin-right: 3px;"></i>Liên hệ</a>
-    </span>
-    <div class="menu-divider"></div>
-    <span class="toolbar-child"><a style="color: #1F1F1F;" (click)="showPopup()">
-      <i class="fa-solid fa-circle-info" style="margin-right: 3px;"></i>Trợ giúp</a>
-    </span>
+<!--    <span class="toolbar-child"><a style="color: #1F1F1F;" (click)="showPopup()">-->
+<!--      <i class="fa-solid fa-phone" style="margin-right: 3px;"></i>Liên hệ</a>-->
+<!--    </span>-->
+<!--    <div class="menu-divider"></div>-->
+<!--    <span class="toolbar-child"><a style="color: #1F1F1F;" (click)="showPopup()">-->
+<!--      <i class="fa-solid fa-circle-info" style="margin-right: 3px;"></i>Trợ giúp</a>-->
+<!--    </span>-->
   </div>
   <div class="d-flex wrapper-right">
     <button class="btn-gift" nz-button [nzType]="'text'" [nzShape]="'circle'" (click)="ninja(template2)"
@@ -96,9 +96,9 @@
             <li nz-menu-item (click)="navigateToDetails()">
               <span nz-icon nzType="user" nzTheme="outline"></span> Hồ sơ cá nhân
             </li>
-            <li nz-menu-item (click)="navigateToChangePass()">
-              <span nz-icon nzType="safety" nzTheme="outline"></span> Đổi mật khẩu
-            </li>
+<!--            <li nz-menu-item (click)="navigateToChangePass()">-->
+<!--              <span nz-icon nzType="safety" nzTheme="outline"></span> Đổi mật khẩu-->
+<!--            </li>-->
             <li nz-menu-item nzDanger (click)="logOut()">
               <span nz-icon nzType="logout" nzTheme="outline"></span> Đăng xuất
             </li>

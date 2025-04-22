@@ -29,12 +29,7 @@
   </div>
   <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32}">
     <div nz-col nzSpan="8" *ngFor="let project of projects">
-      <div class="project-card d-flex justify-content-between"
-           [ngStyle]="{
-       'background': 'url(assets/images/project' + (project.id % 3 + 1) + '.jpg)',
-       'background-size': 'cover',
-       'background-position': 'center'
-     }">
+      <div class="project-card d-flex justify-content-between">
         <div class="wrapper-item" nz-col>
           <div class="wrapper-card-header">
             <h5 class="project-title">{{ project.projectName }}</h5>
@@ -46,9 +41,9 @@
           <div class="wrapper-card-content" (click)="getListTask(project.id)">
             <p>Từ ngày {{ project.startDay | date: 'dd/MM/yyyy' }} đến ngày {{ project.endDay | date: 'dd/MM/yyyy'}}</p>
             <div class="card-content-footer">
-              <p style="color: rgb(255,45,58); font-weight: bold;">Công việc chưa làm: {{ project.taskTodo}} </p>
-              <p style="color: #f39f1e; font-weight: bold;">Công việc đang xử lý: {{ project.taskProcess}}</p>
-              <p style="color: #5bf32a; font-weight: bold;">Công việc hoàn thành: {{ project.taskDone}}</p>
+              <p style="color: #f87171; font-weight: bold;">Công việc chưa làm: {{ project.taskTodo}} </p>
+              <p style="color: #bb8d0b; font-weight: bold;">Công việc đang xử lý: {{ project.taskProcess}}</p>
+              <p style="color: #0079c1; font-weight: bold;">Công việc hoàn thành: {{ project.taskDone}}</p>
             </div>
           </div>
         </div>
