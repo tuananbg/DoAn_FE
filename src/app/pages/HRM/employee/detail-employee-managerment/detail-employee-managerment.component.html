@@ -24,12 +24,13 @@
       </dxi-item>
       <dxi-item location="before" [text]="contactName"></dxi-item>
       <dxi-item location="after" locateInMenu="auto" style="margin-right: 10px;">
-        <dx-button
-          text="Xuất file PDF"
-          type="default"
-          stylingMode="contained"
-          (click) = "onExportPdf()"
-        ></dx-button>
+        <app-button-export appCheckAuthorize (clickExport)="onExportPdf()" [buttonClass]="'css-box-shadow'"></app-button-export>
+<!--        <dx-button-->
+<!--          text="Xuất file PDF"-->
+<!--          type="default"-->
+<!--          stylingMode="contained"-->
+<!--          (click) = "onExportPdf()"-->
+<!--        ></dx-button>-->
       </dxi-item>
 <!--      <dxi-item location="after">-->
 <!--        <dx-button-->

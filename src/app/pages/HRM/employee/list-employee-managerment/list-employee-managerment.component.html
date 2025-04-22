@@ -62,15 +62,17 @@
         <div class="grid-header"><i class="fa-solid fa-users-viewfinder" style="margin-right: 7px;"></i>Nhân viên</div>
       </dxi-item>
       <dxi-item location="after" locateInMenu="auto" appCheckAuthorize>
-        <dx-button
-          text="Thêm nhân viên"
-          icon="plus"
-          type="default"
-          stylingMode="contained"
-          (onClick)="addContact()"
-        ></dx-button>
+        <app-button-create appCheckAuthorize (clickCreate)="addContact()" [loading]="isLoading"></app-button-create>
+<!--        <dx-button-->
+<!--          text="Thêm nhân viên"-->
+<!--          icon="plus"-->
+<!--          type="default"-->
+<!--          stylingMode="contained"-->
+<!--          (onClick)="addContact()"-->
+<!--        ></dx-button>-->
       </dxi-item>
-      <dxi-item name="exportButton"></dxi-item>
+
+      <dxi-item name="exportButton"><app-button-export appCheckAuthorize (clickExport)="onExporting($event)" [buttonClass]="'css-box-shadow'"></app-button-export></dxi-item>
       <dxi-item name="searchPanel" locateInMenu="auto"></dxi-item>
     </dxo-toolbar>
 

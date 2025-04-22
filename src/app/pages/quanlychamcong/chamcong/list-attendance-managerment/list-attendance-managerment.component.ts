@@ -40,7 +40,8 @@ export class ListAttendanceManagermentComponent implements OnInit {
   backgroundColorTwo: string = '';
   isDisabled = false;
   isDisabledTwo = false;
-  idUserCustom: any;
+  // idUserCustom: any;
+  employeeCode: any;
   idAttendance: any;
   @ViewChild('schedulerRef', {static: false}) schedulerRef!: DxSchedulerComponent;
   @ViewChild('tooltipRef', {static: false}) tooltipRef!: DxTooltipComponent;
@@ -75,10 +76,10 @@ export class ListAttendanceManagermentComponent implements OnInit {
 
   ngOnInit(): void {
     this.dateNow = new Date();
-    const token = localStorage.getItem('token');
-    const payloadToken: any = token ? this.parseJwt(token) : null;
-    const userObject = JSON.parse(payloadToken.user);
-    this.idUserCustom = userObject.id;
+    // const token = localStorage.getItem('token');
+    // const payloadToken: any = token ? this.parseJwt(token) : null;
+    // const userObject = JSON.parse(payloadToken.user);
+    this.employeeCode = localStorage.getItem('employeeCode');
     this.loadAttendanceId();
     this.fetchData(this.request.currentPage, this.request.pageSize);
     this.fetchDepartment();
@@ -90,15 +91,15 @@ export class ListAttendanceManagermentComponent implements OnInit {
     // this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
-  parseJwt(token: string): string {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
-  };
+  // parseJwt(token: string): string {
+  //   const base64Url = token.split('.')[1];
+  //   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  //   const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
+  //     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  //   }).join(''));
+  //
+  //   return JSON.parse(jsonPayload);
+  // };
 
   fetchData(currentPage?: number, pageSize?: number) {
     const pageable = {
@@ -133,7 +134,7 @@ export class ListAttendanceManagermentComponent implements OnInit {
   }
 
   loadAttendanceId() {
-    const data = {employeeId: this.idUserCustom, workingDay: new Date()};
+    const data = {employeeCode: this.employeeCode, workingDay: new Date()};
     this.attendanceService.getAttendanceId(data).subscribe(res => {
         if (res && res.code === "OK" && res.data != null) {
           this.idAttendance = res.data;
@@ -152,7 +153,7 @@ export class ListAttendanceManagermentComponent implements OnInit {
 
   loadStartDate(): void {
     this.isLoadingOne = true;
-    const data = {id: null, employeeId: this.idUserCustom, workingDay: new Date(), checkInTime: new Date()};
+    const data = {id: null, employeeCode: this.employeeCode, workingDay: new Date(), checkInTime: new Date()};
     this.spinner.show().then();
     this.attendanceService.createAttendance(data).subscribe(res => {
       if (res && res.body.code === "OK") {
@@ -179,11 +180,11 @@ export class ListAttendanceManagermentComponent implements OnInit {
     this.isLoadingTwo = true;
     const data = {
       id: this.idAttendance,
-      employeeId: this.idUserCustom,
+      employeeId: this.employeeCode,
       workingDay: new Date(),
       checkOutTime: new Date()
     };
-    console.log("//" + this.idUserCustom);
+    console.log("//" + this.employeeCode);
     this.attendanceService.editAttendance(data).subscribe(res => {
       if (res && res.code === "OK") {
         this.toastService.openSuccessToast('Đã chấm công, xin cảm ơn');

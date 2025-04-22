@@ -46,9 +46,10 @@
         <div nz-col class="gutter-row" [nzSpan]="6">
           <nz-form-item nz-col nzSpan="24">
             <nz-form-control>
-              <app-select [ngClass]="'w-100'" [data]="lstEmployee" [valueField]="'id'" [placeHolder]="'--Tất cả--'"
-                          [labelField]="'employeeName'" [openSearchModal]="false" [getObjectValue]="true"
-                          [labelHorizontal]="false" formControlName="employeeId" labelContent="Người gửi đơn:">
+              <app-select [data]="lstEmployee" [getObjectValue]="true" [labelField]="'employeeName'"
+                          [labelHorizontal]="false"
+                          [ngClass]="'w-100'" [openSearchModal]="false" [placeHolder]="'--Tất cả--'"
+                          [valueField]="'employeeCode'" formControlName="employeeCode" labelContent="Người gửi đơn:">
               </app-select>
             </nz-form-control>
           </nz-form-item>
@@ -187,10 +188,10 @@
                 <app-button-icon class="action__margin" [isEdit] = "true"
                                  [tooltipTitle]="'Sửa đơn'"
                                  [loading]="isLoading"
-                                 [disabled] ="data.employeeId != employeeCode"
+                                 [disabled] ="data.employeeCode != employeeCode"
                                  (clickAction)="openUpdateModal(data)"></app-button-icon>
                 <app-button-icon class="action__margin" [isDelete]="true"
-                                 [disabled] ="data.employeeId != employeeCode"
+                                 [disabled] ="data.employeeCode != employeeCode"
                                  [tooltipTitle]="'Xóa đơn'" (click)="openModalDelete(data)"></app-button-icon>
               </div>
             </td>

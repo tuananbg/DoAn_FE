@@ -181,7 +181,7 @@ export class DetailInforEmployeeComponent implements OnInit {
             heightLeft -= pageHeight;
           }
 
-          pdf.save('ho_so_nhan_vien.pdf'); // Generated
+          pdf.save('Ho so CBNV_' + this.employeeCode + '_.pdf');
           setTimeout(() => {
             this.spinner.hide().then();
           }, 2000);

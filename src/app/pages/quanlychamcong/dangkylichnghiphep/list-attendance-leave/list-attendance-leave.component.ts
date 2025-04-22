@@ -115,7 +115,7 @@ export class ListAttendanceLeaveComponent implements OnInit {
     this.attendanceLeaveService.searchAttendanceLeave(this.searchKeyword, status, pageable).subscribe(res => {
       if (res && res.code === "OK") {
         this.lstData = res.data;
-        this.total = res.data.dataCount;
+        // this.total = res.data.dataCount;
         this.spinner.hide().then();
         if (this.lstData.length === 0) {
           if (this.request.currentPage !== 0) {

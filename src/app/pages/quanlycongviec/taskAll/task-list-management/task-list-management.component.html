@@ -22,8 +22,11 @@
       <strong style="font-size: 18px;">Tổng hợp công việc</strong>
     </div>
     <div style="display: flex; gap: 10px;">
-      <dx-button icon="add" text="Tạo mới công việc" type="default" (onClick)="onCreateTask()"></dx-button>
-      <dx-button icon="download" text="Tải danh sách công việc" type="default" (onClick)="(onExporting($event))"></dx-button>
+      <app-button-create appCheckAuthorize (clickCreate)="onCreateTask()" [loading]="isLoading"></app-button-create>
+<!--      <app-button-create appCheckAuthorize (clickCreate)="onExporting($event)" [loading]="isLoading"></app-button-create>-->
+      <app-button-export appCheckAuthorize (clickExport)="onExporting($event)" [buttonClass]="'css-box-shadow'"></app-button-export>
+<!--      <dx-button icon="add" text="Tạo mới công việc" type="default" (onClick)="onCreateTask()"></dx-button>-->
+<!--      <dx-button icon="download" text="Tải danh sách công việc" type="default" (onClick)="(onExporting($event))"></dx-button>-->
     </div>
   </div>
 

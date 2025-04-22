@@ -29,6 +29,7 @@ export class ListEmployeeManagermentComponent implements OnInit {
   isPanelOpened = false;
   searchForm!: FormGroup;
   isAddContactPopupOpened = false;
+  isLoading = false;
   currentTabIndex = 0;
   statusList = ['EMPLOYMENT', 'RETIRED'];
 
