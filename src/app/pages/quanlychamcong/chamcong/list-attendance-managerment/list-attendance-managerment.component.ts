@@ -82,7 +82,7 @@ export class ListAttendanceManagermentComponent implements OnInit {
     this.employeeCode = localStorage.getItem('employeeCode');
     this.loadAttendanceId();
     this.fetchData(this.request.currentPage, this.request.pageSize);
-    this.fetchDepartment();
+    // this.fetchDepartment();
     this.fetchEmployee();
   }
 
@@ -245,21 +245,15 @@ export class ListAttendanceManagermentComponent implements OnInit {
     this.visible = false;
   }
 
-  fetchDepartment() {
-    this.departmentService.searchDepartment(this.payloadDepartment, {page: 0, size: -1}).subscribe(res => {
-      if (res && res.code === "OK") {
-        this.lstDepartment = res.data.content;
-        this.lstDepartment.sort((a, b) => a.departmentName.localeCompare(b.departmentName));
-      }
-    }, (error: any) => {
-      console.log(error);
-    })
-  }
-
   fetchEmployee() {
-    this.employeeService.searchEmployee(this.payloadEmployee, {page: 0, size: -1}).subscribe(res => {
+    this.employeeService.getListSelect().subscribe(res => {
       if (res && res.code === "OK") {
-        this.lstEmployee = res.data.data;
+        this.lstEmployee = res.data;
+        this.lstEmployee =  this.lstEmployee.map(res => `${res.employeeName} - ${res.employeeCode}`);
+        this.lstEmployee = this.lstEmployee.map(item => ({
+          ...item,
+          employeeName: item.employeeName + " - " + item.employeeCode
+        }));
         this.lstEmployee.sort((a, b) => a.employeeName.localeCompare(b.employeeName));
       }
     }, (error: any) => {
@@ -267,14 +261,14 @@ export class ListAttendanceManagermentComponent implements OnInit {
     })
   }
 
-  onOptionChangeDepartment(event: any): void {
-    const selectedValue = event;
-    console.log("Selected option:", selectedValue);
-    const queryModel = this.payloadEmployee;
-    queryModel.departmentId = event;
-    this.selectedOptionEmployee = "";
-    this.fetchEmployee();
-  }
+  // onOptionChangeDepartment(event: any): void {
+  //   const selectedValue = event;
+  //   console.log("Selected option:", selectedValue);
+  //   const queryModel = this.payloadEmployee;
+  //   queryModel.departmentId = event;
+  //   this.selectedOptionEmployee = "";
+  //   this.fetchEmployee();
+  // }
 
   onOptionChangeEmployee(event: any): void {
     const selectedValue = event;

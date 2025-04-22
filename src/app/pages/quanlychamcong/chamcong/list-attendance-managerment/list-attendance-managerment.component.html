@@ -16,24 +16,26 @@
     <div class="d-flex justify-content-between">
       <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }"
            style="width: 70%; align-items: center;" class="d-flex justify-content-center">
-        <div nz-col style="width: 45%; margin-right: 10px;">
-          <label for="select1">Phòng ban</label>
-          <nz-select id="select1" style="width: 100%;" nzShowSearch nzAllowClear
-                     [(ngModel)]="selectedOptionDepartment"
-                     (ngModelChange)="onOptionChangeDepartment($event)">
-            <nz-option *ngFor="let option of lstDepartment" [nzValue]="option.departmentId"
-                       [nzLabel]="option.departmentName"></nz-option>
-          </nz-select>
-        </div>
-        <div nz-col style="width: 45%; margin-left: 10px;">
-          <label for="select2">Nhân viên</label>
-          <nz-select id="select2" style="width: 100%;" nzShowSearch nzAllowClear
-                     [(ngModel)]="selectedOptionEmployee"
-                     (ngModelChange)="onOptionChangeEmployee($event)">
-            <nz-option *ngFor="let option of lstEmployee" [nzValue]="option.id"
-                       [nzLabel]="option.employeeName +' - '+ option.employeeCode"></nz-option>
-          </nz-select>
-        </div>
+<!--        <div nz-col style="width: 45%; margin-left: 10px;">-->
+<!--          <label for="select2">Nhân viên</label>-->
+<!--          <nz-select id="select2" style="width: 100%;" nzShowSearch nzAllowClear-->
+<!--                     [(ngModel)]="selectedOptionEmployee"-->
+<!--                     (ngModelChange)="onOptionChangeEmployee($event)">-->
+<!--            <nz-option *ngFor="let option of lstEmployee" [nzValue]="option.id"-->
+<!--                       [nzLabel]="option.employeeName +' - '+ option.employeeCode"></nz-option>-->
+<!--          </nz-select>-->
+<!--        </div>-->
+<!--        <div nz-col style="width: 45%; margin-left: 10px;">-->
+<!--          <label for="select2">Nhân viên</label>-->
+<!--          <app-select [ngClass]="'w-100'" [data]="lstEmployee"-->
+<!--                      [valueField]="'employeeCode'"-->
+<!--                      [required]="true"-->
+<!--                      [labelField]="'employeeName'"-->
+<!--                      [placeHolder]="isView ? '' : '&#45;&#45;Lựa chọn&#45;&#45;'"-->
+<!--                      [openSearchModal]="false" [getObjectValue]="true"-->
+<!--                      [labelHorizontal]="false" formControlName="employeeCode" labelContent="Nhân viên">-->
+<!--          </app-select>-->
+<!--        </div>-->
       </div>
       <nz-row class="btn-wrappers" nzJustify="end" nzAlign="middle">
         <button nz-button nzType="primary" (click)="loadStartDate()"

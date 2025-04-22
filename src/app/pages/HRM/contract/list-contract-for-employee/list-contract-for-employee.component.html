@@ -63,7 +63,7 @@
 <!--            <td class="max-width-250 text-center" [nz-tooltip]="'Hợp đồng lao động tự do'" *ngIf="data.contractType == 4">-->
 <!--              <span class="css-badge badge badge-pill bg-info p-3">Hợp đồng lao động tự do</span></td>-->
             <td class="max-width-250" [nz-tooltip]="data.attachFile">
-              <a style="color: #1abc9c; font-weight: bold" (click)="handleClick(data.attachFile)">{{data.attachFile}}</a>
+              <a style="color: #00a1dd; font-weight: bold" (click)="handleClick(data.attachFile)">{{data.attachFile}}</a>
             </td>
             <td class="max-width-150 text-center" [nz-tooltip]="data.activeDate | date: 'dd/MM/yyyy'">{{ data.activeDate | date: 'dd/MM/yyyy' }}</td>
             <td class="max-width-150 text-center" [nz-tooltip]="data.expiredDate | date: 'dd/MM/yyyy'">{{ data.expiredDate | date: 'dd/MM/yyyy' }}</td>
