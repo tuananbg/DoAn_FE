@@ -17,20 +17,19 @@ export class AttendanceOTService {
 
   }
 
-  searchAttendanceOt(payload: any, pageable: any): Observable<any> {
-    return this.httpClient.post(
-      API_CONFIG.BASE_URL + "attendanceOt/search",
-      payload,
+  searchAttendanceOt(params: any): Observable<any> {
+    return this.httpClient.get(
+      `${API_CONFIG.BASE_URL}attendance-ot/list`,
       {
-        headers: new HttpHeaders({'Content-Type': 'application/json'}),
-        params: pageable,
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        params: params
       }
-    )
+    );
   }
 
   createAttendanceOt(attendanceOt: any): Observable<any> {
     return this.httpClient.post(
-      API_CONFIG.BASE_URL + "attendanceOt",
+      API_CONFIG.BASE_URL + "attendance-ot/create",
       attendanceOt,
       {
         observe: 'response'

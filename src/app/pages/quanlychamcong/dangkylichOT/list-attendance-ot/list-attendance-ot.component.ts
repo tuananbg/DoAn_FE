@@ -7,6 +7,7 @@ import {en_US, NzI18nService} from "ng-zorro-antd/i18n";
 import * as moment from "moment";
 import {EmployeeService} from "../../../../service/employee.service";
 import {AttendanceOTService} from "../../../../service/attendance-ot.service";
+import {debounceTime, distinctUntilChanged} from "rxjs/operators";
 
 @Component({
   selector: 'app-list-attendance-ot',
@@ -85,13 +86,21 @@ export class ListAttendanceOtComponent implements OnInit {
     // this.idUserDetailId = userObject.userDetailId;
     this.employeeCode = localStorage.getItem('employeeCode');
     this.searchForm = this.formBuilder.group({
-      startDay: new FormControl(null),
-      employeeCode: new FormControl(null),
-      isActive: new FormControl(null),
+      keyword: new FormControl(null, [Validators.maxLength(100)]),
     });
     if (this.searchFormValue) {
       this.searchForm.patchValue(this.searchFormValue);
     }
+
+    this.searchForm.get('keyword')?.valueChanges
+      .pipe(
+        debounceTime(500),               // đợi 500ms sau khi người dùng dừng gõ
+        distinctUntilChanged()           // chỉ gọi nếu giá trị thực sự thay đổi
+      )
+      .subscribe(value => {
+        this.onSearchChanged(value);
+      });
+
     this.fetchData(this.request.currentPage, this.request.pageSize);
     this.fetchEmployee();
   }
@@ -108,21 +117,24 @@ export class ListAttendanceOtComponent implements OnInit {
 
   fetchData(currentPage?: number, pageSize?: number){
     const formValue = this.searchForm.value;
+    // const status = this.statusList[this.currentTabIndex];
+
     const queryModel = {
-      isActive: formValue.isActive === 0 ? '0' : !formValue.isActive ? null : formValue.isActive.toString(),
-      startDay: !formValue.startDay ? null : formValue.startDay,
-      employeeId: !formValue.employeeId ? null : formValue.employeeId,
+      keyword: formValue.keyword ?? "",
     };
+
     const pageable = {
       page: currentPage,
       size: pageSize,
-      sort: this.request.sort,
+      sort: this.request.sort
     };
+
+    const finalParams = { ...pageable, ...queryModel };
     this.spinner.show().then();
-    this.attendanceOTService.searchAttendanceOt(queryModel, pageable).subscribe(res => {
+    this.attendanceOTService.searchAttendanceOt(finalParams).subscribe(res => {
       if (res && res.code === "OK") {
-        this.lstData = res.data.data;
-        this.total = res.data.dataCount;
+        this.lstData = res.data.content;
+        this.total = res.data.totalElements;
         this.spinner.hide().then();
         if (this.lstData.length === 0) {
           if (this.request.currentPage !== 0) {
@@ -308,6 +320,12 @@ export class ListAttendanceOtComponent implements OnInit {
     }, (error: any) => {
       console.log(error);
     })
+  }
+
+  searchKeyword: string | null = null; // Mặc định là null
+  onSearchChanged(event: any) {
+    this.searchKeyword = event.value ? event.value : null; // Nếu không nhập, đặt lại null
+    this.fetchData(this.request.currentPage, this.request.pageSize); // Gọi API
   }
 
 

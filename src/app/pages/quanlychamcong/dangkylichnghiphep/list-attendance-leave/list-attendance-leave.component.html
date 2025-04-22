@@ -14,77 +14,18 @@
 <nz-collapse nzExpandIconPosition="right">
   <nz-collapse-panel nzHeader="Thông tin tìm kiếm" [nzActive]="isActive">
     <form nz-form [formGroup]="searchForm" nzLayout="vertical" (keyup.enter)="nzOnSearch()">
-      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }">
-        <div nz-col class="gutter-row" [nzSpan]="6">
-          <nz-form-item nz-col nzSpan="24">
+      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
+        <div nz-col [nzSm]="24" [nzMd]="8" [nzLg]="8">
+          <nz-form-item>
             <nz-form-control>
-              <app-select [ngClass]="'w-150'" [data]="lstIsActive" [valueField]="'id'"
-                          [labelField]="'name'"
-                          [placeHolder]="'--Tất cả--'"
-                          [openSearchModal]="false" [getObjectValue]="true"
-                          [labelHorizontal]="false" formControlName="isActive" labelContent="Trạng thái">
-              </app-select>
+              <app-input-text-v2
+                formControlName="keyword"
+                label="Tìm kiếm"
+                [maxlength]="'255'"
+                [nzAllowClear]="true"
+              ></app-input-text-v2>
             </nz-form-control>
           </nz-form-item>
-        </div>
-        <div nz-col class="gutter-row" [nzSpan]="6">
-          <app-date-picker formControlName="startDay" placeHolder="dd/mm/yyyy"
-                           [format]="'dd/MM/yyyy'"
-                           labelContent="Từ ngày"
-                           [ngClass]="'w-150'"
-                           (changeDate)="onChangeStartDay($event)" [errorTip]="startDayErrorMessage"
-                           [span]="24"></app-date-picker>
-        </div>
-        <div nz-col class="gutter-row" [nzSpan]="6">
-          <app-date-picker formControlName="endDay" placeHolder="dd/mm/yyyy"
-                           [format]="'dd/MM/yyyy'"
-                           labelContent="Đến ngày"
-                           [ngClass]="'w-150'"
-                           (changeDate)="onChangeEndDay($event)" [errorTip]="endDayErrorMessage"
-                           [span]="24"></app-date-picker>
-        </div>
-        <div nz-col class="gutter-row" [nzSpan]="6">
-          <nz-form-item nz-col nzSpan="24">
-            <nz-form-control>
-              <app-select [data]="lstEmployee" [getObjectValue]="true" [labelField]="'employeeName'"
-                          [labelHorizontal]="false"
-                          [ngClass]="'w-100'" [openSearchModal]="false" [placeHolder]="'--Tất cả--'"
-                          [valueField]="'employeeCode'" formControlName="employeeCode" labelContent="Người gửi đơn:">
-              </app-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
-      <div nz-row>
-        <div nz-col nzSpan="24">
-          <div nz-row nzGutter="20" nzJustify="center">
-            <div nz-col>
-              <nz-form-item>
-                <nz-form-control>
-                  <app-button-common buttonType="default" buttonText="Nhập lại" iconTheme="outline"
-                                     [buttonClass]="'css-box-shadow'"
-                                     iconType="reload" (clickAction)="resetForm()"></app-button-common>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col>
-              <nz-form-item>
-                <nz-form-control>
-                  <app-button-base iconType="search" (clickAction)="nzOnSearch()"
-                                   [buttonClass]="'css-box-shadow'"
-                                   text="Tìm kiếm"></app-button-base>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col>
-              <nz-form-item>
-                <nz-form-control>
-                  <app-button-export (clickExport)="openExport()"
-                                     [buttonClass]="'css-box-shadow'"></app-button-export>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-          </div>
         </div>
       </div>
     </form>
@@ -102,7 +43,8 @@
         </div>
       </div>
       <div class="list__head-right">
-        <div class="list__head-btn">
+        <div class="list__head-btn" style="display: flex; gap: 8px;">
+          <app-button-export appCheckAuthorize (clickExport)="openExport()" [buttonClass]="'css-box-shadow'"></app-button-export>
           <app-button-create (clickCreate)="openCreateModal()" [loading]="isLoading"></app-button-create>
         </div>
       </div>

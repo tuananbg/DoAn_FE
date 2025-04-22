@@ -44,82 +44,34 @@
     <dxo-sorting mode="multiple"></dxo-sorting>
     <dxo-header-filter [visible]="true"></dxo-header-filter>
     <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
-    <dxo-search-panel class="search-wrapper"
-                      style="width: 150px; height: 40px;"
+    <dxo-search-panel class="search-wrapper" style="width: 150px; height: 40px;"
                       [visible]="true"
-                      placeholder="Tìm kiếm nhân viên"
-                      (textChange)="onSearchChanged($event)"
+                      placeholder="Tìm kiếm nhân viên" (textChange)="onSearchChanged($event)"
     ></dxo-search-panel>
-    <dxo-export
-      [enabled]="true"
-      [allowExportSelectedData]="true"
-      [formats]="['xlsx']"
-    >
+    <dxo-export [enabled]="true" [allowExportSelectedData]="true" [formats]="['xlsx']">
     </dxo-export>
 
     <dxo-toolbar>
       <dxi-item location="before">
         <div class="grid-header"><i class="fa-solid fa-users-viewfinder" style="margin-right: 7px;"></i>Nhân viên</div>
       </dxi-item>
+      <dxi-item name="exportButton">
+        <app-button-export appCheckAuthorize (clickExport)="onExporting($event)" [buttonClass]="'css-box-shadow'"></app-button-export>
+      </dxi-item>
       <dxi-item location="after" locateInMenu="auto" appCheckAuthorize>
         <app-button-create appCheckAuthorize (clickCreate)="addContact()" [loading]="isLoading"></app-button-create>
-<!--        <dx-button-->
-<!--          text="Thêm nhân viên"-->
-<!--          icon="plus"-->
-<!--          type="default"-->
-<!--          stylingMode="contained"-->
-<!--          (onClick)="addContact()"-->
-<!--        ></dx-button>-->
       </dxi-item>
 
-      <dxi-item name="exportButton"><app-button-export appCheckAuthorize (clickExport)="onExporting($event)" [buttonClass]="'css-box-shadow'"></app-button-export></dxi-item>
       <dxi-item name="searchPanel" locateInMenu="auto"></dxi-item>
     </dxo-toolbar>
 
-    <dxi-column
-      dataField="employeeCode"
-      caption="Mã nhân viên"
-      sortOrder="desc"
-      [hidingPriority]="5"
-      [minWidth]="150"
-    ></dxi-column>
-    <dxi-column
-      dataField="employeeName"
-      caption="Tên nhân viên"
-      sortOrder="asc"
-      [hidingPriority]="5"
-      [minWidth]="150"
-    ></dxi-column>
-    <dxi-column
-      dataField="departmentName"
-      caption="Phòng ban"
-      [hidingPriority]="5"
-      [minWidth]="150"
-    ></dxi-column>
-    <dxi-column
-      dataField="positionName"
-      caption="Chức vụ"
-      [hidingPriority]="5"
-      [minWidth]="150"
-    ></dxi-column>
-    <dxi-column
-      dataField="phone"
-      caption="Số điện thoại"
-      [hidingPriority]="5"
-      [minWidth]="150"
-    ></dxi-column>
-    <dxi-column
-      dataField="genderName"
-      caption="Giới tính"
-      [hidingPriority]="5"
-      [minWidth]="100"
-    ></dxi-column>
-    <dxi-column
-      dataField="address"
-      caption="Địa chỉ"
-      [hidingPriority]="5"
-      [minWidth]="100"
-    ></dxi-column>
+    <dxi-column dataField="employeeCode" caption="Mã nhân viên" sortOrder="desc" [hidingPriority]="5" [minWidth]="150"></dxi-column>
+    <dxi-column dataField="employeeName" caption="Tên nhân viên" sortOrder="asc" [hidingPriority]="5" [minWidth]="150"></dxi-column>
+    <dxi-column dataField="departmentName" caption="Phòng ban" [hidingPriority]="5" [minWidth]="150"></dxi-column>
+    <dxi-column dataField="positionName" caption="Chức vụ" [hidingPriority]="5" [minWidth]="150"></dxi-column>
+    <dxi-column dataField="phone" caption="Số điện thoại" [hidingPriority]="5" [minWidth]="150"></dxi-column>
+    <dxi-column dataField="genderName" caption="Giới tính" [hidingPriority]="5" [minWidth]="100"></dxi-column>
+    <dxi-column dataField="address" caption="Địa chỉ" [hidingPriority]="5" [minWidth]="100"></dxi-column>
   </dx-data-grid>
 
 <!--  <app-panel-employee-managerment-->

@@ -7,6 +7,7 @@ import * as moment from "moment/moment";
 import {en_US, NzI18nService} from "ng-zorro-antd/i18n";
 import {AttendanceLeaveService} from "../../../../service/attendance-leave.service";
 import {EmployeeService} from "../../../../service/employee.service";
+import {debounceTime, distinctUntilChanged} from "rxjs/operators";
 
 @Component({
   selector: 'app-list-attendance-leave',
@@ -86,14 +87,21 @@ export class ListAttendanceLeaveComponent implements OnInit {
     this.i18n.setLocale(en_US);
     this.employeeCode = localStorage.getItem('employeeCode');
     this.searchForm = this.formBuilder.group({
-      isActive: new FormControl(null, [Validators.maxLength(100)]),
-      startDay: new FormControl(null, [Validators.maxLength(100)]),
-      endDay: new FormControl(null),
-      employeeCode: new FormControl(null),
+      keyword: new FormControl(null, [Validators.maxLength(100)]),
     });
     if (this.searchFormValue) {
       this.searchForm.patchValue(this.searchFormValue);
     }
+
+    this.searchForm.get('keyword')?.valueChanges
+      .pipe(
+        debounceTime(500),               // đợi 500ms sau khi người dùng dừng gõ
+        distinctUntilChanged()           // chỉ gọi nếu giá trị thực sự thay đổi
+      )
+      .subscribe(value => {
+        this.onSearchChanged(value);
+      });
+
     this.fetchData(this.request.currentPage, this.request.pageSize);
     this.fetchEmployee();
   }

@@ -16,66 +16,16 @@
     <form nz-form [formGroup]="searchForm" nzLayout="vertical" (keyup.enter)="nzOnSearch()">
       <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
         <div nz-col [nzSm]="24" [nzMd]="8" [nzLg]="8">
-          <nz-form-item nz-col nzSpan="24">
+          <nz-form-item>
             <nz-form-control>
-              <app-select [ngClass]="'w-150'" [data]="lstIsActive" [valueField]="'id'"
-                          [labelField]="'name'"
-                          [placeHolder]="'--Tất cả--'"
-                          [openSearchModal]="false" [getObjectValue]="true"
-                          [labelHorizontal]="false" formControlName="isActive" labelContent="Trạng thái">
-              </app-select>
+              <app-input-text-v2
+                formControlName="keyword"
+                label="Tìm kiếm"
+                [maxlength]="'255'"
+                [nzAllowClear]="true"
+              ></app-input-text-v2>
             </nz-form-control>
           </nz-form-item>
-        </div>
-        <div nz-col [nzSm]="24" [nzMd]="8" [nzLg]="8">
-          <app-date-picker formControlName="startDay" placeHolder="dd/mm/yyyy"
-                           [format]="'dd/MM/yyyy'"
-                           labelContent="Từ ngày"
-                           [ngClass]="'w-150'"
-                           [span]="24"></app-date-picker>
-        </div>
-        <div nz-col [nzSm]="24" [nzMd]="8" [nzLg]="8">
-          <nz-form-item nz-col nzSpan="24">
-            <nz-form-control>
-              <app-select [ngClass]="'w-100'" [data]="lstEmployee" [valueField]="'employeeCode'" [placeHolder]="'--Tất cả--'"
-                          [labelField]="'employeeName'" [openSearchModal]="false" [getObjectValue]="true"
-                          [ngStyleCus]="{'padding-left' : '5px'}"
-                          [labelHorizontal]="false" formControlName="employeeCode" labelContent="Người gửi đơn:">
-              </app-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
-      <div nz-row>
-        <div nz-col nzSpan="24">
-          <div nz-row nzGutter="20" nzJustify="center">
-            <div nz-col>
-              <nz-form-item>
-                <nz-form-control>
-                  <app-button-common buttonType="default" buttonText="Nhập lại" iconTheme="outline"
-                                     [buttonClass]="'css-box-shadow'"
-                                     iconType="reload" (clickAction)="resetForm()"></app-button-common>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col>
-              <nz-form-item>
-                <nz-form-control>
-                  <app-button-base iconType="search" (clickAction)="nzOnSearch()"
-                                   [buttonClass]="'css-box-shadow'"
-                                   text="Tìm kiếm"></app-button-base>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-<!--            <div nz-col>-->
-<!--              <nz-form-item>-->
-<!--                <nz-form-control>-->
-<!--                  <app-button-export (clickExport)="openExport()"-->
-<!--                                     [buttonClass]="'css-box-shadow'"></app-button-export>-->
-<!--                </nz-form-control>-->
-<!--              </nz-form-item>-->
-<!--            </div>-->
-          </div>
         </div>
       </div>
     </form>
@@ -93,7 +43,8 @@
         </div>
       </div>
       <div class="list__head-right">
-        <div class="list__head-btn">
+        <div class="list__head-btn" style="display: flex; gap: 8px;">
+          <app-button-export appCheckAuthorize (clickExport)="openExport()" [buttonClass]="'css-box-shadow'"></app-button-export>
           <app-button-create (clickCreate)="openCreateModal()" [loading]="isLoading"></app-button-create>
         </div>
       </div>
@@ -103,36 +54,16 @@
                 [nzNoResult]="'Không có kết quả tìm kiếm'" [nzScroll]="{ x: SCROLL_TABLE.SCROLL_X}">
         <thead>
         <tr class="ant-header-customize">
-          <th nzWidth="60px" class="text-center">
-            STT
-          </th>
-          <th nzWidth="200px" class="text-center">
-            Người gửi đơn
-          </th>
-          <th nzWidth="150px" class="text-center">
-            Ngày tăng ca
-          </th>
-          <th nzWidth="220px" class="text-center">
-            Thời gian bắt đầu
-          </th>
-          <th nzWidth="220px" class="text-center">
-            Thời gian kết thúc
-          </th>
-          <th nzWidth="200px" class="text-center">
-            Trạng thái
-          </th>
-          <th nzWidth="200px" class="text-center">
-            Tổng số giờ
-          </th>
-          <th nzWidth="200px" class="text-center">
-            Người theo dõi
-          </th>
-          <th nzWidth="250px" class="text-center">
-            Nội dung
-          </th>
-          <th nzWidth="270px" class="text-center" nzRight="0">
-            Hành động
-          </th>
+          <th nzWidth="60px" class="text-center">STT</th>
+          <th nzWidth="200px" class="text-center">Người gửi đơn</th>
+          <th nzWidth="150px" class="text-center">Ngày tăng ca</th>
+          <th nzWidth="220px" class="text-center">Thời gian bắt đầu</th>
+          <th nzWidth="220px" class="text-center">Thời gian kết thúc</th>
+          <th nzWidth="200px" class="text-center">Trạng thái</th>
+          <th nzWidth="200px" class="text-center">Tổng số giờ</th>
+          <th nzWidth="200px" class="text-center">Người theo dõi</th>
+          <th nzWidth="250px" class="text-center">Nội dung</th>
+          <th nzWidth="270px" class="text-center" nzRight="0">Hành động</th>
         </tr>
         </thead>
         <tbody>
@@ -146,11 +77,11 @@
                 [nz-tooltip]="data.startTime | date: 'HH:mm:ss'">{{data.startTime | date: 'HH:mm:ss'}}</td>
             <td class="max-width-220 text-center"
                 [nz-tooltip]="data.endTime | date: 'HH:mm:ss'">{{data.endTime | date: 'HH:mm:ss'}}</td>
-            <td class="max-width-200 text-center" [nz-tooltip]="'Đã duyệt'" *ngIf="data.isActive == 1">
+            <td class="max-width-200 text-center" [nz-tooltip]="'Đã duyệt'" *ngIf="data.status == 1">
               <span class="css-badge badge badge-pill bg-success p-3">Đã duyệt</span></td>
-            <td class="max-width-200 text-center" [nz-tooltip]="'Chờ duyệt'" *ngIf="data.isActive === 2">
+            <td class="max-width-200 text-center" [nz-tooltip]="'Chờ duyệt'" *ngIf="data.status === 2">
               <span class="css-badge badge badge-pill bg-warning p-3">Chờ duyệt</span></td>
-            <td class="max-width-200 text-center" [nz-tooltip]="'Từ chối'" *ngIf="data.isActive === 3">
+            <td class="max-width-200 text-center" [nz-tooltip]="'Từ chối'" *ngIf="data.status === 3">
               <span class="css-badge badge badge-pill bg-danger p-3">Từ chối</span></td>
             <td class="max-width-200 text-center" [nz-tooltip]="data.totalTime">{{data.totalTime}} giờ</td>
             <td class="max-width-200" [nz-tooltip]="data.followName">{{data.followName}}</td>

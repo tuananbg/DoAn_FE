@@ -94,7 +94,7 @@ export class FormAttendanceOtComponent implements OnInit, OnChanges {
     }
     if (this.createForm.valid) {
       const data = this.createForm.value;
-      data.attendanceOtID = this.idChild ? this.idChild : null;
+      // data.attendanceOtID = this.idChild ? this.idChild : null;
       data.startDay = data.startDay ? data.startDay : null;
       data.startTime = data.startTime ? data.startTime : null;
       data.totalTime = data.totalTime ? data.totalTime : null;
@@ -104,7 +104,7 @@ export class FormAttendanceOtComponent implements OnInit, OnChanges {
       if (!this.isUpdate) {
         this.spinner.show().then();
         this.attendanceOTService.createAttendanceOt(data).subscribe(res => {
-          if (res && res.body.code === "OK") {
+          if (res && res.body.code === "201") {
             this.toastService.openSuccessToast('Đăng ký lịch tăng ca thành công');
             this.clickSave.emit();
             this.createForm.reset();
@@ -120,7 +120,7 @@ export class FormAttendanceOtComponent implements OnInit, OnChanges {
         });
       } else {
         this.attendanceOTService.editAttendanceOt(data).subscribe(res => {
-          if (res && res.code === "OK") {
+          if (res && res.code === "202") {
             this.toastService.openSuccessToast('Sửa lịch tăng ca thành công');
             this.clickSave.emit();
           } else {
@@ -211,18 +211,17 @@ export class FormAttendanceOtComponent implements OnInit, OnChanges {
   fetchEmployee() {
     this.employeeService.getListSelect().subscribe(res => {
       if (res && res.code === "OK") {
-        this.lstEmployee = res.data;
-        this.lstEmployee =  this.lstEmployee.map(res => `${res.employeeName} - ${res.employeeCode}`);
-        this.lstEmployee = this.lstEmployee.map(item => ({
+        this.lstEmployee = res.data.map((item: any) => ({
           ...item,
-          employeeName: item.employeeName + " - " + item.employeeCode
+          employeeName: `${item.employeeName} - ${item.employeeCode}`
         }));
         this.lstEmployee.sort((a, b) => a.employeeName.localeCompare(b.employeeName));
       }
-    }, (error: any) => {
+    }, error => {
       console.log(error);
-    })
+    });
   }
+
 
 
 }
