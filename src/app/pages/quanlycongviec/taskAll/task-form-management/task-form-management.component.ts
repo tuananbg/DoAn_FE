@@ -99,15 +99,15 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
     this.checkIsViewOrUpdate();
     console.log("createBy",this.createBy)
     this.addForm = this.formBuilder.group({
-      taskCode: new FormControl({ value: '', disabled: true }, [Validators.required]),
-      taskName: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.maxLength(500)]),
+      taskCode: new FormControl({ value: '', disabled: this.isUpdate }, [Validators.required]),
+      taskName: new FormControl({ value: '', disabled: this.isUpdate }, [Validators.required, Validators.maxLength(500)]),
       taskDescription: new FormControl(),
       taskStatus: new FormControl( [Validators.required]),
       startDay: new FormControl(null, [Validators.required]),
       endDay: new FormControl(null, [Validators.required]),
       employeeCode: new FormControl( [Validators.required]),
       managerCode:new FormControl([Validators.required]),
-      projectCode: new FormControl({ value: '', disabled: true }, [Validators.required]),
+      projectCode: new FormControl({ value: '', disabled: this.isUpdate }, [Validators.required]),
       priority: new FormControl(null, [Validators.required]),
       duration: new FormControl(null),
       communication: new FormControl(null),
