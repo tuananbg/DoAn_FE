@@ -51,45 +51,24 @@
     </div>
     <div class="list__table">
       <nz-tabset [(nzSelectedIndex)]="currentTabIndex" (nzSelectedIndexChange)="onTabChange($event)" style="margin-bottom: 15px;">
-        <nz-tab nzTitle="Cần làm"></nz-tab>
-        <nz-tab nzTitle="Đang xử lý"></nz-tab>
-        <nz-tab nzTitle="Hoàn thành"></nz-tab>
+        <nz-tab nzTitle="Chờ duyệt"></nz-tab>
+        <nz-tab nzTitle="Đã duyệt"></nz-tab>
+        <nz-tab nzTitle="Từ chối duyệt"></nz-tab>
       </nz-tabset>
       <nz-table #rowSelectionTable nzBordered [nzData]="lstData" [nzFrontPagination]="false"
                 [nzNoResult]="'Không có kết quả tìm kiếm'" [nzScroll]="{ x: SCROLL_TABLE.SCROLL_X}">
         <thead>
         <tr class="ant-header-customize">
-          <th nzWidth="60px" class="text-center">
-            STT
-          </th>
-          <th  nzWidth="200px" class="text-center">
-            Người gửi đơn
-          </th>
-          <th nzWidth="170px" class="text-center">
-            Loại nghỉ phép
-          </th>
-          <th nzWidth="150px" class="text-center">
-            Từ ngày
-          </th>
-          <th nzWidth="150px" class="text-center">
-            Đến ngày
-          </th>
-          <th nzWidth="150px" class="text-center">
-            Tổng số ngày
-          </th>
-          <th nzWidth="200px" class="text-center">
-            Trạng thái
-          </th>
-          <th nzWidth="200px" class="text-center">
-            Người phê duyệt
-          </th>
-          <th nzWidth="200px" class="text-center">
-            Người theo dõi
-          </th>
-          <th nzWidth="250px" class="text-center">
-            Nội dung
-          </th>
-          <th nzWidth="270px" class="text-center" nzRight="0">
+          <th nzWidth="60px" class="text-center">STT</th>
+          <th  nzWidth="200px" class="text-center">Người gửi đơn</th>
+          <th nzWidth="200px" class="text-center">Người phê duyệt</th>
+          <th nzWidth="170px" class="text-center">Loại nghỉ phép</th>
+          <th nzWidth="150px" class="text-center">Từ ngày</th>
+          <th nzWidth="150px" class="text-center">Đến ngày</th>
+          <th nzWidth="150px" class="text-center">Tổng số ngày</th>
+          <th nzWidth="200px" class="text-center">Trạng thái</th>
+          <th nzWidth="250px" class="text-center">Nội dung</th>
+          <th *ngIf="isShowActionColumn" nzWidth="270px" class="text-center" nzRight="0">
             Hành động
           </th>
         </tr>
@@ -99,42 +78,42 @@
           <tr>
             <td class="text-center max-width-60">{{ (request.currentPage * request.pageSize) + idx + 1}}</td>
             <td class="max-width-200" [nz-tooltip]="data.employeeName">{{data.employeeName}}</td>
+            <td class="max-width-200" [nz-tooltip]="data.reviewerName">{{data.reviewerName}}</td>
             <td class="max-width-170" [nz-tooltip]="data.leaveCategory">{{data.leaveCategory}}</td>
             <td class="max-width-150 text-center" [nz-tooltip]="data.startDay | date: 'dd/MM/yyyy'">{{data.startDay | date: 'dd/MM/yyyy'}}</td>
             <td class="max-width-150 text-center" [nz-tooltip]="data.endDay | date: 'dd/MM/yyyy'">{{data.endDay | date: 'dd/MM/yyyy'}}</td>
             <td class="max-width-150 text-center" [nz-tooltip]="data.totalTime">{{data.totalTime}}</td>
-            <td class="max-width-200 text-center" [nz-tooltip]="'Đã duyệt'" *ngIf="data.isActive == 1">
-              <span class="css-badge badge badge-pill bg-success p-3">Đã duyệt</span></td>
-            <td class="max-width-200 text-center" [nz-tooltip]="'Chờ duyệt'" *ngIf="data.isActive === 2">
+            <td class="max-width-200 text-center" [nz-tooltip]="'Chờ duyệt'" *ngIf="data.status === 1">
               <span class="css-badge badge badge-pill bg-warning p-3">Chờ duyệt</span></td>
-            <td class="max-width-200 text-center" [nz-tooltip]="'Từ chối'" *ngIf="data.isActive === 3">
+            <td class="max-width-200 text-center" [nz-tooltip]="'Từ chối'" *ngIf="data.status === 2">
               <span class="css-badge badge badge-pill bg-danger p-3">Từ chối</span></td>
-            <td class="max-width-200" [nz-tooltip]="data.reviewerName">{{data.reviewerName}}</td>
-            <td class="max-width-200" [nz-tooltip]="data.trackerName">{{data.trackerName}}</td>
+            <td class="max-width-200 text-center" [nz-tooltip]="'Đã duyệt'" *ngIf="data.status == 3">
+              <span class="css-badge badge badge-pill bg-success p-3">Đã duyệt</span></td>
+
             <td class="max-width-250" [nz-tooltip]="data.description">
               {{ data.description.length > 100 ? (data.description | slice:0:50) + '...' : data.description }}
             </td>
-            <td class="text-center max-width-270" nzRight="0">
+            <td class="text-center max-width-270" nzRight="0" *ngIf="isShowActionColumn">
               <div class="action">
                 <app-button-icon class="action__margin" [isCheckCircle] = "true"
                                  [tooltipTitle]="'Duyệt đơn'"
                                  [loading]="isLoading"
-                                 [disabled] ="data.reviewerId != employeeCode"
+                                 [disabled]="employeeCode !== 'ADMIN' && data.reviewerCode != employeeCode"
                                  (clickAction)="openUpdateActiveModal(data)"></app-button-icon>
                 <app-button-icon class="action__margin" [isUnCheckCircle]="true"
                                  [tooltipTitle]="'Từ chối'"
                                  [loading]="isLoading"
-                                 [disabled] ="data.reviewerId != employeeCode"
+                                 [disabled]="employeeCode !== 'ADMIN' && data.reviewerCode != employeeCode"
                                  (clickAction)="openUpdateActiveFalseModal(data)">
                 </app-button-icon>
                 <app-button-icon class="action__margin" [isEdit] = "true"
                                  [tooltipTitle]="'Sửa đơn'"
                                  [loading]="isLoading"
-                                 [disabled] ="data.employeeCode != employeeCode"
+                                 [disabled]="employeeCode !== 'ADMIN' && data.employeeCode != employeeCode"
                                  (clickAction)="openUpdateModal(data)"></app-button-icon>
-                <app-button-icon class="action__margin" [isDelete]="true"
-                                 [disabled] ="data.employeeCode != employeeCode"
-                                 [tooltipTitle]="'Xóa đơn'" (click)="openModalDelete(data)"></app-button-icon>
+<!--                <app-button-icon class="action__margin" [isDelete]="true"-->
+<!--                                 [disabled] ="data.employeeCode != employeeCode"-->
+<!--                                 [tooltipTitle]="'Xóa đơn'" (click)="openModalDelete(data)"></app-button-icon>-->
               </div>
             </td>
           </tr>

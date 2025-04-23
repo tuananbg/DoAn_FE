@@ -23,7 +23,7 @@ export class AttendanceLeaveService {
       params = params.set('keyword', keyword);
     }
     return this.httpClient.get(
-      `${API_CONFIG.BASE_URL}leave/list/${status}`,
+      `${API_CONFIG.BASE_URL}attendance-leave/list/${status}`,
       {
         headers: new HttpHeaders({'Content-Type': 'application/json'}),
         params: params
@@ -33,7 +33,7 @@ export class AttendanceLeaveService {
 
   createAttendanceLeave(attendanceLeave: any): Observable<any> {
     return this.httpClient.post(
-      API_CONFIG.BASE_URL + "leave",
+      API_CONFIG.BASE_URL + "attendance-leave/create",
       attendanceLeave,
       {
         observe: 'response'
@@ -43,25 +43,25 @@ export class AttendanceLeaveService {
 
   getAttendanceLeaveId(id: number | undefined): Observable<any> {
     return this.httpClient.get(
-      API_CONFIG.BASE_URL + "leave/detail" + '/' + id,
+      API_CONFIG.BASE_URL + "attendance-leave/detail" + '/' + id,
     );
   }
 
   editAttendanceLeave(payload: any): Observable<any> {
     return this.httpClient.put(
-      API_CONFIG.BASE_URL + "leave",
+      API_CONFIG.BASE_URL + "attendance-leave",
       payload,
     );
   }
 
   deleteAttendanceLeave(id: string): Observable<any> {
     return this.httpClient.delete(
-      API_CONFIG.BASE_URL + "leave/delete" + '/' + id,
+      API_CONFIG.BASE_URL + "attendance-leave/delete" + '/' + id,
     );
   }
 
   exportAttendanceLeave(payload: any, pageable: any): Observable<any> {
-    return this.httpClient.post(API_CONFIG.BASE_URL + "leave/export",
+    return this.httpClient.post(API_CONFIG.BASE_URL + "attendance-leave/export",
       pageable,
       {
         responseType: 'blob',

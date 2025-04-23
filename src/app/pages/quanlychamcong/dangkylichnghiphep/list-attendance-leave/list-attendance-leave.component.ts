@@ -29,7 +29,7 @@ export class ListAttendanceLeaveComponent implements OnInit {
     sort: 'createdDate/desc', // -: desc | +: asc,
   };
   currentTabIndex = 0;
-  statusList = ["TODO", 'PROCESSING','DONE'];
+  statusList = ["TODO", 'DONE','REJECT'];
   lstData: any[] = [];
   total = 0;
   lstIsActive = [
@@ -41,6 +41,7 @@ export class ListAttendanceLeaveComponent implements OnInit {
     SCROLL_X: '1000px',
     SCROLL_Y: '60vh'
   }
+  isShowActionColumn = true;
   isVisibleModalDelete = false;
   isLoading = false;
   message: string = '';
@@ -122,8 +123,9 @@ export class ListAttendanceLeaveComponent implements OnInit {
     this.spinner.show().then();
     this.attendanceLeaveService.searchAttendanceLeave(this.searchKeyword, status, pageable).subscribe(res => {
       if (res && res.code === "OK") {
-        this.lstData = res.data;
-        // this.total = res.data.dataCount;
+        this.lstData = res.data.content;
+        this.total = res.data.totalElements;
+        this.checkShowActionColumn();
         this.spinner.hide().then();
         if (this.lstData.length === 0) {
           if (this.request.currentPage !== 0) {
@@ -163,6 +165,20 @@ export class ListAttendanceLeaveComponent implements OnInit {
   openCreateModal(): void {
     this.idChild = null;
     this.isVisible = true;
+    this.isUpdate = false; // ⬅️ THÊM DÒNG NÀY
+    this.objectChild = {
+      leaveCategory: null,
+      startDay: null,
+      endDay: null,
+      totalTime: null,
+      reviewerId: null,
+      trackerId: null,
+      description: null
+    };
+  }
+
+  checkShowActionColumn(): void {
+    this.isShowActionColumn = this.lstData?.some(item => item.status !== 2 && item.status !== 3);
   }
 
   openUpdateModal(data?: any): void {
@@ -246,7 +262,7 @@ export class ListAttendanceLeaveComponent implements OnInit {
   onTabChange(index: number): void {
     this.currentTabIndex = index;
     this.request.currentPage = 0;
-    this.fetchData();
+    this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
   searchKeyword: string | null = null; // Mặc định là null

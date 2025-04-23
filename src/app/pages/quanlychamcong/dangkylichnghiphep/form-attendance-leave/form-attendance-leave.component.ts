@@ -16,7 +16,7 @@ export class FormAttendanceLeaveComponent implements OnInit, OnChanges {
   createForm!: FormGroup;
   @Input() isUpdate: any;
   @Input() idChild: any;
-  @Input() visible: any;
+  @Input() visible: boolean = false;
   @Input() objectChild: any;
   @Output() clickCancel = new EventEmitter();
   @Output() clickSave = new EventEmitter();
@@ -57,8 +57,7 @@ export class FormAttendanceLeaveComponent implements OnInit, OnChanges {
           this.createForm.get('startDay')?.setValue(this.objectChild.startDay);
           this.createForm.get('endDay')?.setValue(this.objectChild.endDay);
           this.createForm.get('totalTime')?.setValue(this.objectChild.totalTime);
-          this.createForm.get('reviewerId')?.setValue(this.objectChild.reviewerId);
-          this.createForm.get('trackerId')?.setValue(this.objectChild.trackerId);
+          this.createForm.get('reviewerCode')?.setValue(this.objectChild.reviewerCode);
           this.createForm.get('description')?.setValue(this.objectChild.description);
         });
       } else {
@@ -73,7 +72,7 @@ export class FormAttendanceLeaveComponent implements OnInit, OnChanges {
       leaveCategory: new FormControl(null, [Validators.required]),
       startDay: new FormControl(null, [Validators.required]),
       endDay: new FormControl(null, [Validators.required]),
-      totalTime: new FormControl(null),
+      // totalTime: new FormControl(null),
       employeeCode: new FormControl(null),
       reviewerCode: new FormControl(null, [Validators.required]),
       // trackerId: new FormControl(null, [Validators.required]),
@@ -104,7 +103,7 @@ export class FormAttendanceLeaveComponent implements OnInit, OnChanges {
       data.leaveCategory = data.leaveCategory === 0 ? 0 : !data.leaveCategory ? null : data.leaveCategory;
       data.startDay = data.startDay ? data.startDay : null;
       data.endDay = data.endDay ? data.endDay : null;
-      data.totalTime = data.totalTime ? data.totalTime : null;
+      // data.totalTime = data.totalTime ? data.totalTime : null;
       data.employeeCode = this.employeeCode ? this.employeeCode : null;
       data.reviewerCode = data.reviewerCode ? data.reviewerCode : null;
       // data.trackerId = data.trackerId ? data.trackerId : null;
@@ -224,17 +223,15 @@ export class FormAttendanceLeaveComponent implements OnInit, OnChanges {
   fetchEmployee() {
     this.employeeService.getListSelect().subscribe(res => {
       if (res && res.code === "OK") {
-        this.lstEmployee = res.data;
-        this.lstEmployee =  this.lstEmployee.map(res => `${res.employeeName} - ${res.employeeCode}`);
-        this.lstEmployee = this.lstEmployee.map(item => ({
+        this.lstEmployee = res.data.map((item: any) => ({
           ...item,
-          employeeName: item.employeeName + " - " + item.employeeCode
+          employeeName: `${item.employeeName} - ${item.employeeCode}`
         }));
         this.lstEmployee.sort((a, b) => a.employeeName.localeCompare(b.employeeName));
       }
-    }, (error: any) => {
+    }, error => {
       console.log(error);
-    })
+    });
   }
 
   isDisableDateFromToday = (current: Date): boolean => {

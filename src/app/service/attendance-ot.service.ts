@@ -17,9 +17,9 @@ export class AttendanceOTService {
 
   }
 
-  searchAttendanceOt(params: any): Observable<any> {
+  searchAttendanceOt(status: string,params: any): Observable<any> {
     return this.httpClient.get(
-      `${API_CONFIG.BASE_URL}attendance-ot/list`,
+      `${API_CONFIG.BASE_URL}attendance-ot/list/${status}`,
       {
         headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
         params: params
@@ -45,7 +45,14 @@ export class AttendanceOTService {
 
   editAttendanceOt(payload: any): Observable<any> {
     return this.httpClient.put(
-      API_CONFIG.BASE_URL + "attendanceOt",
+      API_CONFIG.BASE_URL + "attendance-ot/update",
+      payload,
+    );
+  }
+
+  completeAttendanceOt(payload: any): Observable<any> {
+    return this.httpClient.put(
+      API_CONFIG.BASE_URL + "attendance-ot/complete",
       payload,
     );
   }

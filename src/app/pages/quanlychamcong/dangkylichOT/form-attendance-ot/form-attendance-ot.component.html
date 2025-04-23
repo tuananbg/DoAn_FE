@@ -60,7 +60,7 @@
                     [required]="true"
                     [labelField]="'employeeName'" [openSearchModal]="false" [getObjectValue]="true"
                     [ngStyleCus]="{'padding-left' : '39px'}"
-                    [labelHorizontal]="false" formControlName="followCode" labelContent="Người theo dõi:">
+                    [labelHorizontal]="false" formControlName="followCode" labelContent="Người phê duyệt">
         </app-select>
       </div>
     </div>
@@ -76,6 +76,9 @@
           </app-input-textarea-v2>
         </nz-form-control>
       </nz-form-item>
+    </div>
+    <div nz-row>
+      <p style="font-size: 15px; color: blue; margin-left: 125px;">(*) Thông báo sẽ được gửi đến email cá nhân của người phê duyệt.</p>
     </div>
   </form>
 

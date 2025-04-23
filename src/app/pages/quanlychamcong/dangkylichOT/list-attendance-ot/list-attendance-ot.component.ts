@@ -31,15 +31,13 @@ export class ListAttendanceOtComponent implements OnInit {
   };
   lstData: any[] = [];
   total = 0;
-  lstIsActive = [
-    {id: 1, name: "Đã duyệt"},
-    {id: 2, name: "Chờ duyệt"},
-    {id: 3, name: "Từ chối"}
-  ]
+  currentTabIndex = 0;
+  statusList = ["TODO", 'DONE','REJECT'];
   SCROLL_TABLE = {
     SCROLL_X: '1000px',
     SCROLL_Y: '60vh'
   }
+  isShowActionColumn = true;
   isVisibleModalDelete = false;
   isLoading = false;
   message: string = '';
@@ -105,6 +103,10 @@ export class ListAttendanceOtComponent implements OnInit {
     this.fetchEmployee();
   }
 
+  checkShowActionColumn(): void {
+    this.isShowActionColumn = this.lstData?.some(item => item.status !== 2 && item.status !== 3);
+  }
+
   // parseJwt(token: string): string {
   //   const base64Url = token.split('.')[1];
   //   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -117,7 +119,7 @@ export class ListAttendanceOtComponent implements OnInit {
 
   fetchData(currentPage?: number, pageSize?: number){
     const formValue = this.searchForm.value;
-    // const status = this.statusList[this.currentTabIndex];
+    const status = this.statusList[this.currentTabIndex];
 
     const queryModel = {
       keyword: formValue.keyword ?? "",
@@ -131,10 +133,11 @@ export class ListAttendanceOtComponent implements OnInit {
 
     const finalParams = { ...pageable, ...queryModel };
     this.spinner.show().then();
-    this.attendanceOTService.searchAttendanceOt(finalParams).subscribe(res => {
+    this.attendanceOTService.searchAttendanceOt(status,finalParams).subscribe(res => {
       if (res && res.code === "OK") {
         this.lstData = res.data.content;
         this.total = res.data.totalElements;
+        this.checkShowActionColumn();
         this.spinner.hide().then();
         if (this.lstData.length === 0) {
           if (this.request.currentPage !== 0) {
@@ -177,7 +180,8 @@ export class ListAttendanceOtComponent implements OnInit {
   }
 
   openUpdateModal(data?: any): void {
-    this.idChild = data.attendanceOtID;
+    console.log("data",data)
+    this.idChild = data.id;
     this.objectChild = {
       startDay: data.startDay,
       startTime: data.startTime,
@@ -190,9 +194,9 @@ export class ListAttendanceOtComponent implements OnInit {
     this.isUpdate = true;
   }
 
-  openUpdateActiveModal(data?: any){
-    const dataModel = {attendanceOtID : data.attendanceOtID, isActive: 1};
-    this.attendanceOTService.editAttendanceOt(dataModel).subscribe(res => {
+  approvedModal(data?: any){
+    const dataModel = {id : data.id, status: 3};
+    this.attendanceOTService.completeAttendanceOt(dataModel).subscribe(res => {
       if (res && res.code === "OK") {
         this.toastService.openSuccessToast('Đã được duyệt');
         this.fetchData(this.request.currentPage, this.request.pageSize);
@@ -206,9 +210,9 @@ export class ListAttendanceOtComponent implements OnInit {
     });
   }
 
-  openUpdateActiveFalseModal(data?: any){
-    const dataModel = {attendanceOtID : data.attendanceOtID, isActive: 3};
-    this.attendanceOTService.editAttendanceOt(dataModel).subscribe(res => {
+  rejectModal(data?: any){
+    const dataModel = {id : data.id,status: 2};
+    this.attendanceOTService.completeAttendanceOt(dataModel).subscribe(res => {
       if (res && res.code === "OK") {
         this.toastService.openInfoToast('Đơn đã bị từ chối');
         this.fetchData(this.request.currentPage, this.request.pageSize);
@@ -303,6 +307,11 @@ export class ListAttendanceOtComponent implements OnInit {
   handleOkModal(){
     this.isVisible = false;
     this.isUpdate = false;
+    this.fetchData(this.request.currentPage, this.request.pageSize);
+  }
+  onTabChange(index: number): void {
+    this.currentTabIndex = index;
+    this.request.currentPage = 0;
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 

@@ -7,7 +7,7 @@
   [nzFooter]="footerTpl"
   (nzOnClose)="close()"
 >
-  <form nz-form *ngIf="createForm" [formGroup]="createForm" (keyup.enter)="handleOkModal()">
+  <form nz-form *nzDrawerContent [formGroup]="createForm" (keyup.enter)="handleOkModal()">
   <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
       <div nz-col nzSpan="24">
         <app-select [ngClass]="'w-100'" [data]="lstLeaveCategory" [valueField]="'name'" [placeHolder]="'--Tất cả--'"
@@ -44,16 +44,16 @@
                          [span]="24"></app-date-picker>
       </div>
     </div>
-    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
-      <div nz-col nzSpan="24">
-        <app-input-text-v2 [ngClass]="{'w-100': true, 'disabled-button': true}" formControlName="totalTime" [required]="true"
-                           label="Tổng số ngày" nz-col nzSpan="24"
-                           [isDisabled]="true"
-                           [typeInput]="'number'"
-                           [ngStyleCus]="{'padding-left' : '0'}"
-                           [nzAllowClear]="true"></app-input-text-v2>
-      </div>
-    </div>
+<!--    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">-->
+<!--      <div nz-col nzSpan="24">-->
+<!--        <app-input-text-v2 [ngClass]="{'w-100': true, 'disabled-button': true}" formControlName="totalTime" [required]="true"-->
+<!--                           label="Tổng số ngày" nz-col nzSpan="24"-->
+<!--                           [isDisabled]="true"-->
+<!--                           [typeInput]="'number'"-->
+<!--                           [ngStyleCus]="{'padding-left' : '0'}"-->
+<!--                           [nzAllowClear]="true"></app-input-text-v2>-->
+<!--      </div>-->
+<!--    </div>-->
     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
       <div nz-col nzSpan="24">
         <app-select [ngClass]="'w-100'" [data]="lstEmployee" [valueField]="'employeeCode'" [placeHolder]="'--Tất cả--'"
