@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit {
   form: FormGroup = new FormGroup({
     account: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
+    rememberMe: new FormControl(false),
   });
 
   submit() {

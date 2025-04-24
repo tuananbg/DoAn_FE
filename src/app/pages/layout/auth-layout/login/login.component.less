@@ -5,6 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .login-wrapper {
@@ -15,45 +16,51 @@
 }
 
 .login-card {
-  background-color: rgba(255, 255, 255, 0.95);
+  background: rgba(10, 3, 29, 0.3);
   padding: 40px 30px;
-  border-radius: 20px;
+  border-radius: 18px;
   text-align: center;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-  width: 400px;
-  animation: fadeIn 0.6s ease;
+  width: 420px;
+  box-shadow: 0 10px 35px rgba(0, 170, 255, 0.4);
+  backdrop-filter: blur(12px);
+  animation: fadeIn 0.7s ease;
+  border: 1px solid rgba(0, 187, 255, 0.3);
 }
 
 .icon-container img {
   width: 60px;
   height: 60px;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .title {
-  margin: 0;
-  margin-bottom: 20px;
-  color: #e53935;
-  font-weight: bold;
+  margin: 0 0 16px;
+  color: #ffffff;
   font-size: 20px;
+  font-weight: bold;
 }
 
 .login-label {
-  font-size: 15px;
-  font-weight: 500;
-  color: #333;
+  font-size: 14px;
+  color: #ddd;
+  margin-bottom: 14px;
   display: block;
-  margin-bottom: 16px;
 }
 
 .field-group {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .full-width {
   width: 100%;
 }
 
+mat-form-field {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+}
+
+/* Button */
 .button-group {
   display: flex;
   flex-direction: column;
@@ -62,36 +69,112 @@
 
 .button-group button {
   width: 100%;
-  background: linear-gradient(45deg, #2a68ff, #014b9d);
-  color: white;
+  background: linear-gradient(90deg, #0099ff, #0055aa);
+  color: #fff;
   font-weight: bold;
+  border-radius: 6px;
 }
 
+/* Forgot password link */
 .forgot-password {
-  margin-top: 10px;
+  margin-top: 12px;
   font-size: 13px;
-  color: #4285f4;
+  color: #6ec1ff;
   text-decoration: none;
+  transition: 0.2s ease-in-out;
+}
+.forgot-password:hover {
+  text-decoration: underline;
 }
 
-.footer {
-  margin-top: 15px;
-  font-size: 12px;
-  color: #888;
+/* Error text */
+.text-danger {
+  color: #ff4d4f;
+  font-size: 13px;
 }
 
+/* Animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(-15px);
+    transform: translateY(-20px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
-.text-danger {
-  color: red;
-  font-size: 13px;
+
+/* ----------------------------------
+   Material Field Custom Styling
+---------------------------------- */
+
+/* Text color */
+.mat-input-element {
+  color: #ffffff !important;
+}
+
+/* Placeholder */
+.mat-form-field-infix input::placeholder {
+  color: #e0e0e0 !important;
+  opacity: 1;
+}
+
+/* Label */
+.mat-form-field-label,
+.mat-form-field-label:not(.mat-form-field-empty),
+.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+  color: #ffffff !important;
+  font-weight: 500;
+}
+
+/* Focus border */
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  border-color: #00ccff !important;
+  box-shadow: 0 0 0 2px rgba(0, 204, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+/* Non-focused border */
+.mat-form-field-outline {
+  border-color: #cccccc50;
+}
+
+/* Icons */
+.mat-form-field-prefix mat-icon,
+.mat-form-field-suffix mat-icon,
+.mat-icon-button {
+  color: #ffffff !important;
+  opacity: 0.95;
+  font-size: 20px;
+}
+
+/* Error (Invalid) styles */
+.mat-form-field-invalid .mat-form-field-outline-thick {
+  border-color: rgba(255, 0, 0, 0.6);
+}
+
+.mat-form-field-invalid .mat-input-element,
+.mat-form-field-invalid .mat-form-field-label,
+.mat-form-field-invalid .mat-form-field-prefix mat-icon,
+.mat-form-field-invalid .mat-form-field-suffix mat-icon {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.remember-me {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+  color: #fff;
+  font-size: 14px;
+}
+
+.mat-checkbox-label {
+  color: #ffffff !important;
+}
+
+.mat-checkbox-inner-container {
+  margin-right: 6px;
 }
 

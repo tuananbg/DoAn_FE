@@ -28,6 +28,9 @@
         </mat-form-field>
       </div>
 
+      <div class="remember-me">
+        <mat-checkbox formControlName="rememberMe">Nhớ mật khẩu</mat-checkbox>
+      </div>
       <div class="button-group">
         <button mat-raised-button color="primary" type="submit">Đăng nhập</button>
         <a class="forgot-password" [routerLink]="'/auth/changePassword'">Forgot Password?</a>

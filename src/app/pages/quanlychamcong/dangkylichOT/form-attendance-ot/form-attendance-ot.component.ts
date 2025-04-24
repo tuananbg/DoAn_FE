@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ToastService} from "../../../../service/toast.service";
 import {NgxSpinnerService} from "ngx-spinner";
-import {AttendanceLeaveService} from "../../../../service/attendance-leave.service";
 import {EmployeeService} from "../../../../service/employee.service";
 import {AttendanceOTService} from "../../../../service/attendance-ot.service";
 import {differenceInCalendarDays} from "date-fns";
@@ -50,7 +49,7 @@ export class FormAttendanceOtComponent implements OnInit, OnChanges {
           this.createForm.get('startTime')?.setValue(this.objectChild.startTime);
           this.createForm.get('endTime')?.setValue(this.objectChild.endTime);
           this.createForm.get('totalTime')?.setValue(this.objectChild.totalTime);
-          this.createForm.get('followId')?.setValue(this.objectChild.followId);
+          this.createForm.get('followCode')?.setValue(this.objectChild.followCode);
           this.createForm.get('descriptionOt')?.setValue(this.objectChild.descriptionOt);
         });
       } else {

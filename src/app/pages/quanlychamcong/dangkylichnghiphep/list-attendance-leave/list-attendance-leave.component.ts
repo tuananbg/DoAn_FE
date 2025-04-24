@@ -57,8 +57,7 @@ export class ListAttendanceLeaveComponent implements OnInit {
       startDay: null,
       endDay: null,
       totalTime: null,
-      reviewerId: null,
-      trackerId: null,
+     reviewerCode: null,
       description: null
   };
   lstEmployee: any[] = [];
@@ -171,8 +170,7 @@ export class ListAttendanceLeaveComponent implements OnInit {
       startDay: null,
       endDay: null,
       totalTime: null,
-      reviewerId: null,
-      trackerId: null,
+      reviewerCode: null,
       description: null
     };
   }
@@ -182,14 +180,14 @@ export class ListAttendanceLeaveComponent implements OnInit {
   }
 
   openUpdateModal(data?: any): void {
-    this.idChild = data.leaveID;
+    this.idChild = data.id;
+    console.log("data",data)
     this.objectChild = {
         leaveCategory: data.leaveCategory,
         startDay: data.startDay,
         endDay: data.endDay,
         totalTime: data.totalTime,
-        reviewerId: data.reviewerId,
-        trackerId: data.trackerId,
+        reviewerCode: data.reviewerCode,
         description: data.description
     };
     this.isVisible = true;

@@ -52,11 +52,12 @@ export class FormAttendanceLeaveComponent implements OnInit, OnChanges {
     if (this.createForm) {
       if (this.idChild != null) {
         this.createForm.reset();
+        console.log("data3",this.objectChild)
         setTimeout(() => {
           this.createForm.get('leaveCategory')?.setValue(this.objectChild.leaveCategory);
           this.createForm.get('startDay')?.setValue(this.objectChild.startDay);
           this.createForm.get('endDay')?.setValue(this.objectChild.endDay);
-          this.createForm.get('totalTime')?.setValue(this.objectChild.totalTime);
+          // this.createForm.get('totalTime')?.setValue(this.objectChild.totalTime);
           this.createForm.get('reviewerCode')?.setValue(this.objectChild.reviewerCode);
           this.createForm.get('description')?.setValue(this.objectChild.description);
         });
@@ -98,6 +99,7 @@ export class FormAttendanceLeaveComponent implements OnInit, OnChanges {
       this.createForm.controls[i].updateValueAndValidity();
     }
     if (this.createForm.valid) {
+      console.log("data",this.createForm.value)
       const data = this.createForm.value;
       data.leaveID = this.idChild ? this.idChild : null;
       data.leaveCategory = data.leaveCategory === 0 ? 0 : !data.leaveCategory ? null : data.leaveCategory;
