@@ -197,7 +197,7 @@ export class ListAttendanceOtComponent implements OnInit {
   approvedModal(data?: any){
     const dataModel = {id : data.id, status: 3};
     this.attendanceOTService.completeAttendanceOt(dataModel).subscribe(res => {
-      if (res && res.code === "OK") {
+      if (res && res.code === "202") {
         this.toastService.openSuccessToast('Đã được duyệt');
         this.fetchData(this.request.currentPage, this.request.pageSize);
       } else {
@@ -213,7 +213,7 @@ export class ListAttendanceOtComponent implements OnInit {
   rejectModal(data?: any){
     const dataModel = {id : data.id,status: 2};
     this.attendanceOTService.completeAttendanceOt(dataModel).subscribe(res => {
-      if (res && res.code === "OK") {
+      if (res && res.code === "202") {
         this.toastService.openInfoToast('Đơn đã bị từ chối');
         this.fetchData(this.request.currentPage, this.request.pageSize);
       } else {

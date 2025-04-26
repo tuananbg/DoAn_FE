@@ -49,7 +49,14 @@ export class AttendanceLeaveService {
 
   editAttendanceLeave(payload: any): Observable<any> {
     return this.httpClient.put(
-      API_CONFIG.BASE_URL + "attendance-leave",
+      API_CONFIG.BASE_URL + "attendance-leave/update",
+      payload,
+    );
+  }
+
+  completeAttendanceLeave(payload: any): Observable<any> {
+    return this.httpClient.put(
+      API_CONFIG.BASE_URL + "attendance-leave/complete",
       payload,
     );
   }

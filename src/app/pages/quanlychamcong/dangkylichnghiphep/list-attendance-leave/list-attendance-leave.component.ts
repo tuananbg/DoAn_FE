@@ -350,10 +350,10 @@ export class ListAttendanceLeaveComponent implements OnInit {
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
-  openUpdateActiveModal(data?: any){
-    const dataModel = {leaveID : data.leaveID, isActive: 1};
-    this.attendanceLeaveService.editAttendanceLeave(dataModel).subscribe(res => {
-      if (res && res.code === "OK") {
+  approvedModal(data?: any){
+    const dataModel = {id : data.id, status: 3};
+    this.attendanceLeaveService.completeAttendanceLeave(dataModel).subscribe(res => {
+      if (res && res.code === "202") {
         this.toastService.openSuccessToast('Đã được duyệt');
         this.fetchData(this.request.currentPage, this.request.pageSize);
       } else {
@@ -382,10 +382,10 @@ export class ListAttendanceLeaveComponent implements OnInit {
     })
   }
 
-  openUpdateActiveFalseModal(data?: any){
-    const dataModel = {leaveID : data.leaveID, isActive: 3};
-    this.attendanceLeaveService.editAttendanceLeave(dataModel).subscribe(res => {
-      if (res && res.code === "OK") {
+  rejectModal(data?: any){
+    const dataModel = {id : data.id, status: 2};
+    this.attendanceLeaveService.completeAttendanceLeave(dataModel).subscribe(res => {
+      if (res && res.code === "202") {
         this.toastService.openInfoToast('Đơn đã bị từ chối');
         this.fetchData(this.request.currentPage, this.request.pageSize);
       } else {

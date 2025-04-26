@@ -101,7 +101,7 @@ export class FormAttendanceLeaveComponent implements OnInit, OnChanges {
     if (this.createForm.valid) {
       console.log("data",this.createForm.value)
       const data = this.createForm.value;
-      data.leaveID = this.idChild ? this.idChild : null;
+      data.id = this.idChild ? this.idChild : null;
       data.leaveCategory = data.leaveCategory === 0 ? 0 : !data.leaveCategory ? null : data.leaveCategory;
       data.startDay = data.startDay ? data.startDay : null;
       data.endDay = data.endDay ? data.endDay : null;
@@ -113,7 +113,7 @@ export class FormAttendanceLeaveComponent implements OnInit, OnChanges {
       if (!this.isUpdate) {
         this.spinner.show().then();
         this.attendanceLeaveService.createAttendanceLeave(data).subscribe(res => {
-          if (res && res.body.code === "OK") {
+          if (res && res.body.code === "200") {
             this.toastService.openSuccessToast('Đăng ký lịch nghỉ thành công');
             this.clickSave.emit();
             this.createForm.reset();
@@ -129,7 +129,7 @@ export class FormAttendanceLeaveComponent implements OnInit, OnChanges {
         });
       } else {
         this.attendanceLeaveService.editAttendanceLeave(data).subscribe(res => {
-          if (res && res.code === "OK") {
+          if (res && res.code === "201") {
             this.toastService.openSuccessToast('Sửa lịch nghỉ phép thành công');
             this.clickSave.emit();
           } else {
