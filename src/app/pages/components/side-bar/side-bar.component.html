@@ -12,37 +12,25 @@
       <i class="fa-solid fa-house" style="margin-right: 5px;"></i>
       <span><a [routerLink]="'/dashboard'">Trang chủ</a></span>
     </li>
-    <li nz-submenu nzTitle="Hành chính nhân sự" nzIcon="usergroup-add" [nzOpen]="subMenuQLNS">
+    <li appCheckAuthorize nz-submenu nzTitle="Hành chính nhân sự" nzIcon="usergroup-add" [nzOpen]="subMenuQLNS">
       <ul>
         <li nz-menu-item [nzMatchRouter]="true">
           <!--              <i nz-icon nzTheme="outline"></i>-->
           <span><a [routerLink]="'/employee'">Danh sách nhân viên</a></span>
         </li>
-        <li
-          appCheckAuthorize
-          nz-menu-item
-          [nzMatchRouter]="true"
-        >
+        <li nz-menu-item [nzMatchRouter]="true">
           <!--          <i nz-icon nzTheme="outline"></i>-->
           <span><a [routerLink]="'/wage'">Thông tin phụ cấp</a></span>
         </li>
-        <li
-          appCheckAuthorize
-          nz-menu-item
-          [nzMatchRouter]="true"
-        >
+        <li nz-menu-item [nzMatchRouter]="true">
           <!--          <i nz-icon nzTheme="outline"></i>-->
           <span><a [routerLink]="'/contract'">Quản lý hợp đồng</a></span>
         </li>
-        <li
-          appCheckAuthorize
-          nz-menu-item [nzMatchRouter]="true">
+        <li nz-menu-item [nzMatchRouter]="true">
           <!--          <i nz-icon nzTheme="outline"></i>-->
           <span><a [routerLink]="'/department'">Phòng ban</a></span>
         </li>
-        <li
-          appCheckAuthorize
-          nz-menu-item [nzMatchRouter]="true">
+        <li nz-menu-item [nzMatchRouter]="true">
           <!--          <i nz-icon nzTheme="outline"></i>-->
           <span><a [routerLink]="'/position'">Chức vụ</a></span>
         </li>
@@ -63,16 +51,19 @@
     </li>
     <li nz-submenu nzTitle="Quản lý công việc" nzIcon="carry-out" [nzOpen]="subMenuQLCV">
       <ul>
-        <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/project'">Dự án</a></span></li>
-        <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/task-list'">Danh sách công việc</a></span></li>
-        <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="['/project-person', employeeCode]">Việc của tôi</a></span></li>
+        <li appCheckAuthorize nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/project'">Dự án</a></span>
+        </li>
+        <li appCheckAuthorize nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/task-list'">Danh sách công việc</a></span>
+        </li>
+        <li nz-menu-item [nzMatchRouter]="true"><span><a
+          [routerLink]="['/project-person', employeeCode]">Việc của tôi</a></span></li>
       </ul>
     </li>
     <li appCheckAuthorize nz-submenu nzTitle="Quản trị hệ thống" nzIcon="database" [nzOpen]="subMenuQLHT">
       <ul>
         <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/register'">Tạo tài khoản</a></span></li>
         <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/account'">Quản lý tài khoản</a></span></li>
-<!--        <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/system'">Quản lý cây phân cấp</a></span></li>-->
+        <!--        <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/system'">Quản lý cây phân cấp</a></span></li>-->
         <li nz-menu-item [nzMatchRouter]="true"><span><a>Cấu hình</a></span></li>
       </ul>
     </li>

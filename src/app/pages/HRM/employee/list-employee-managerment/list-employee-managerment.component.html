@@ -82,7 +82,7 @@
 <!--  >-->
 <!--  </app-panel-employee-managerment>-->
 
-  <app-form-popup [(visible)]="isAddContactPopupOpened" (save)="handleOkModal()" titleText="Thêm nhân viên mới">
+  <app-form-popup appCheckAuthorize [(visible)]="isAddContactPopupOpened" (save)="handleOkModal()" titleText="Thêm nhân viên mới">
       <app-form-employee-managerment></app-form-employee-managerment>
   </app-form-popup>
 

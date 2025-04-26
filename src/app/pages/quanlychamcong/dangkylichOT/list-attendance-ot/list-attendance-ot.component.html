@@ -55,7 +55,7 @@
         <nz-tab nzTitle="Đã duyệt"></nz-tab>
         <nz-tab nzTitle="Từ chối duyệt"></nz-tab>
       </nz-tabset>
-      <nz-table #rowSelectionTable nzBordered [nzData]="lstData" [nzFrontPagination]="false"
+      <nz-table #rowSelectionTable [nzBordered]="true" [nzData]="lstData" [nzFrontPagination]="false"
                 [nzNoResult]="'Không có kết quả tìm kiếm'" [nzScroll]="{ x: SCROLL_TABLE.SCROLL_X}">
         <thead>
         <tr class="ant-header-customize">
