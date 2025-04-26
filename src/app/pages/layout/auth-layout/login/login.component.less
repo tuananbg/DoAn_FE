@@ -177,4 +177,10 @@ mat-form-field {
 .mat-checkbox-inner-container {
   margin-right: 6px;
 }
-
+::ng-deep .mat-form-field-prefix .mat-icon {
+  color: white !important;
+}
+::ng-deep input::placeholder {
+  color: rgba(140, 136, 136, 0.76) !important; /* hoặc bất kỳ màu nào bạn muốn */
+  opacity: 1;              /* tránh bị mờ */
+}
