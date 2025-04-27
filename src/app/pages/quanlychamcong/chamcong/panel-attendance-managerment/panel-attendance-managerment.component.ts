@@ -60,19 +60,17 @@ export class PanelAttendanceManagermentComponent implements OnInit {
 
   fetchData(currentPage?: number, pageSize?: number){
     const queryModel = {
-      employeeId: this.employeeId ? this.employeeId : null,
-      employeeCode: this.employeeCode ? this.employeeCode.trim() : null,
       workingDay: this.workingDay ? this.workingDay : null,
-      departmentId: this.departmentId ?  this.departmentId : null,
     };
     const pageable = {
       page: currentPage,
       size: pageSize,
       sort: this.request.sort,
     };
-    this.attendanceService.searchAttendance(queryModel, pageable).subscribe(res => {
+    console.log("QueryModel", queryModel);
+    this.attendanceService.getList(queryModel, pageable).subscribe(res => {
       if (res && res.code === "OK") {
-        this.lstData = res.data.data;
+        this.lstData = res.data.content;
         this.total = res.data.dataCount;
         if (this.lstData.length === 0) {
           if (this.request.currentPage !== 0) {
@@ -84,7 +82,7 @@ export class PanelAttendanceManagermentComponent implements OnInit {
         this.toastService.openErrorToast("Lỗi hệ thống");
       }
     }, error => {
-      // this.toastService.openErrorToast(error.error.msgCode);
+      this.toastService.openErrorToast(error.error.msgCode);
       this.toastService.openErrorToast("Lỗi hệ thống");
     });
   }

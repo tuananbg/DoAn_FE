@@ -31,7 +31,9 @@
               formControlName="employeeCode"
               labelContent="Nhân viên">
             </app-select>
-
+            <div *ngIf="form.get('employeeCode')?.invalid && (form.get('employeeCode')?.dirty || form.get('employeeCode')?.touched)" style="color: red; margin-top: 5px;">
+              Vui lòng chọn nhân viên
+            </div>
           </div>
         </form>
       </div>

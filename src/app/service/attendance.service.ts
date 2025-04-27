@@ -18,9 +18,9 @@ export class AttendanceService {
               private login: LoginService) {
   }
 
-  searchAttendance(payload: any, pageable: any): Observable<any> {
+  getList(payload: any, pageable: any): Observable<any> {
     return this.httpClient.post(
-      API_CONFIG.BASE_URL + "attendance/search",
+      API_CONFIG.BASE_URL + "attendance/list",
       payload,
       {
         headers: new HttpHeaders({'Content-Type': 'application/json'}),

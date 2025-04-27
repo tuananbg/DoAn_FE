@@ -143,10 +143,22 @@ export class ListAttendanceManagermentComponent implements OnInit {
   loadAttendanceId(employeeCode: string) {
     console.log("employeeCode", employeeCode);
     this.attendanceService.getAttendanceId(employeeCode).subscribe(res => {
-      if (res && res.code === "OK" && res.data != 0) {
-        this.id = res.data;
-        this.isDisabled = true;
-        console.log("//" + this.id);
+      if (res && res.code === "OK" && res.data) {
+        console.log("data2:", res);
+
+        this.id = res.data.id;
+
+        if (res.data.status === 1) {
+          this.isDisabled = true;
+          this.isDisabledTwo = false;
+        } else if (res.data.status === 2) {
+          this.isDisabled = true;
+          this.isDisabledTwo = true;
+        } else {
+          this.isDisabled = false;
+          this.isDisabledTwo = false;
+        }
+
       } else {
         this.spinner.hide().then();
       }
@@ -156,22 +168,19 @@ export class ListAttendanceManagermentComponent implements OnInit {
     });
   }
 
-  onEmployeeCodeChange(employeeCode: string) {
-    if (employeeCode) {
-      this.loadAttendanceId(employeeCode);
-    }
-  }
+
+  // onEmployeeCodeChange(employeeCode: string) {
+  //   if (employeeCode) {
+  //     this.loadAttendanceId(employeeCode);
+  //   }
+  // }
 
 
   loadStartDate(): void {
     this.isLoadingOne = true;
     // 👇 Lấy employeeCode từ form ra
     const employeeCode = this.form.get('employeeCode')?.value;
-    const now = new Date();
-    const formattedWorkingDay = formatDate(now, 'yyyy-MM-dd HH:mm:ss', 'en-US');
-    const formattedCheckInTime = formatDate(now, 'yyyy-MM-dd HH:mm:ss', 'en-US');
-
-    const data = { id: null, employeeCode: employeeCode, workingDay: formattedWorkingDay, checkInTime: formattedCheckInTime };
+    const data = { id: null, employeeCode: employeeCode};
 
     this.spinner.show().then();
     console.log("data :", data);
@@ -179,8 +188,8 @@ export class ListAttendanceManagermentComponent implements OnInit {
     this.attendanceService.createAttendance(data).subscribe(res => {
       if (res && res.body.code === "201") {
         this.id = res.id;
-        console.log("//" + this.id);
-        this.toastService.openSuccessToast('Đã chấm công, xin cảm ơn');
+        console.log("id:" + this.id);
+        this.toastService.openSuccessToast('Đã chấm công thành công, xin cảm ơn!');
         this.loadAttendanceId(employeeCode);
       } else {
         this.toastService.openErrorToast(res.body.msgCode);
@@ -202,19 +211,14 @@ export class ListAttendanceManagermentComponent implements OnInit {
   loadEndDate(): void {
     this.isLoadingTwo = true;
     const employeeCode = this.form.get('employeeCode')?.value;
-
     const data = {
       id: this.id,
-      employeeId: employeeCode,
-      workingDay: new Date(),
-      checkOutTime: new Date()
+      employeeCode: employeeCode,
     };
-
     console.log("data :", data);
-
     this.attendanceService.editAttendance(data).subscribe(res => {
       if (res && res.code === "202") {
-        this.toastService.openSuccessToast('Đã chấm công, xin cảm ơn');
+        this.toastService.openSuccessToast('Đã chấm công thành công, xin cảm ơn!');
         this.isDisabledTwo = true;
       } else {
         this.toastService.openErrorToast(res.body.msgCode);
@@ -242,6 +246,7 @@ export class ListAttendanceManagermentComponent implements OnInit {
   }
 
   onCalendarDateChange = (date: any) => {
+    console.log("Date:",date)
     this.currentDate = date;
     this.repaintScheduler();
   };
