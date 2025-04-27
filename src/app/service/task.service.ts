@@ -85,4 +85,14 @@ export class TaskService {
     )
   }
 
+  exportEmployee(status: string): Observable<any> {
+    return this.httpClient.get(
+      `${API_CONFIG.BASE_URL}employee-contract/download-xlsx/${status}`,  // <-- thêm status vào URL
+      {
+        responseType: 'blob',
+        observe: 'response',
+      }
+    );
+  }
+
 }

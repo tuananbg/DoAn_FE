@@ -70,7 +70,7 @@ export class ListEmployeeManagermentComponent implements OnInit {
   onTabChange(index: number): void {
     this.currentTabIndex = index;
     this.request.currentPage = 0;
-    this.fetchData();
+    this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
   onSearchChanged(event: any) {

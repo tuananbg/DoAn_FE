@@ -46,7 +46,8 @@
         </div>
       </div>
       <div class="list__head-right">
-        <div class="list__head-btn">
+        <div class="list__head-btn" style="display: flex; gap: 10px;">
+          <app-button-export appCheckAuthorize (clickExport)="onExporting($event)" [buttonClass]="'css-box-shadow'"></app-button-export>
           <app-button-create (clickCreate)="openCreateModal()" [loading]="isLoading"></app-button-create>
         </div>
       </div>

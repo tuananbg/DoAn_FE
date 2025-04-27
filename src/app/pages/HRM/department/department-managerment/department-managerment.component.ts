@@ -8,6 +8,7 @@ import {CreateDepartmentComponent} from "../create-department/create-department.
 import {NzTableSortOrder} from "ng-zorro-antd/table";
 import {LoginService} from "../../../../service/login.service";
 import {debounceTime, distinctUntilChanged} from "rxjs/operators";
+import {FileManagerService} from "../../../../service/file-manager.service";
 
 @Component({
   selector: 'app-department-managerment',
@@ -55,7 +56,7 @@ export class DepartmentManagermentComponent implements OnInit {
     private modal: NzModalService,
     private spinner: NgxSpinnerService,
     private viewContainerRef: ViewContainerRef,
-    private login: LoginService
+    private fileManagerService: FileManagerService,
   ) {
 
   }
@@ -198,41 +199,50 @@ export class DepartmentManagermentComponent implements OnInit {
     });
   }
 
-  openExport() {
-    // for (const control in this.searchForm.controls) {
-    //   if (this.searchForm.contains(control)) {
-    //     this.searchForm.controls[control].markAsDirty();
-    //     this.searchForm.controls[control].updateValueAndValidity();
-    //   }
-    // }
-    // if (this.searchForm.invalid) return;
-    // const formValue = this.searchForm.value;
+  async onExporting(e: any) {
+    if (this.searchForm.invalid) return;
 
-    // const queryModel = {
-    //   code: !formValue.code ? null : formValue.code.trim().toString(),
-    //   systemCode: !formValue.systemCode ? null : formValue.systemCode.toString(),
-    //   status: formValue.status === 0 ? '0' : !formValue.status ? null : formValue.status.toString(),
-    //   levelWarning: !formValue.levelWarning ? null : formValue.levelWarning.toString(),
-    //   staffId: !formValue.staffId ? null : formValue.staffId,
-    // };
-    // this.spinner.show().then();
-    // this.ticketAlertService.exportTicket(queryModel).subscribe(async response => {
-    //     const isJsonBlob = (data: any) => data instanceof Blob && data.type === 'application/json';
-    //     const responseData = isJsonBlob(response.body) ? await (response.body).text() : response.body || {};
-    //     if (typeof responseData === "string") {
-    //       const responseJson = JSON.parse(responseData);
-    //       this.toastService.openErrorToast(responseJson.msgCode);
-    //     } else {
-    //       const currentDate = moment();
-    //       const formattedDate = currentDate.format(DATE_EXCEL);
-    //       this.fileManagerService.downloadFile(response, 'danhsachticket_'+formattedDate+'.xlsx');
-    //     }
-    //   }, error => {
-    //     this.toastService.openErrorToast(error);
-    //   }, () => {
-    //     this.spinner.hide().then();
-    //   });
-    // this.nzOnSearch();
+    await this.fetchData(this.request.currentPage, this.request.pageSize);
+    this.spinner.show().then();
+
+    if (this.lstData.length === 0) {
+      this.spinner.hide().then(); // đừng quên hide luôn
+      return;
+    }
+
+    const status = this.statusList[this.currentTabIndex];
+
+    this.departmentService.exportEmployee(status).subscribe(
+      async response => {
+        const isJsonBlob = (data: any) => data instanceof Blob && data.type === 'application/json';
+        const responseData = isJsonBlob(response.body) ? await (response.body).text() : response.body || {};
+
+        if (typeof responseData === "string") {
+          const responseJson = JSON.parse(responseData);
+          this.toastService.openErrorToast(responseJson.msgCode);
+        } else {
+          const contentDisposition = response.headers.get('Content-Disposition');
+          let fileName = 'export.xlsx'; // fallback filename
+
+          if (contentDisposition) {
+            const match = contentDisposition.match(/filename\*=UTF-8''(.+)/);
+            if (match && match[1]) {
+              fileName = decodeURIComponent(match[1]);
+            }
+          }
+
+          this.fileManagerService.downloadFile(response, fileName);
+        }
+      },
+      error => {
+        this.toastService.openErrorToast(error);
+      },
+      () => {
+        this.spinner.hide().then();
+      }
+    );
+
+    e.cancel = true;
   }
 
   onTabChange(index: number): void {

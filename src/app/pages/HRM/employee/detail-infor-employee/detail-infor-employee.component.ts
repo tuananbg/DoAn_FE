@@ -65,7 +65,7 @@ export class DetailInforEmployeeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("AAAA")
+    // console.log("AAAA")
     this.route.paramMap.subscribe(params => {
 
       const employeeCode = params.get('code');
