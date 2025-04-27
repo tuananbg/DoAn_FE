@@ -1,4 +1,4 @@
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {AuthService} from "./auth.service";
@@ -39,12 +39,13 @@ export class AttendanceService {
     );
   }
 
-  getAttendanceId(payload: any): Observable<any> {
-    return this.httpClient.post(
-      API_CONFIG.BASE_URL + "attendance/detailAttendanceId",
-      payload
+  getAttendanceId(employeeCode: string): Observable<any> {
+    return this.httpClient.get(
+      API_CONFIG.BASE_URL + `attendance/getId/${employeeCode}`
     );
   }
+
+
 
   editAttendance(payload: any): Observable<any> {
     return this.httpClient.post(

@@ -13,30 +13,29 @@
 </div>
 <nz-collapse nzExpandIconPosition="right">
   <nz-collapse-panel nzHeader="Chấm công ngày {{dateNow | date: 'dd/MM/yyyy'}}" [nzActive]="isActive">
-    <div class="d-flex justify-content-between">
-      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }"
-           style="width: 70%; align-items: center;" class="d-flex justify-content-center">
-<!--        <div nz-col style="width: 45%; margin-left: 10px;">-->
-<!--          <label for="select2">Nhân viên</label>-->
-<!--          <nz-select id="select2" style="width: 100%;" nzShowSearch nzAllowClear-->
-<!--                     [(ngModel)]="selectedOptionEmployee"-->
-<!--                     (ngModelChange)="onOptionChangeEmployee($event)">-->
-<!--            <nz-option *ngFor="let option of lstEmployee" [nzValue]="option.id"-->
-<!--                       [nzLabel]="option.employeeName +' - '+ option.employeeCode"></nz-option>-->
-<!--          </nz-select>-->
-<!--        </div>-->
-<!--        <div nz-col style="width: 45%; margin-left: 10px;">-->
-<!--          <label for="select2">Nhân viên</label>-->
-<!--          <app-select [ngClass]="'w-100'" [data]="lstEmployee"-->
-<!--                      [valueField]="'employeeCode'"-->
-<!--                      [required]="true"-->
-<!--                      [labelField]="'employeeName'"-->
-<!--                      [placeHolder]="isView ? '' : '&#45;&#45;Lựa chọn&#45;&#45;'"-->
-<!--                      [openSearchModal]="false" [getObjectValue]="true"-->
-<!--                      [labelHorizontal]="false" formControlName="employeeCode" labelContent="Nhân viên">-->
-<!--          </app-select>-->
-<!--        </div>-->
+    <div class="d-flex justify-content-between" style="align-items: center;">
+      <div nz-row [nzGutter]="{ xs: 16, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }" style="width: 400px;">
+        <form [formGroup]="form" style="width: 100%;">
+          <div style="width: 100%;">
+            <app-select
+              appCheckAuthorize
+              style="width: 100%;"
+              [data]="lstEmployee"
+              [valueField]="'employeeCode'"
+              [required]="true"
+              [labelField]="'employeeName'"
+              [placeHolder]="isView ? '' : '--Lựa chọn--'"
+              [openSearchModal]="false"
+              [getObjectValue]="true"
+              [labelHorizontal]="false"
+              formControlName="employeeCode"
+              labelContent="Nhân viên">
+            </app-select>
+
+          </div>
+        </form>
       </div>
+
       <nz-row class="btn-wrappers" nzJustify="end" nzAlign="middle">
         <button nz-button nzType="primary" (click)="loadStartDate()"
                 [nzLoading]="isLoadingOne"
@@ -60,6 +59,7 @@
     </div>
   </nz-collapse-panel>
 </nz-collapse>
+
 <nz-collapse nzExpandIconPosition="right" style="margin-top: 10px">
   <nz-card>
     <div class="scheduler-container d-flex">

@@ -14,6 +14,8 @@ import {NzDrawerPlacement} from "ng-zorro-antd/drawer";
 import {DepartmentService} from "../../../../service/department.service";
 import * as moment from "moment";
 import {FileManagerService} from "../../../../service/file-manager.service";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { formatDate } from '@angular/common';
 
 type SelectedAppointment = { data: Record<string, any>, target: any };
 
@@ -40,9 +42,9 @@ export class ListAttendanceManagermentComponent implements OnInit {
   backgroundColorTwo: string = '';
   isDisabled = false;
   isDisabledTwo = false;
-  // idUserCustom: any;
-  employeeCode: any;
-  idAttendance: any;
+  form!: FormGroup;
+  userCode: any;
+  id: any;
   @ViewChild('schedulerRef', {static: false}) schedulerRef!: DxSchedulerComponent;
   @ViewChild('tooltipRef', {static: false}) tooltipRef!: DxTooltipComponent;
   tasks: DataSource<Task> = new DataSource<Task, any>([]);
@@ -61,6 +63,7 @@ export class ListAttendanceManagermentComponent implements OnInit {
   payloadEmployee = {employeeCode: null, employeeName: null, employeeEmail: null, employeeGender: null, positionId: null, departmentId: null};
   lstDepartment: any[] = [];
   lstEmployee: any[] = [];
+  isView: boolean = false;
   dateNow: any;
 
   constructor(
@@ -69,27 +72,31 @@ export class ListAttendanceManagermentComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private employeeService: EmployeeService,
     protected screen: ScreenService,
-    private departmentService:DepartmentService,
-    private fileManagerService: FileManagerService
+    private fileManagerService: FileManagerService,
+    private formBuilder: FormBuilder
   ) {
   }
 
   ngOnInit(): void {
     this.dateNow = new Date();
-    // const token = localStorage.getItem('token');
-    // const payloadToken: any = token ? this.parseJwt(token) : null;
-    // const userObject = JSON.parse(payloadToken.user);
-    this.employeeCode = localStorage.getItem('employeeCode');
-    this.loadAttendanceId();
-    this.fetchData(this.request.currentPage, this.request.pageSize);
-    // this.fetchDepartment();
+    this.userCode = localStorage.getItem('employeeCode');
+    this.form = this.formBuilder.group({
+      employeeCode: [null, Validators.required]
+    });
+    this.form.get('employeeCode')?.valueChanges.subscribe(employeeCode => {
+      if (employeeCode) {
+        this.loadAttendanceId(employeeCode);
+      }
+    });
+
+    this.loadAttendanceId(this.userCode);
     this.fetchEmployee();
   }
 
-  nzOnSearch(): void {
-    this.request.currentPage = 0;
-    // this.fetchData(this.request.currentPage, this.request.pageSize);
-  }
+  // nzOnSearch(): void {
+  //   this.request.currentPage = 0;
+  //   // this.fetchData(this.request.currentPage, this.request.pageSize);
+  // }
 
   // parseJwt(token: string): string {
   //   const base64Url = token.split('.')[1];
@@ -133,34 +140,48 @@ export class ListAttendanceManagermentComponent implements OnInit {
     });
   }
 
-  loadAttendanceId() {
-    const data = {employeeCode: this.employeeCode, workingDay: new Date()};
-    this.attendanceService.getAttendanceId(data).subscribe(res => {
-        if (res && res.code === "OK" && res.data != null) {
-          this.idAttendance = res.data;
-          this.isDisabled = true;
-          // this.backgroundColorOne = '#999999'
-          console.log("//" + this.idAttendance);
-        } else {
-          this.spinner.hide().then();
-        }
-      }, error => {
-        this.toastService.openErrorToast(error.error.msgCode);
+  loadAttendanceId(employeeCode: string) {
+    console.log("employeeCode", employeeCode);
+    this.attendanceService.getAttendanceId(employeeCode).subscribe(res => {
+      if (res && res.code === "OK" && res.data != 0) {
+        this.id = res.data;
+        this.isDisabled = true;
+        console.log("//" + this.id);
+      } else {
         this.spinner.hide().then();
       }
-    )
+    }, error => {
+      this.toastService.openErrorToast(error.error.msgCode);
+      this.spinner.hide().then();
+    });
   }
+
+  onEmployeeCodeChange(employeeCode: string) {
+    if (employeeCode) {
+      this.loadAttendanceId(employeeCode);
+    }
+  }
+
 
   loadStartDate(): void {
     this.isLoadingOne = true;
-    const data = {id: null, employeeCode: this.employeeCode, workingDay: new Date(), checkInTime: new Date()};
+    // 👇 Lấy employeeCode từ form ra
+    const employeeCode = this.form.get('employeeCode')?.value;
+    const now = new Date();
+    const formattedWorkingDay = formatDate(now, 'yyyy-MM-dd HH:mm:ss', 'en-US');
+    const formattedCheckInTime = formatDate(now, 'yyyy-MM-dd HH:mm:ss', 'en-US');
+
+    const data = { id: null, employeeCode: employeeCode, workingDay: formattedWorkingDay, checkInTime: formattedCheckInTime };
+
     this.spinner.show().then();
+    console.log("data :", data);
+
     this.attendanceService.createAttendance(data).subscribe(res => {
-      if (res && res.body.code === "OK") {
-        this.idAttendance = res.id;
-        console.log("//" + this.idAttendance);
+      if (res && res.body.code === "201") {
+        this.id = res.id;
+        console.log("//" + this.id);
         this.toastService.openSuccessToast('Đã chấm công, xin cảm ơn');
-        this.loadAttendanceId();
+        this.loadAttendanceId(employeeCode);
       } else {
         this.toastService.openErrorToast(res.body.msgCode);
         this.spinner.hide().then();
@@ -171,22 +192,28 @@ export class ListAttendanceManagermentComponent implements OnInit {
     }, () => {
       this.spinner.hide().then();
     });
+
     setTimeout(() => {
       this.isLoadingOne = false;
     }, 3000);
   }
 
+
   loadEndDate(): void {
     this.isLoadingTwo = true;
+    const employeeCode = this.form.get('employeeCode')?.value;
+
     const data = {
-      id: this.idAttendance,
-      employeeId: this.employeeCode,
+      id: this.id,
+      employeeId: employeeCode,
       workingDay: new Date(),
       checkOutTime: new Date()
     };
-    console.log("//" + this.employeeCode);
+
+    console.log("data :", data);
+
     this.attendanceService.editAttendance(data).subscribe(res => {
-      if (res && res.code === "OK") {
+      if (res && res.code === "202") {
         this.toastService.openSuccessToast('Đã chấm công, xin cảm ơn');
         this.isDisabledTwo = true;
       } else {
@@ -202,6 +229,7 @@ export class ListAttendanceManagermentComponent implements OnInit {
       this.isLoadingTwo = false;
     }, 3000);
   }
+
 
   onSelectedDateChange = (e?: Date) => {
     const date = e instanceof Date ? e : new Date();
@@ -248,18 +276,17 @@ export class ListAttendanceManagermentComponent implements OnInit {
   fetchEmployee() {
     this.employeeService.getListSelect().subscribe(res => {
       if (res && res.code === "OK") {
-        this.lstEmployee = res.data;
-        this.lstEmployee =  this.lstEmployee.map(res => `${res.employeeName} - ${res.employeeCode}`);
-        this.lstEmployee = this.lstEmployee.map(item => ({
+        this.lstEmployee = res.data.map((item: any) => ({
           ...item,
-          employeeName: item.employeeName + " - " + item.employeeCode
+          employeeName: item.employeeName + ' - ' + item.employeeCode
         }));
         this.lstEmployee.sort((a, b) => a.employeeName.localeCompare(b.employeeName));
       }
     }, (error: any) => {
       console.log(error);
-    })
+    });
   }
+
 
   // onOptionChangeDepartment(event: any): void {
   //   const selectedValue = event;
