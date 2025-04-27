@@ -27,21 +27,30 @@ export interface ContactBase {
 }
 
 export interface Contact {
-  id: number,
-  employeeCode: string,
-  employeeName: string,
-  gender: number,
-  status: ContactStatus,
-  phone: string,
-  birthday: any,
-  email: string,
-  address: string,
-  departmentName: string,
-  positionName: string,
-  departmentId: number,
-  positionId: number,
-  avatar: string,
-  isActive: any,
+  id: number;
+  employeeCode: string;
+  employeeName: string;
+  avatar: string;
+  departmentName: string;
+  positionName: string;
+  birthday:  any;
+  gender: number;
+  placeOfBirth: string;
+  taxCode: string;
+  insuranceNumber: string;
+  permanentAddress: string;
+  currentAddress: string;
+  identityNumber: string;
+  mobile: string;
+  nation: string;
+
+  // Thêm để binding UI
+  email: string;
+  address: string;
+  departmentId: number;
+  positionId: number;
+  status: ContactStatus;
+  isActive: any;
 }
 
 export const newContact: ContactBase = {

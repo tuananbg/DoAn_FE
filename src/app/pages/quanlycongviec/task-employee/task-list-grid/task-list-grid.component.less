@@ -1,8 +1,67 @@
-
-#tasks-grid {
-  min-height: 300px;
+:host {
+  width: 100%;
+  display: block;
 }
 
-.edit-cell {
-  position: relative;
+.view-wrapper {
+  padding: 0 16px;
+
+  .grid-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+
+    .grid-title {
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+      font-weight: 600;
+
+      i {
+        margin-right: 8px;
+      }
+    }
+
+    .grid-actions {
+      display: flex;
+      gap: 10px;
+    }
+  }
+
+  nz-collapse {
+    margin-bottom: 12px;
+  }
+
+  nz-tabset {
+    margin-bottom: 12px;
+
+    ::ng-deep .ant-tabs-nav {
+      margin-bottom: 4px;
+    }
+
+    ::ng-deep .ant-tabs-tab {
+      padding: 8px 16px;
+      font-size: 14px;
+    }
+
+    ::ng-deep .ant-tabs-ink-bar {
+      background-color: #1890ff;
+    }
+  }
+
+  .grid {
+    .dx-datagrid-header-panel {
+      padding: 0;
+    }
+
+    .dx-toolbar {
+      margin-top: 0;
+      padding: 0 16px;
+    }
+
+    .dx-datagrid-content .dx-row {
+      cursor: pointer;
+    }
+  }
 }

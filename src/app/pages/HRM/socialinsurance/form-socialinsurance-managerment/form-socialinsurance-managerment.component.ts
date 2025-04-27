@@ -88,7 +88,7 @@ export class FormSocialinsuranceManagermentComponent implements OnInit {
       if (!this.isUpdate) {
         this.spinner.show().then();
         this.socialinsuranceService.create(data).subscribe(res => {
-          if (res && res.body.code === "OK") {
+          if (res && res.body.code === "201") {
             this.toastService.openSuccessToast('Thêm mới thông tin bảo hiểm thành công');
             this.clickSave.emit();
             this.createForm.reset();

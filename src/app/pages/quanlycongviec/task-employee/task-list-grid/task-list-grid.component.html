@@ -1,132 +1,103 @@
-<dx-data-grid
-  id="tasks-grid"
-  class="theme-dependent"
-  height="100%"
-  [dataSource]="tasks"
-  (onRowClick)="navigateToDetails($event)"
-  (onEditingStart)="toogleUseNavigation()"
-  (onEditCanceled)="toogleUseNavigation()"
-  (onSaved)="toogleUseNavigation()"
-  [hoverStateEnabled]="true"
-  [columnAutoWidth]="true"
-  [showBorders]="true"
->
-  <dxo-paging [pageSize]="15"></dxo-paging>
-  <dxo-pager [visible]="true" [showPageSizeSelector]="true"></dxo-pager>
-  <dxo-editing mode="row" [allowUpdating]="true"> </dxo-editing>
-  <dxo-selection
-    selectAllMode="allPages"
-    showCheckBoxesMode="always"
-    mode="multiple"
-  ></dxo-selection>
-  <dxo-scrolling mode="virtual"></dxo-scrolling>
-  <dxo-sorting mode="multiple"></dxo-sorting>
-  <dxo-header-filter [visible]="true"></dxo-header-filter>
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#3579c2"
+             type="line-scale" [fullScreen]="false"><p style="color: white"> Đang tải... </p>
+</ngx-spinner>
+<div class="ant-breadcrumb-custom">
+  <nz-breadcrumb>
+    <nz-breadcrumb nzSeparator=">">
+      <nz-breadcrumb-item>
+        <a>Quản lý công việc</a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a>Danh sách công việc</a>
+      </nz-breadcrumb-item>
+    </nz-breadcrumb>
+  </nz-breadcrumb>
+</div>
+<div class="view-wrapper list-page crm-contact-list">
 
-  <dxi-column dataField="text" caption="Subject" [hidingPriority]="7">
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dxi-column>
-  <dxi-column dataField="company" caption="Company" [hidingPriority]="6">
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dxi-column>
-  <dxi-column
-    dataField="priority"
-    caption="Priority"
-    [hidingPriority]="4"
-    cellTemplate="cellPriority"
-    editCellTemplate="editCellPriority"
-  >
-    <dxo-lookup [dataSource]="priorityList"></dxo-lookup>
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dxi-column>
-  <dxi-column
-    dataField="startDate"
-    caption="Start Date"
-    dataType="date"
-    [hidingPriority]="2"
-  >
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dxi-column>
-  <dxi-column
-    dataField="dueDate"
-    caption="Due Date"
-    dataType="date"
-    sortOrder="asc"
-    [hidingPriority]="1"
-  >
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dxi-column>
-  <dxi-column dataField="owner" caption="Owner" [hidingPriority]="5">
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dxi-column>
-  <dxi-column
-    dataField="status"
-    caption="Status"
-    [hidingPriority]="3"
-    [minWidth]="120"
-    cellTemplate="cellStatus"
-    editCellTemplate="editCellStatus"
-  >
-    <dxo-lookup [dataSource]="statusList"></dxo-lookup>
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dxi-column>
-
-  <div *dxTemplate="let cellInfo of 'cellPriority'">
-    <app-status-indicator
-      [isField]="false"
-      [showBar]="true"
-      [value]="cellInfo.data.priority"
-    >
-    </app-status-indicator>
+  <!-- Thanh công cụ -->
+  <div class="grid-header mb-2" style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <i class="fa-solid fa-list-check" style="margin-right: 7px;"></i>
+      <strong style="font-size: 18px;">Công việc của tôi</strong>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <app-button-create appCheckAuthorize (clickCreate)="onCreateTask()" [loading]="isLoading"></app-button-create>
+      <app-button-export appCheckAuthorize (clickExport)="onExporting($event)" [buttonClass]="'css-box-shadow'"></app-button-export>
+    </div>
   </div>
 
-  <div *dxTemplate="let cellInfo of 'editCellPriority'">
-    <dx-select-box
-      class="edit-cell"
-      [(value)]="cellInfo.value"
-      [items]="priorityList"
-      (onValueChanged)="cellInfo.setValue($event.value)"
-      (onSelectionChanged)="cellInfo.component.updateDimensions()"
-      fieldTemplate="field"
-    >
-      <div *dxTemplate="let data of 'field'">
-        <app-status-indicator
-          [showBar]="true"
-          [value]="cellInfo.value"
-        ></app-status-indicator>
-      </div>
-      <div *dxTemplate="let data of 'item'">
-        <app-status-indicator
-          [showBar]="true"
-          [isField]="false"
-          [value]="data"
-        ></app-status-indicator>
-      </div>
-    </dx-select-box>
-  </div>
+  <!-- Tìm kiếm nâng cao -->
+  <form [formGroup]="searchForm" (keyup.enter)="nzOnSearch()">
+    <div nz-col [nzSm]="8" [nzMd]="8" [nzLg]="8">
+      <nz-form-item>
+        <nz-form-control>
+          <app-input-text-v2
+            formControlName="keyword"
+            label="Tìm kiếm"
+            [maxlength]="'255'"
+            [nzAllowClear]="true"
+          ></app-input-text-v2>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </form>
 
-  <div *dxTemplate="let cellInfo of 'cellStatus'">
-    <app-status-indicator
-      [isField]="false"
-      [value]="cellInfo.data.status"
-    ></app-status-indicator>
-  </div>
 
-  <div *dxTemplate="let cellInfo of 'editCellStatus'">
-    <dx-select-box
-      class="edit-cell"
-      [(value)]="cellInfo.value"
-      [items]="statusList"
-      (onValueChanged)="cellInfo.setValue($event.value)"
-      (onSelectionChanged)="cellInfo.component.updateDimensions()"
-      fieldTemplate="field"
-    >
-      <div *dxTemplate="let data of 'field'">
-<!--        <status-indicator [value]="cellInfo.value"></status-indicator>-->
-      </div>
-      <div *dxTemplate="let s of 'item'">
-<!--        <status-indicator [isField]="false" [value]="s"></status-indicator>-->
-      </div>
-    </dx-select-box>
-  </div>
-</dx-data-grid>
+
+  <!-- Tabs -->
+  <nz-tabset [(nzSelectedIndex)]="currentTabIndex" (nzSelectedIndexChange)="onTabChange($event)" style="margin-bottom: 15px;">
+    <nz-tab nzTitle="Cần làm"></nz-tab>
+    <nz-tab nzTitle="Đang xử lý"></nz-tab>
+    <nz-tab nzTitle="Hoàn thành"></nz-tab>
+  </nz-tabset>
+
+  <!-- DataGrid -->
+  <dx-data-grid
+    class="grid theme-dependent"
+    noDataText=""
+
+    height="100%"
+    keyExpr="id"
+    [dataSource]="lstData"
+    [allowColumnReordering]="true"
+    [focusedRowEnabled]="true"
+    [showBorders]="true"
+    [(focusedRowKey)]="userId"
+    (onRowClick)="rowClick($event)"
+  >
+
+    <dxo-scrolling mode="virtual"></dxo-scrolling>
+    <dxo-sorting mode="multiple"></dxo-sorting>
+    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+
+    <dxi-column dataField="taskCode" caption="Mã công việc" [minWidth]="150" sortOrder="desc"></dxi-column>
+    <dxi-column dataField="taskName" caption="Tên công việc" [minWidth]="150"></dxi-column>
+    <dxi-column dataField="projectName" caption="Tên dự án" [minWidth]="100"></dxi-column>
+    <dxi-column dataField="employeeName" caption="Người thực hiện" [minWidth]="100"></dxi-column>
+    <dxi-column dataField="managerName" caption="Quản lý" [minWidth]="100"></dxi-column>
+    <dxi-column
+      dataField="taskStatus"
+      caption="Trạng thái"
+      [minWidth]="150"
+      [lookup]="{
+    dataSource: lstTaskStatus,
+    valueExpr: 'code',
+    displayExpr: 'name'
+  }"
+    ></dxi-column>
+    <dxi-column dataField="startDay" caption="Từ ngày" [minWidth]="150"></dxi-column>
+    <dxi-column dataField="endDay" caption="Đến ngày" [minWidth]="150"></dxi-column>
+    <dxi-column
+      dataField="priority"
+      caption="Độ ưu tiên"
+      [minWidth]="100"
+      [lookup]="{
+    dataSource: lstPriority,
+    valueExpr: 'code',
+    displayExpr: 'name'
+  }"
+    ></dxi-column>
+
+  </dx-data-grid>
+</div>

@@ -1,91 +1,194 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {DxDataGridComponent} from "devextreme-angular";
-import {TaskForm, taskPriorityList, taskStatusList} from "../../../../core/task";
 import {Router} from "@angular/router";
-import {DxTabsTypes} from "devextreme-angular/ui/tabs";
 import {DxDataGridTypes} from "devextreme-angular/ui/data-grid";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {ToastService} from "../../../../service/toast.service";
+import {NgxSpinnerService} from "ngx-spinner";
+import {TaskService} from "../../../../service/task.service";
+import {FileManagerService} from "../../../../service/file-manager.service";
 
 @Component({
   selector: 'app-task-list-grid',
   templateUrl: './task-list-grid.component.html',
   styleUrls: ['./task-list-grid.component.less']
 })
-export class TaskListGridComponent implements OnChanges {
+export class TaskListGridComponent implements OnInit {
+  @ViewChild(DxDataGridComponent, {static: true}) dataGrid!: DxDataGridComponent;
 
-  @ViewChild(DxDataGridComponent, { static: false }) grid!: DxDataGridComponent;
+  isActive = true;
+  searchForm!: FormGroup;
+  isUpdate = false;
+  isLoading = false;
+  userId: number | undefined;
+  currentTabIndex = 0;
+  statusList = ["TODO", 'PROCESSING','DONE'];
+  getStatusLabel(status: string): string {
+    switch (status) {
+      case 'TODO': return 'Cần làm';
+      case 'PROCESSING': return 'Đang xử lý';
+      case 'DONE': return 'Hoàn thành';
+      default: return status;
+    }
+  }
+  lstTaskStatus: any[] = [
+    {code: 1, name: "Chưa làm"},
+    {code: 2, name: "Đang xử lý"},
+    {code: 3, name: "Hoàn thành"},
+  ];
+  lstPriority: any[] = [
+    {code: 1, name: "Thấp"},
+    {code: 2, name: "Trung bình"},
+    {code: 3, name: "Cao"},
+  ];
 
-  @Input() dataSource!: TaskForm[];
+  request: any = {
+    listTextSearch: [],
+    code: null,
+    page: 1,
+    name: null,
+    currentPage: 0,
+    pageSize: 10,
+    sort: 'createDate/DESC', // -: desc | +: asc,
+  };
+  lstData: any[] = [];
+  total = 0;
 
-  @Output() tabValueChanged: EventEmitter<any> = new EventEmitter<EventEmitter<any>>();
-
-  tasks!: TaskForm[];
-
-  priorityList = taskPriorityList;
-
-  statusList = taskStatusList;
-
-  isLoading = true;
-
-  useNavigation = true;
-
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private toastService: ToastService,
+    private spinner: NgxSpinnerService,
+    private formBuilder: FormBuilder,
+    private taskService:TaskService
+  ) {
   }
 
-  refresh() {
-    this.grid.instance.refresh();
+  ngOnInit() {
+    this.searchForm = this.formBuilder.group({
+      keyword: new FormControl(null, [Validators.maxLength(100)]),
+    });
+    this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
-  showColumnChooser() {
-    this.grid.instance.showColumnChooser();
+  fetchData(currentPage: number = 0, pageSize: number = 10): void {
+    const pageable = { page: currentPage, size: pageSize };
+    const status = this.statusList[this.currentTabIndex];
+
+    this.spinner.show().then();
+
+    this.taskService.getListPerson(this.searchKeyword, status, pageable).subscribe({
+      next: (res) => {
+        if (res && res.code === "OK" && res.data && res.data.content) {
+          this.lstData = res.data.content.map((item: any) => ({
+            id: item.id,
+            taskCode: item.taskCode,
+            taskName: item.taskName,
+            employeeName: item.employeeName,
+            managerName: item.managerName,
+            taskStatus: item.status, // chuyển code sang label
+            startDay: item.startDay ? this.formatDate(item.startDay) : '',
+            endDay: item.endDay ? this.formatDate(item.endDay) : '',
+            priority: item.priority,
+            projectName: item.projectName || '',
+          }));
+        } else {
+          this.lstData = [];
+          this.toastService.openErrorToast(res?.msgCode || "Không thể lấy dữ liệu");
+          this.spinner.hide().then();
+        }
+      },
+      error: (err) => {
+        this.toastService.openErrorToast(err?.error?.msgCode || "Lỗi server");
+        this.spinner.hide().then();
+      },
+      complete: () => {
+        this.spinner.hide().then();
+      }
+    });
   }
 
-  search(text: string) {
-    this.grid.instance.searchByText(text);
+
+  searchKeyword: string | null = null;
+
+  onSearchChanged(event: any) {
+    this.searchKeyword = event.value ? event.value : null; // Nếu không nhập, đặt lại null
+    this.fetchData(this.request.currentPage, this.request.pageSize); // Gọi API
   }
 
-  // onExportingToPdf() {
-  //   const doc = new jsPDF();
-  //   exportToPdf({
-  //     jsPDFDocument: doc,
-  //     component: this.grid.instance,
-  //   }).then(() => {
-  //     doc.save('Tasks.pdf');
-  //   });
-  // };
+  nzOnSearch(): void {
+    this.request.currentPage = 0;
+    this.fetchData(this.request.currentPage, this.request.pageSize);
+  }
 
-  // onExportingToXLSX() {
-  //   const workbook = new Workbook();
-  //   const worksheet = workbook.addWorksheet('Tasks');
-  //
-  //   exportToXLSX({
-  //     component: this.grid.instance,
-  //     worksheet,
-  //     autoFilterEnabled: true,
-  //   }).then(() => {
-  //     workbook.xlsx.writeBuffer().then((buffer) => {
-  //       saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Tasks.xlsx');
-  //     });
-  //   });
-  // };
+  formatDate(dateStr: string): string {
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return ''; // Kiểm tra ngày hợp lệ
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['dataSource']) {
-      this.tasks = changes['dataSource'].currentValue.filter((item: any) => !!item.status && !!item.priority);
+
+  onTabChange(index: number) {
+    this.currentTabIndex = index;
+    this.request.currentPage = 0; // reset về trang đầu
+    this.fetchData(this.request.currentPage, this.request.pageSize);
+  }
+
+
+  refresh = () => {
+    this.fetchData();
+    this.dataGrid.instance.refresh();
+  };
+
+  rowClick(e: DxDataGridTypes.RowClickEvent) {
+    // Kiểm tra dữ liệu dòng khi click
+    const taskCode = e.data?.taskCode;
+    console.log("data",e.data)
+    this.router.navigate(['/task/update', taskCode]);
+  }
+
+  onOpenedChange = (value: boolean) => {
+    if (!value) {
+      this.userId == null;
     }
   };
 
-  toogleUseNavigation = () => {
-    this.useNavigation = !this.useNavigation;
+  onPinnedChange = () => {
+    this.dataGrid.instance.updateDimensions();
   };
 
-  tabsItemClick = (e: DxTabsTypes.ItemClickEvent) => {
-    this.tabValueChanged.emit(e);
+  onCreateTask = () => {
+    this.router.navigate(['/task/add']);
   };
-
-  navigateToDetails = (e: DxDataGridTypes.RowClickEvent) => {
-    if(this.useNavigation && e.rowType !== 'detailAdaptive') {
-      this.router.navigate(['/planning-task-details']);
-    }
-  };
+  async onExporting(e: any) {
+    // if (this.searchForm.invalid) return;
+    // const queryModel = null;
+    // const pageable = {
+    //   sort: this.request.sort
+    // };
+    // await this.fetchData(this.request.currentPage, this.request.pageSize);
+    // this.spinner.show().then();
+    // if(this.lstData.length===0){
+    //   return;
+    // }
+    // this.employeeService.exportEmployee(queryModel, pageable).subscribe(async response => {
+    //   const isJsonBlob = (data: any) => data instanceof Blob && data.type === 'application/json';
+    //   const responseData = isJsonBlob(response.body) ? await (response.body).text() : response.body || {};
+    //   if (typeof responseData === "string") {
+    //     const responseJson = JSON.parse(responseData);
+    //     this.toastService.openErrorToast(responseJson.msgCode);
+    //   } else {
+    //     const currentDate = moment(new Date()).format('DDMMYYYY');
+    //     this.fileManagerService.downloadFile(response, 'danhsachnhanvien_' + currentDate + '.xlsx');
+    //   }
+    // }, error => {
+    //   this.toastService.openErrorToast(error);
+    // }, () => {
+    //   this.spinner.hide().then();
+    // });
+    // e.cancel = true;
+  }
 
 }

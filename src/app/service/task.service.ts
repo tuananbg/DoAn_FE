@@ -44,6 +44,21 @@ export class TaskService {
     )
   }
 
+  getListPerson(keyword: any,status : string, pageable: any): Observable<any> {
+    let params = new HttpParams({fromObject: pageable});
+
+    if (keyword) {
+      params = params.set('keyword', keyword);
+    }
+    return this.httpClient.get(
+      `${API_CONFIG.BASE_URL}task/list/person/${status}`,
+      {
+        headers: new HttpHeaders({'Content-Type': 'application/json'}),
+        params: params
+      }
+    )
+  }
+
   create(taskDTO: any): Observable<any> {
     return this.httpClient.post(
       API_CONFIG.BASE_URL + "task/create",

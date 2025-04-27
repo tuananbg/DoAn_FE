@@ -4,9 +4,6 @@
       <dx-toolbar class="panel-toolbar">
         <dxi-item location="before" cssClass="accent">
           <div *dxTemplate style="display: flex; padding: 5px 40px;">
-            <div *ngIf="!isDisablePinClose"
-                 [ngClass]="user.isActive == 2 ? 'circle-button-success' : 'circle-button-danger'">
-            </div>
             <app-form-textbox
               [(value)]="user.employeeName"
               [isEditing]="isEditing"
@@ -140,8 +137,7 @@
                   <div *dxTemplate>
                     <app-form-textbox
                       icon="tel"
-                      mask="+1(000)000-0000"
-                      [(value)]="user.phone"
+                      [(value)]="user.mobile"
                       [isEditing]="isEditing"
                     >
                     </app-form-textbox>

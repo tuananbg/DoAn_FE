@@ -171,11 +171,11 @@ const routes: Routes = [
         component: TaskFormManagementComponent
       },
       {
-        path: 'project-person/:employeeCode',
+        path: 'project-person',
         component: TaskListGridComponent
       },
       {
-        path: 'task-person/:employeeCode/:projectCode',
+        path: 'task-person/:projectCode',
         component: TaskDetailManagementComponent
       },
     ]

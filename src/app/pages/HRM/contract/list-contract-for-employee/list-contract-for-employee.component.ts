@@ -51,7 +51,6 @@ export class ListContractForEmployeeComponent implements OnInit {
 
 
   constructor(
-    private qualificationService: QualificationService,
     private contractService: ContractService,
     private fileManagerService: FileManagerService,
     private toastService: ToastService,
@@ -76,8 +75,8 @@ export class ListContractForEmployeeComponent implements OnInit {
     this.spinner.show().then();
     this.contractService.getListForEmployee(this.employeeCode, pageable).subscribe(res => {
       if (res && res.code === "OK") {
-        this.lstData = res.data.data;
-        this.total = res.data.dataCount;
+        this.lstData = res.data.content;
+        this.total = res.data.totalElements;
         this.spinner.hide().then();
         if (this.lstData.length === 0) {
           if (this.request.currentPage !== 0) {

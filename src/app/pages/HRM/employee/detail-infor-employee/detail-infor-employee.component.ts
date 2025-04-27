@@ -212,6 +212,17 @@ export class DetailInforEmployeeComponent implements OnInit {
       }
     });
   };
+  onAvatarChanged(event: any) {
+    const file = event.value[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.user.avatar = e.target.result; // base64 string ảnh
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
 
 
 }

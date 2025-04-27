@@ -36,15 +36,15 @@ export class SocialinsuranceService {
     );
   }
 
-  getId(id: number | undefined): Observable<any> {
-    return this.httpClient.get(
-      API_CONFIG.BASE_URL + "social-insurance/detail" + '/' + id,
-    );
-  }
+  // getId(id: number | undefined): Observable<any> {
+  //   return this.httpClient.get(
+  //     API_CONFIG.BASE_URL + "social-insurance/detail" + '/' + id,
+  //   );
+  // }
 
   edit(payload: any): Observable<any> {
     return this.httpClient.put(
-      API_CONFIG.BASE_URL + "social-insurance",
+      API_CONFIG.BASE_URL + "social-insurance/update",
       payload,
     );
   }
