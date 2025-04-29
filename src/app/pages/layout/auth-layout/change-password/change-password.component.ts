@@ -106,7 +106,7 @@ export class ChangePasswordComponent implements OnInit {
   verifyFormSubmit(): void {
     if (this.formCodeConfirm.valid) {
       const code = this.formCodeConfirm.value['code'];
-      this.http.get(API_CONFIG.BASE_URL + `auth/check-verify-code/${code}`, null).subscribe({
+      this.http.get(API_CONFIG.BASE_URL + `auth/check-verify-code/${code}`).subscribe({
         next: res => {
           this.isTabTwo = false;
           this.isTabThree = true;

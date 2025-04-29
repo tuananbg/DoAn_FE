@@ -9,66 +9,20 @@
   </nz-breadcrumb>
 </div>
 <nz-collapse nzExpandIconPosition="right">
-  <nz-collapse-panel
-    nzHeader="Điều kiện tìm kiếm"
-    [nzActive]="searchActive"
-  >
-    <form
-      nz-form
-      nzLayout="vertical"
-    >
-      <div nz-row nzGutter="60">
-<!--        <div nz-col nzSpan="6">-->
-<!--          <nz-form-item>-->
-<!--            <nz-form-label >Tên nhân viên</nz-form-label>-->
-<!--            <nz-form-control  nzErrorTip="Please input your username!">-->
-<!--              <input nz-input placeholder="" />-->
-<!--            </nz-form-control>-->
-<!--          </nz-form-item>-->
-<!--        </div>-->
-        <div nz-col nzSpan="6">
+  <nz-collapse-panel nzHeader="Điều kiện tìm kiếm" [nzActive]="searchActive">
+    <form nz-form [formGroup]="searchForm" nzLayout="vertical" (keyup.enter)="nzOnSearch()">
+      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
+        <div nz-col [nzSm]="24" [nzMd]="8" [nzLg]="8">
           <nz-form-item>
-            <nz-form-label >Email</nz-form-label>
-            <nz-form-control  nzErrorTip="Please input your Password!">
-              <input nz-input placeholder="" />
+            <nz-form-control>
+              <app-input-text-v2
+                formControlName="keyword"
+                label="Tìm kiếm"
+                [maxlength]="'255'"
+                [nzAllowClear]="true"
+              ></app-input-text-v2>
             </nz-form-control>
           </nz-form-item>
-        </div>
-        <div nz-col nzSpan="6">
-          <nz-form-item>
-            <nz-form-label>Trạng thái</nz-form-label>
-            <nz-form-control  nzErrorTip="Please input your Password!">
-              <input nz-input placeholder="" />
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="6">
-          <nz-form-item>
-            <nz-form-label>Trạng thái kích hoạt</nz-form-label>
-            <nz-form-control  nzErrorTip="Please input your Password!">
-              <input nz-input placeholder="" />
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
-      <div nz-row>
-        <div nz-col nzOffset="9" nzSpan="6">
-          <div nz-row nzGutter="30">
-            <div nz-col>
-              <nz-form-item>
-                <nz-form-control>
-                  <button nz-button nzType="primary"><i class="fa-solid fa-rotate-left" style="margin-right: 7px;"></i> Nhập lại</button>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col>
-              <nz-form-item>
-                <nz-form-control>
-                  <button nz-button nzType="primary"><i class="fa-solid fa-magnifying-glass" style="margin-right: 7px;"></i>Tìm kiếm</button>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-          </div>
         </div>
       </div>
     </form>
@@ -79,6 +33,10 @@
     nzHeader="Kết quả tìm kiếm"
     [nzActive]="resultActive"
   >
+    <nz-tabset [(nzSelectedIndex)]="currentTabIndex" (nzSelectedIndexChange)="onTabChange($event)">
+      <nz-tab nzTitle="Hoạt động"></nz-tab>
+      <nz-tab nzTitle="Khóa"></nz-tab>
+    </nz-tabset>
     <nz-table
       #sortTable
       nzSize="small"
@@ -87,13 +45,8 @@
       [nzFrontPagination]="false"
       [nzLoading]="tableLoading"
       [nzShowSizeChanger]="true"
-      [nzTotal]="pagination.total"
-      [nzPageIndex]="pagination.current + 1"
-      [nzPageSize]="pagination.pageSize"
       [nzPageSizeOptions]="[10, 15, 20]"
       [nzScroll]="{ x: 'maxContent'}"
-      (nzPageIndexChange)="handlePageIndexChange($event)"
-      (nzPageSizeChange)="handlePageSizeChange($event)"
     >
       <thead>
       <tr>
@@ -106,7 +59,7 @@
       </thead>
       <tbody>
       <tr *ngFor="let data of sortTable.data; let i = index">
-        <td style="text-align: center">{{pagination.current * pagination.pageSize + i + 1}}</td>
+        <td style="text-align: center">{{(request.currentPage * request.pageSize) + i + 1}}</td>
         <td style="text-align: center">{{ data.email}}</td>
         <td style="text-align: center">{{ data.status === 1 ? 'Hoạt động' : 'Không hoạt động'}}</td>
         <td style="text-align: center">{{ data.active === 1 ? 'Kích hoạt' : 'Chưa kích hoạt'}}</td>

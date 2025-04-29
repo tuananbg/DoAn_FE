@@ -97,57 +97,61 @@ export class PositionManagermentFormComponent implements OnInit {
     this.modal.destroy();
   }
 
-  handleOkModal() {
-    for (const i in this.createForm.controls) {
-      this.createForm.controls[i].markAsDirty();
-      this.createForm.controls[i].updateValueAndValidity();
-    }
+  handleOkModal(): void {
+    // 1. Đánh dấu toàn bộ field để validate
+    Object.values(this.createForm.controls).forEach(control => {
+      control.markAsDirty();
+      control.updateValueAndValidity();
+    });
 
-    console.log(this.createForm);
+    // 2. Nếu hợp lệ mới tiếp tục
     if (this.createForm.valid) {
-      const data = this.createForm.value;
-      data.id = data.id ? data.id : null;
-      data.positionCode = data.positionCode?.trim() ?? null;
-      data.positionName = data.positionName?.trim() ?? null;
-      data.positionDescription = data.positionDescription?.trim() ?? null;
-      data.departmentCode = data.departmentCode ?? null;
-      data.positionCategory = data.positionCategory ?? null;
-      data.jobGroup = data.jobGroup ?? null;
+      // Chuẩn hóa dữ liệu đầu vào
+      const formValue = this.createForm.value;
+      const data = {
+        id: this.isUpdate ? formValue.id : null,
+        positionCode: formValue.positionCode?.trim() || null,
+        positionName: formValue.positionName?.trim() || null,
+        positionDescription: formValue.positionDescription?.trim() || null,
+        departmentCode: formValue.departmentCode || null,
+        positionCategory: formValue.positionCategory || null,
+        jobGroup: formValue.jobGroup || null
+      };
 
-      console.log("data1", data)
-      this.spinner.show().then();
+      this.spinner.show();
 
-      const request = this.isUpdate
+      // 3. Chọn API phù hợp (tạo mới hoặc cập nhật)
+      const request$ = this.isUpdate
         ? this.positionService.editPosition(data)
         : this.positionService.createPosition(data);
 
-
-      request.subscribe({
+      // 4. Gọi API và xử lý phản hồi
+      request$.subscribe({
         next: (res) => {
-          console.log("data",res)
-          const code = res?.body?.code;
-          if (code === "201") {
-            const msg = this.isUpdate ? 'Cập nhật' : 'Thêm mới';
-            this.toastService.openSuccessToast(`${msg} chức vụ thành công`);
+          // Nếu bạn dùng observe: 'response' -> lấy res.body
+          const result = res?.body ?? res;
+
+          if (result.code === '201' || result.code === '202') {
+            const action = this.isUpdate ? 'Cập nhật' : 'Thêm mới';
+            this.toastService.openSuccessToast(`${action} chức vụ thành công`);
             this.clickSave.emit();
             this.handleCancelModal();
           } else {
-            this.toastService.openErrorToast(res?.body?.msgCode || 'Lỗi xử lý chức vụ');
+            this.toastService.openErrorToast(result?.msgCode || 'Lỗi xử lý chức vụ');
             this.spinner.hide();
           }
         },
-        error: (error) => {
-          this.toastService.openErrorToast(error?.error?.msgCode || 'Lỗi hệ thống');
+        error: (err) => {
+          this.toastService.openErrorToast(err?.error?.msgCode || 'Lỗi hệ thống');
           this.spinner.hide();
         },
         complete: () => {
           this.spinner.hide();
         }
       });
-
-
     }
   }
+
 
   fetchDepartment() {
     this.departmentService.getListDepartment(this.payloadDepartment).subscribe(

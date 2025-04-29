@@ -2,7 +2,7 @@
     padding: 0;
     background: transparent;
     border: none;
-  
+
     &:after {
       -webkit-animation: none !important;
       -moz-animation: none !important;
@@ -10,25 +10,29 @@
       -ms-animation: none !important;
       animation: none !important;
     }
-  
+
     &:hover, &:focus {
       svg path {
         fill: #4C4C4C;
       }
-  
+
       .icon__add-user, .icon__add-file {
         color: #C62F2D;
       }
     }
-  
+
     &:disabled {
       pointer-events: none;
       cursor: not-allowed;
       opacity: 0.5;
     }
-  
+
     .icon__add-user {
       font-size: 25px;
     }
   }
-  
+.icon__edit {
+  color: #1890ff; /* hoặc màu nào bạn muốn */
+  font-size: 20px;
+}
+

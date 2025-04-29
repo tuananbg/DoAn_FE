@@ -86,8 +86,8 @@
             <td class="text-center max-width-200">{{ (request.currentPage * request.pageSize) + idx + 1}}</td>
             <td class="max-width-150" [nz-tooltip]="data.departmentCode">{{data.departmentCode}}</td>
             <td class="max-width-150" [nz-tooltip]="data.departmentName">{{data.departmentName}}</td>
-            <td class="max-width-100 text-center" [nz-tooltip]="'Không hoạt động'" *ngIf="data.status === 0">
-              <span class="css-badge badge badge-pill bg-danger p-3">Không hoạt động</span></td>
+            <td class="max-width-100 text-center" [nz-tooltip]="'Vô hiệu'" *ngIf="data.status === 0">
+              <span class="css-badge badge badge-pill bg-danger p-3">Vô hiệu</span></td>
             <td class="max-width-100 text-center" [nz-tooltip]="'Hoạt động'" *ngIf="data.status === 1">
               <span class="css-badge badge badge-pill bg-success p-3">Hoạt động</span></td>
             <td class="text-center max-width-150">
@@ -96,8 +96,8 @@
                                  [tooltipTitle]="'Cập nhật phòng ban'"
                                  [loading]="isLoading"
                                  (clickAction)="openUpdateModal(data)"></app-button-icon>
-                <app-button-icon class="action__margin" [isDelete]="true"
-                                 [tooltipTitle]="'Xóa phòng ban'" (click)="openModalDelete(data)"></app-button-icon>
+                <app-button-icon class="action__margin" [isLock]="true"
+                                 [tooltipTitle]="'Vô hiệu phòng ban'" (click)="openModalDelete(data)"></app-button-icon>
               </div>
             </td>
           </tr>

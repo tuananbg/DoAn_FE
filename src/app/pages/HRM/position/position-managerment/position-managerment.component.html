@@ -60,7 +60,7 @@
                 [nzNoResult]="'Không có kết quả tìm kiếm'" [nzScroll]="{ x: SCROLL_TABLE.SCROLL_X}">
         <thead>
         <tr class="ant-header-customize">
-          <th nzWidth="50px" class="text-center">
+          <th nzWidth="80px" class="text-center">
             STT
           </th>
           <th  nzWidth="100px" class="text-center">
@@ -69,8 +69,14 @@
           <th nzWidth="150px" class="text-center">
             Tên chức vụ
           </th>
-          <th nzWidth="150px" class="text-center">
+          <th nzWidth="200px" class="text-center">
             Tên phòng ban
+          </th>
+          <th nzWidth="150px" class="text-center">
+            Chức danh
+          </th>
+          <th nzWidth="150px" class="text-center">
+            Cấp bậc
           </th>
           <th nzWidth="200px" class="text-center">
             Mô tả
@@ -78,7 +84,7 @@
           <th nzWidth="200px" class="text-center">
             Trạng thái
           </th>
-          <th nzWidth="100px" class="text-center">
+          <th nzWidth="150px" class="text-center" *ngIf="currentTabIndex === 0">
             Hành động
           </th>
         </tr>
@@ -86,23 +92,28 @@
         <tbody>
         <ng-template ngFor let-data let-idx="index" [ngForOf]="rowSelectionTable.data">
           <tr>
-            <td class="text-center max-width-50">{{ (request.currentPage * request.pageSize) + idx + 1}}</td>
+            <td class="text-center max-width-100">{{ (request.currentPage * request.pageSize) + idx + 1}}</td>
             <td class="max-width-100" [nz-tooltip]="data.positionCode">{{data.positionCode}}</td>
             <td class="max-width-150" [nz-tooltip]="data.positionName">{{data.positionName}}</td>
-            <td class="max-width-150" [nz-tooltip]="data.departmentName">{{data.departmentName}}</td>
+            <td class="max-width-200" [nz-tooltip]="data.departmentName">{{data.departmentName}}</td>
+            <td class="max-width-150" [nz-tooltip]="data.positionCategoryName">{{data.positionCategoryName}}</td>
+            <td class="max-width-150" [nz-tooltip]="data.jobGroupName">{{data.jobGroupName}}</td>
             <td class="max-width-200" [nz-tooltip]="data.positionDescription">{{data.positionDescription}}</td>
-            <td class="max-width-200 text-center" [nz-tooltip]="'Không hoạt động'" *ngIf="data.status !== 1">
-              <span class="css-badge badge badge-pill bg-danger p-3">Không hoạt động</span></td>
+            <td class="max-width-100 text-center" [nz-tooltip]="'Vô hiệu'" *ngIf="data.status !== 1">
+              <span class="css-badge badge badge-pill bg-danger p-3">Vô hiệu</span></td>
             <td class="max-width-200 text-center" [nz-tooltip]="'Hoạt động'" *ngIf="data.status === 1">
               <span class="css-badge badge badge-pill bg-success p-3">Hoạt động</span></td>
-            <td class="text-center max-width-150">
+            <td class="text-center max-width-150" *ngIf="currentTabIndex === 0">
               <div class="action">
-                <app-button-icon class="action__margin" [isEdit] = "true"
+                <app-button-icon class="action__margin" [isEdit]="true"
                                  [tooltipTitle]="'Cập nhật chức vụ'"
                                  [loading]="isLoading"
-                                 (clickAction)="openUpdateModal(data)"></app-button-icon>
-                <app-button-icon class="action__margin" [isDelete]="true"
-                                 [tooltipTitle]="'Xóa chức vụ'" (click)="openModalDelete(data)"></app-button-icon>
+                                 (clickAction)="openUpdateModal(data)">
+                </app-button-icon>
+                <app-button-icon class="action__margin" [isLock]="true"
+                                 [tooltipTitle]="'Vô hiệu chức vụ'"
+                                 (click)="openModalDelete(data)">
+                </app-button-icon>
               </div>
             </td>
           </tr>
@@ -123,7 +134,7 @@
   </nz-card>
 </nz-collapse>
 
-<app-modal-confirm title="Xác nhận xóa" [isVisible]="isVisibleModalDelete"
+<app-modal-confirm title="Xác nhận vô hiệud" [isVisible]="isVisibleModalDelete"
                    textButtonCancel="Hủy"
                    [text]="'Đồng ý'"
                    [isConfirm]="true"

@@ -43,7 +43,7 @@ export class PositionManagermentComponent implements OnInit {
   departmentCode: any;
   isLoading = false;
   message: string = '';
-  idPosition: any;
+  positionCode: any;
 
 
   constructor(
@@ -188,8 +188,8 @@ export class PositionManagermentComponent implements OnInit {
   openModalDelete(item: any): void {
     if (!item.totalEmp) {
       this.isVisibleModalDelete = true;
-      this.idPosition = item.id;
-      this.message = `<span>Bạn có chắc chắn muốn xóa chức vụ mã <b>${this.idPosition}</b> không?</span>`
+      this.positionCode = item.positionCode;
+      this.message = `<span>Bạn có chắc chắn muốn vô hiệu chức vụ <b>${this.positionCode}</b> không?</span>`
     }
   }
 
@@ -199,10 +199,11 @@ export class PositionManagermentComponent implements OnInit {
   }
 
   callBackModalDelete() {
-    this.positionService.deletePosition(this.idPosition).subscribe(res => {
-      if (res && res.code === "OK") {
+    console.log("code",this.positionCode)
+    this.positionService.disable(this.positionCode).subscribe(res => {
+      if (res && res.code === "202") {
         const data = res.data;
-        this.toastService.openSuccessToast('Xóa chức vụ thành công');
+        this.toastService.openSuccessToast('Vô hiệu chức vụ thành công');
         this.isVisibleModalDelete = false;
       } else {
         this.toastService.openErrorToast(res.msgCode);
@@ -231,21 +232,21 @@ export class PositionManagermentComponent implements OnInit {
     };
     this.spinner.show().then();
     this.positionService.exportPosition(queryModel, pageable).subscribe(async response => {
-        const isJsonBlob = (data: any) => data instanceof Blob && data.type === 'application/json';
-        const responseData = isJsonBlob(response.body) ? await (response.body).text() : response.body || {};
-        if (typeof responseData === "string") {
-          const responseJson = JSON.parse(responseData);
-          this.toastService.openErrorToast(responseJson.msgCode);
-        } else {
-          const currentDate = moment();
-          const formattedDate = currentDate.format('DD-MM-YYYY');
-          this.fileManagerService.downloadFile(response, 'danhsachchucvu_'+formattedDate+'.xlsx');
-        }
-      }, error => {
-        this.toastService.openErrorToast(error);
-      }, () => {
-        this.spinner.hide().then();
-      });
+      const isJsonBlob = (data: any) => data instanceof Blob && data.type === 'application/json';
+      const responseData = isJsonBlob(response.body) ? await (response.body).text() : response.body || {};
+      if (typeof responseData === "string") {
+        const responseJson = JSON.parse(responseData);
+        this.toastService.openErrorToast(responseJson.msgCode);
+      } else {
+        const currentDate = moment();
+        const formattedDate = currentDate.format('DD-MM-YYYY');
+        this.fileManagerService.downloadFile(response, 'danhsachchucvu_'+formattedDate+'.xlsx');
+      }
+    }, error => {
+      this.toastService.openErrorToast(error);
+    }, () => {
+      this.spinner.hide().then();
+    });
     this.nzOnSearch();
   }
 

@@ -8,6 +8,9 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {NgxSpinnerService} from "ngx-spinner";
 import {ToastService} from "../../../service/toast.service";
 import {FormAccountManagementComponent} from "../form-account-management/form-account-management.component";
+import {en_US, NzI18nService} from "ng-zorro-antd/i18n";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {debounceTime, distinctUntilChanged} from "rxjs/operators";
 
 @Component({
   selector: 'app-account-management',
@@ -20,11 +23,15 @@ export class AccountManagementComponent implements OnInit {
 
   resultActive: boolean = true
   tableLoading: boolean = false
-  pagination: { total: number, current: number, pageSize: number } = {
-    total: 0,
-    current: 0,
-    pageSize: 10
-  }
+  searchForm!: FormGroup;
+  request: any = {
+    currentPage: 0,
+    pageSize: 10,
+    sort: ['createdDate/DESC']
+  };
+  searchFormValue: any;
+  currentTabIndex = 0;
+  statusList = ['ACTIVE', 'LOCK'];
   tableData: Array<AccountSearchResponse> = []
   searchData: object = {}
   columns = [
@@ -66,25 +73,55 @@ export class AccountManagementComponent implements OnInit {
               private spinner: NgxSpinnerService,
               private viewContainerRef: ViewContainerRef,
               private toastService: ToastService,
+              private i18n: NzI18nService,
+              private formBuilder: FormBuilder,
   ) {
   }
 
   ngOnInit(): void {
-    this.getData()
+    this.i18n.setLocale(en_US);
+    this.searchForm = this.formBuilder.group({
+      keyword: new FormControl(null, [Validators.maxLength(100)]),
+    });
+    if (this.searchFormValue) {
+      this.searchForm.patchValue(this.searchFormValue);
+    }
+
+    this.searchForm.get('keyword')?.valueChanges
+      .pipe(
+        debounceTime(500),               // đợi 500ms sau khi người dùng dừng gõ
+        distinctUntilChanged()           // chỉ gọi nếu giá trị thực sự thay đổi
+      )
+      .subscribe(value => {
+        this.onSearchChanged(value);
+      });
+
+    this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
-  getData() {
-    this.spinner.show().then(); // Hiển thị spinner khi bắt đầu load dữ liệu
+  fetchData(currentPage?: number, pageSize?: number) {
+    const formValue = this.searchForm.value;
+    const status = this.statusList[this.currentTabIndex];
 
-    this.accountService.getAllAccount(this.searchData, this.pagination.current, this.pagination.pageSize)
+    const queryModel = {
+      keyword: formValue.keyword ?? "",
+    };
+
+    const pageable = {
+      page: currentPage,
+      size: pageSize,
+      sort: this.request.sort
+    };
+
+    const finalParams = { ...pageable, ...queryModel };
+
+    this.spinner.show().then();
+    this.accountService.getAllAccount(status, finalParams)
       .subscribe({
         next: (res) => {
           console.log(res);
           if (res && res.dataList) {
             this.tableData = res.dataList;
-            this.pagination.current = res.pageIndex;
-            this.pagination.pageSize = res.pageSize;
-            this.pagination.total = res.totalElements;
           }
           this.spinner.hide().then(); // Ẩn spinner sau khi tải xong
         },
@@ -100,14 +137,32 @@ export class AccountManagementComponent implements OnInit {
       });
   }
 
-  handlePageIndexChange($event: number) {
-    this.pagination.current = $event - 1
-    this.getData()
+  onTabChange(index: number): void {
+    this.currentTabIndex = index;
+    this.request.currentPage = 0;
+    this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
-  handlePageSizeChange($event: number) {
-    this.pagination.pageSize = $event
-    this.getData()
+  nzOnSearch(): void {
+    this.request.currentPage = 0;
+    this.fetchData(this.request.currentPage, this.request.pageSize);
+  }
+
+  // handlePageIndexChange($event: number) {
+  //   this.pagination.current = $event - 1
+  //   this.getData()
+  // }
+  //
+  // handlePageSizeChange($event: number) {
+  //   this.pagination.pageSize = $event
+  //   this.getData()
+  // }
+
+  searchKeyword: string | null = null; // Mặc định là null
+
+  onSearchChanged(event: any) {
+    this.searchKeyword = event.value ? event.value : null; // Nếu không nhập, đặt lại null
+    this.fetchData(this.request.currentPage, this.request.pageSize); // Gọi API
   }
 
   openUpdateModal(data?: any): void {
@@ -128,7 +183,7 @@ export class AccountManagementComponent implements OnInit {
     modalRef.afterClose.subscribe(rs => {
       this.isLoading = true;
       if (this.isLoading) {
-        this.getData();
+        this.fetchData(this.request.currentPage, this.request.pageSize);
       }
     });
   }

@@ -69,14 +69,14 @@ export class PositionService {
 
   editPosition(payload: any): Observable<any> {
     return this.httpClient.put(
-      API_CONFIG.BASE_URL + "position",
+      API_CONFIG.BASE_URL + "position/update",
       payload,
     );
   }
 
-  deletePosition(id: string): Observable<any> {
-    return this.httpClient.delete(
-      API_CONFIG.BASE_URL + "position/delete/" + id,
+  disable(positionCode: string): Observable<any> {
+    return this.httpClient.post(
+      API_CONFIG.BASE_URL + "position/disable/" + positionCode,null
     );
   }
 
