@@ -40,9 +40,9 @@ export class AccountService {
     return this.http.get(AUTH_API + apiAccountManagement.apiGetRoleByRoleName + roleName, httpOptions)
   }
 
-  editAccount(payload: any): Observable<any> {
+  createAccount(payload: any): Observable<any> {
     return this.http.put(
-      AUTH_API + '/api/v1/account',
+      AUTH_API + '/api/v1/account/create-new-account',
       payload,
     );
   }

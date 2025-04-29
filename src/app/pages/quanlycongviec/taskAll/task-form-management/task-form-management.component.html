@@ -156,7 +156,7 @@
                 </form>
                 <nz-collapse nzExpandIconPosition="right" style="margin-top: 10px">
                   <div class="list__table">
-                    <nz-table #rowSelectionTable nzBordered [nzData]="lstData" [nzFrontPagination]="false"
+                    <nz-table #rowSelectionTable [nzBordered]="true" [nzData]="lstData" [nzFrontPagination]="false"
                               [nzNoResult]="'Không có kết quả tìm kiếm'" [nzScroll]="{ x: SCROLL_TABLE.SCROLL_X}">
                       <thead>
                       <tr class="ant-header-customize">

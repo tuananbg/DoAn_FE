@@ -16,30 +16,12 @@ import {ToastService} from "../../../../service/toast.service";
 })
 export class RegisterComponent implements OnInit {
   current: number = 0;
-  validateForm!: FormGroup;
-  companyInfoForm!: FormGroup;
+  isView = false;
+  listOfOption: string[] = [];
   verifyForm!: FormGroup
   employeeForm!: FormGroup
-  registerFormData: RegisterData = {
-    username: '',
-    email: '',
-    password: '',
-    company: {
-      companyViName: '',
-      companyEnName: '',
-      legalType: '',
-      taxCode: '',
-      address: '',
-      foundingDate: '',
-      representative: '',
-      website: '',
-      phone: ''
-    }
-  }
   lstEmployee: any[] = [];
   lstAccount: any[] = [];
-  payloadAccount = {fullName: null, email: null, status: null, active: null};
-
   constructor(private fb: FormBuilder, private http: HttpClient,
               private notification: NzNotificationService,
               private employeeService: EmployeeService,
@@ -50,120 +32,21 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.validateForm = this.fb.group({
-      email: [null, [Validators.email, Validators.required]],
-      password: [null, [Validators.required]],
-      checkPassword: [null, [Validators.required, this.confirmationValidator]],
-    });
-    this.companyInfoForm = this.fb.group({
-      companyViName: [null, [Validators.required]],
-      companyEnName: [null, [Validators.required]],
-      address: [null, [Validators.required]],
-      taxCode: [null, [Validators.required]],
-      legalType: [null, [Validators.required]],
-      representative: [null, [Validators.required]],
-      foundingDate: [null, [Validators.required]],
-      phone: [null],
-      website: [null]
-    })
-    this.verifyForm = this.fb.group({
-      verifyCode: [null, [Validators.required]]
-    })
     this.employeeForm = this.fb.group({
-      id: [null, [Validators.required]],
-      userDetailId: [null, [Validators.required]]
+      email: [null, [Validators.required, Validators.email]],
+      employeeCode: [null, [Validators.required]]
     })
     this.fetchEmployee();
-    this.fetchAccount();
-  }
-  validationFormSubmit(): void {
-    if (this.validateForm.valid) {
-      this.registerFormData.email = this.validateForm.value['email']
-      this.registerFormData.password = this.validateForm.value['password']
-      console.log(this.registerFormData)
-    } else {
-      Object.values(this.validateForm.controls).forEach(control => {
-        if (control.invalid) {
-          control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
-        }
-      });
-    }
-    this.http.post('http://localhost:8080/api/v1/auth/register', this.registerFormData).subscribe({
-      next: res=> {
-        this.notification.success("Thành công", "Đăng ký tài khoản thành công")
-        this.current++;
-      },
-      error: err => {
-        this.notification.error("Thất bại", err.error.msgCode)
-        console.log(err)
-      }
-    })
-  }
-  companyInfoFormSubmit(): void {
-    if (this.companyInfoForm.valid) {
-      this.registerFormData.company.companyViName = this.companyInfoForm.value['companyViName']
-      this.registerFormData.company.companyEnName = this.companyInfoForm.value['companyEnName']
-      this.registerFormData.company.legalType = this.companyInfoForm.value['legalType']
-      this.registerFormData.company.taxCode = this.companyInfoForm.value['taxCode']
-      this.registerFormData.company.address = this.companyInfoForm.value['address']
-      this.registerFormData.company.foundingDate = this.companyInfoForm.value['foundingDate']
-      this.registerFormData.company.representative = this.companyInfoForm.value['representative']
-      this.registerFormData.company.website = this.companyInfoForm.value['website']
-      this.registerFormData.company.phone = this.companyInfoForm.value['phone']
-      console.log('registerFormData', this.registerFormData);
-      this.http.post('http://localhost:8080/api/v1/auth/register', this.registerFormData).subscribe({
-        next: res=> {
-          this.notification.success("Thành công", "Kích hoạt tài khoản thành công")
-          this.current++
-        },
-        error: err => {
-          this.notification.error("Thất bại", err)
-          console.log(err)
-        }
-      })
-
-    } else {
-      Object.values(this.companyInfoForm.controls).forEach(control => {
-        if (control.invalid) {
-          control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
-        }
-      });
-    }
-  }
-  verifyFormSubmit(): void {
-    if (this.verifyForm.valid) {
-      console.log('submit', this.verifyForm.value);
-      const verifyCode = this.verifyForm.value['verifyCode']
-      this.http.get(`http://localhost:8080/api/v1/auth/${verifyCode}`).subscribe({
-        next: res=> {
-          console.log(res)
-          this.notification.success("Thành công", "Kích hoạt tài khoản thành công");
-          this.fetchAccount();
-          this.current++;
-        },
-        error: err => {
-          console.log(err)
-        }
-      })
-    } else {
-      Object.values(this.verifyForm.controls).forEach(control => {
-        if (control.invalid) {
-          control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
-        }
-      });
-    }
   }
 
   employeeFormSubmit(): void {
+    console.log("Data",this.employeeForm.value);
     if (this.employeeForm.valid) {
       this.spinner.show().then();
       const data = this.employeeForm.value;
-      data.id = !data.id ? null : data.id;
-      data.userDetailId = !data.userDetailId ? null : data.userDetailId;
-      this.accountService.editAccount(data).subscribe(res => {
+      data.email = !data.email ? null : data.email;
+      data.employeeCode = !data.employeeCode ? null : data.employeeCode;
+      this.accountService.createAccount(data).subscribe(res => {
         if (res && res.code === "OK") {
           this.toastService.openSuccessToast("Cấp tài khoản thành công");
           setTimeout(()=>{
@@ -178,7 +61,7 @@ export class RegisterComponent implements OnInit {
         this.spinner.hide().then();
       });
     } else {
-      Object.values(this.verifyForm.controls).forEach(control => {
+      Object.values(this.employeeForm.controls).forEach(control => {
         if (control.invalid) {
           control.markAsDirty();
           control.updateValueAndValidity({ onlySelf: true });
@@ -187,24 +70,11 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  updateConfirmValidator(): void {
-    Promise.resolve().then(() => this.validateForm.controls['checkPassword'].updateValueAndValidity());
-  }
-
-  confirmationValidator = (control: FormControl): { [s: string]: boolean } => {
-    if (!control.value) {
-      return { required: true };
-    } else if (control.value !== this.validateForm.controls['password'].value) {
-      return { confirm: true, error: true };
-    }
-    return {};
-  };
-
-
   fetchEmployee() {
-    this.employeeService.searchEmployee(null, {page: 0, size: -1}).subscribe(res => {
+    this.employeeService.getListSelect().subscribe(res => {
       if (res && res.code === "OK") {
-        this.lstEmployee = res.data.data;
+        this.lstEmployee = res.data;
+        this.listOfOption =  this.lstEmployee.map(res => `${res.employeeName} - ${res.employeeCode}`);
         this.lstEmployee = this.lstEmployee.map(item => ({
           ...item,
           employeeName: item.employeeName + " - " + item.employeeCode
@@ -216,28 +86,4 @@ export class RegisterComponent implements OnInit {
     })
   }
 
-  fetchAccount() {
-    this.accountService.getAllAccount(this.payloadAccount, 0, 1).subscribe({
-      next: (response: any) => {
-        if (response && response.dataList) {
-          this.lstAccount = response.dataList;
-          this.lstAccount.sort((a, b) => a.email.localeCompare(b.email));
-        }
-      },
-      error: (err) => {
-        console.error("Lỗi API:", err);
-        this.toastService.openErrorToast(err.error?.msgCode || "Đã xảy ra lỗi! Vui lòng thử lại.");
-      },
-      complete: () => {
-        console.log("Hoàn thành tải danh sách tài khoản.");
-      }
-    });
-  }
-
-  onChangeCurrent(){
-    this.current = 2;
-  }
-  onChangeCurrentOne(){
-    this.current = 0;
-  }
 }
