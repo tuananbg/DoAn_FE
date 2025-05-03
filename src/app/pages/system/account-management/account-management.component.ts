@@ -1,16 +1,13 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
-import {AccountService} from "../../../service/account.service";
-import {AccountSearchResponse, AccountSearchRequest} from "./types/account";
-import {
-  PositionManagermentFormComponent
-} from "../../HRM/position/position-managerment-form/position-managerment-form.component";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {NgxSpinnerService} from "ngx-spinner";
-import {ToastService} from "../../../service/toast.service";
-import {FormAccountManagementComponent} from "../form-account-management/form-account-management.component";
-import {en_US, NzI18nService} from "ng-zorro-antd/i18n";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {debounceTime, distinctUntilChanged} from "rxjs/operators";
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { AccountService } from "../../../service/account.service";
+import { AccountSearchResponse, Role } from "./types/account";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { NgxSpinnerService } from "ngx-spinner";
+import { ToastService } from "../../../service/toast.service";
+import { FormAccountManagementComponent } from "../form-account-management/form-account-management.component";
+import { en_US, NzI18nService } from "ng-zorro-antd/i18n";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 
 @Component({
   selector: 'app-account-management',
@@ -18,83 +15,47 @@ import {debounceTime, distinctUntilChanged} from "rxjs/operators";
   styleUrls: ['./account-management.component.less']
 })
 export class AccountManagementComponent implements OnInit {
-  searchActive: boolean = true
+  searchActive: boolean = true;
+  resultActive: boolean = true;
   isLoading = false;
+  tableLoading = false;
+  currentTabIndex = 0;
+  currentDeleteEmployeeCode: string | null = null;
+  modalTitle = '';
 
-  resultActive: boolean = true
-  tableLoading: boolean = false
-  searchForm!: FormGroup;
+
   request: any = {
     currentPage: 0,
     pageSize: 10,
     sort: ['createdDate/DESC']
   };
-  searchFormValue: any;
-  currentTabIndex = 0;
+  isVisibleModalDelete = false;
+  message: string = '';
+
   statusList = ['ACTIVE', 'LOCK'];
-  tableData: Array<AccountSearchResponse> = []
-  searchData: object = {}
-  columns = [
-    // {
-    //   title: 'Tên nhân viên',
-    //   width: '200px',
-    //   compare: (a: any, b: any) => a.fullName - b.fullName,
-    // },
-    {
-      title: 'Email',
-      width: '200px',
-      compare: (a: any, b: any) => a.email - b.email,
-    },
-    {
-      title: 'Trạng thái',
-      width: '140px',
-      compare: (a: any, b: any) => a.status - b.status,
-    },
-    {
-      title: 'Trạng thái kích hoạt',
-      width: '170px',
-      compare: (a: any, b: any) => a.active - b.active,
-    },
-    {
-      title: 'Quyền',
-      width: '140px',
-      compare: (a: any, b: any) => a.roles - b.roles,
-    },
-    {
-      title: 'Ngày tạo',
-      width: '140px',
-      compare: (a: any, b: any) => a.createdAt - b.createdAt,
-    },
-  ];
+  searchKeyword: string | null = null;
+  tableData: AccountSearchResponse[] = [];
+  searchForm!: FormGroup;
 
-
-  constructor(private accountService: AccountService,
-              private modal: NzModalService,
-              private spinner: NgxSpinnerService,
-              private viewContainerRef: ViewContainerRef,
-              private toastService: ToastService,
-              private i18n: NzI18nService,
-              private formBuilder: FormBuilder,
-  ) {
-  }
+  constructor(
+    private accountService: AccountService,
+    private modal: NzModalService,
+    private spinner: NgxSpinnerService,
+    private viewContainerRef: ViewContainerRef,
+    private toastService: ToastService,
+    private i18n: NzI18nService,
+    private formBuilder: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.i18n.setLocale(en_US);
     this.searchForm = this.formBuilder.group({
       keyword: new FormControl(null, [Validators.maxLength(100)]),
     });
-    if (this.searchFormValue) {
-      this.searchForm.patchValue(this.searchFormValue);
-    }
 
     this.searchForm.get('keyword')?.valueChanges
-      .pipe(
-        debounceTime(500),               // đợi 500ms sau khi người dùng dừng gõ
-        distinctUntilChanged()           // chỉ gọi nếu giá trị thực sự thay đổi
-      )
-      .subscribe(value => {
-        this.onSearchChanged(value);
-      });
+      .pipe(debounceTime(500), distinctUntilChanged())
+      .subscribe(value => this.onSearchChanged(value));
 
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
@@ -103,38 +64,29 @@ export class AccountManagementComponent implements OnInit {
     const formValue = this.searchForm.value;
     const status = this.statusList[this.currentTabIndex];
 
-    const queryModel = {
-      keyword: formValue.keyword ?? "",
-    };
-
-    const pageable = {
+    const finalParams = {
       page: currentPage,
       size: pageSize,
-      sort: this.request.sort
+      sort: this.request.sort,
+      keyword: formValue.keyword ?? ""
     };
 
-    const finalParams = { ...pageable, ...queryModel };
-
     this.spinner.show().then();
-    this.accountService.getAllAccount(status, finalParams)
-      .subscribe({
-        next: (res) => {
-          console.log(res);
-          if (res && res.dataList) {
-            this.tableData = res.dataList;
-          }
-          this.spinner.hide().then(); // Ẩn spinner sau khi tải xong
-        },
-        error: (err) => {
-          if (err.error && err.error.msgCode) {
-            this.toastService.openErrorToast(err.error.msgCode);
-          }
-          this.spinner.hide().then(); // Ẩn spinner khi có lỗi
-        },
-        complete: () => {
-          console.log("Hoàn thành tải dữ liệu tài khoản.");
+    this.accountService.getAllAccount(status, finalParams).subscribe({
+      next: (res) => {
+        if (res && res.data && res.data.content) {
+          this.tableData = res.data.content;
         }
-      });
+        this.spinner.hide().then();
+      },
+      error: (err) => {
+        if (err.error && err.error.msgCode) {
+          this.toastService.openErrorToast(err.error.msgCode);
+        }
+        this.spinner.hide().then();
+      },
+      complete: () => console.log("Hoàn thành tải dữ liệu tài khoản.")
+    });
   }
 
   onTabChange(index: number): void {
@@ -148,21 +100,9 @@ export class AccountManagementComponent implements OnInit {
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
-  // handlePageIndexChange($event: number) {
-  //   this.pagination.current = $event - 1
-  //   this.getData()
-  // }
-  //
-  // handlePageSizeChange($event: number) {
-  //   this.pagination.pageSize = $event
-  //   this.getData()
-  // }
-
-  searchKeyword: string | null = null; // Mặc định là null
-
   onSearchChanged(event: any) {
-    this.searchKeyword = event.value ? event.value : null; // Nếu không nhập, đặt lại null
-    this.fetchData(this.request.currentPage, this.request.pageSize); // Gọi API
+    this.searchKeyword = event ? event : null;
+    this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
   openUpdateModal(data?: any): void {
@@ -174,16 +114,70 @@ export class AccountManagementComponent implements OnInit {
       nzComponentParams: {
         isUpdate: true,
         emailForm: data.email,
-        rolesForm: data.roles,
+        rolesForm: data.role,
+        employeeCodeForm: data.employeeCode,
+        fullNameForm: data.fullName
       },
       nzOnOk: () => new Promise((resolve) => setTimeout(resolve, 3000)),
       nzFooter: null,
       nzMaskClosable: false,
     });
-    modalRef.afterClose.subscribe(rs => {
+
+    modalRef.afterClose.subscribe(() => {
       this.isLoading = true;
       if (this.isLoading) {
         this.fetchData(this.request.currentPage, this.request.pageSize);
+      }
+    });
+  }
+
+  getRoleNames(roles: any[]): string {
+    if (!roles || !Array.isArray(roles)) return '';
+    return roles.map(r => r.name).join(', ');
+  }
+
+  openModalDelete(data: any): void {
+    this.currentDeleteEmployeeCode = data.employeeCode;
+
+    const isActiveTab = this.currentTabIndex === 0;
+    this.modalTitle = isActiveTab ? 'Xác nhận khóa tài khoản' : 'Xác nhận mở khóa tài khoản';
+    this.message = isActiveTab
+      ? 'Bạn có chắc chắn muốn khóa tài khoản này không?'
+      : 'Bạn có chắc chắn muốn mở khóa tài khoản này không?';
+
+    this.isVisibleModalDelete = true;
+  }
+
+  onCancelModalDelete(): void {
+    this.isVisibleModalDelete = false;
+    this.currentDeleteEmployeeCode = null;
+  }
+  callBackModalDelete(): void {
+    if (!this.currentDeleteEmployeeCode) return;
+
+    const isActiveTab = this.currentTabIndex === 0;
+    const call$ = isActiveTab
+      ? this.accountService.lock(this.currentDeleteEmployeeCode)
+      : this.accountService.unlock(this.currentDeleteEmployeeCode);
+
+    this.spinner.show().then();
+
+    call$.subscribe({
+      next: (res) => {
+        if (res.code === '202') {
+          this.toastService.openSuccessToast('Cập nhật trạng thái tài khoản thành công');
+          this.fetchData(this.request.currentPage, this.request.pageSize);
+        } else {
+          this.toastService.openErrorToast(res?.message || 'Thất bại');
+        }
+        this.isVisibleModalDelete = false;
+      },
+      error: (err) => {
+        this.toastService.openErrorToast(err?.error?.msgCode || 'Lỗi hệ thống');
+        this.isVisibleModalDelete = false;
+      },
+      complete: () => {
+        this.spinner.hide().then();
       }
     });
   }

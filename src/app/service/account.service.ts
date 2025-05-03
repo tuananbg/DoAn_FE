@@ -67,6 +67,19 @@ export class AccountService {
       roleNames,
     )
   }
+  lock(employeeCode: string): Observable<any> {
+    return this.httpClient.put(
+      `${API_CONFIG.BASE_URL}account/employee/lock?code=${employeeCode}`,
+      null
+    );
+  }
+
+  unlock(employeeCode: string): Observable<any> {
+    return this.httpClient.put(
+      `${API_CONFIG.BASE_URL}account/employee/unlock?code=${employeeCode}`,
+      null
+    );
+  }
 
 
 }

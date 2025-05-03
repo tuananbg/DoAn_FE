@@ -1,12 +1,10 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {NzModalRef} from "ng-zorro-antd/modal";
-import {Router} from "@angular/router";
-import {PositionService} from "../../../service/position.service";
-import {ToastService} from "../../../service/toast.service";
-import {NgxSpinnerService} from "ngx-spinner";
-import {DepartmentService} from "../../../service/department.service";
-import {AccountService} from "../../../service/account.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { NzModalRef } from "ng-zorro-antd/modal";
+import { ToastService } from "../../../service/toast.service";
+import { NgxSpinnerService } from "ngx-spinner";
+import { AccountService } from "../../../service/account.service";
+import { RoleService } from "../../../service/role.service";
 
 @Component({
   selector: 'app-form-account-management',
@@ -14,23 +12,18 @@ import {AccountService} from "../../../service/account.service";
   styleUrls: ['./form-account-management.component.less']
 })
 export class FormAccountManagementComponent implements OnInit {
-
-  @Input() emailForm?: any;
-  @Input() rolesForm?: any;
+  @Input() emailForm?: string;
+  @Input() rolesForm?: any[]; // mảng Role[] từ BE
+  @Input() employeeCodeForm?: string;
+  @Input() fullNameForm?: string;
   @Input() isVisibleModal = false;
-  @Input() dataChild = null;
   @Input() isUpdate = false;
   @Output() clickCancel = new EventEmitter();
   @Output() clickSave = new EventEmitter();
-  listOfOption: string[] = [
-    'ADMIN',
-    'USER'
-  ];
 
   createForm!: FormGroup;
-  lstDepartment: any[] = [];
-  payloadDepartment = {name: null, status: null};
   isLoading = false;
+  listOfOption: { code: string, name: string }[] = [];
 
   constructor(
     private modal: NzModalRef,
@@ -38,19 +31,46 @@ export class FormAccountManagementComponent implements OnInit {
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
     private accountService: AccountService,
-  ) {
-  }
+    private roleService: RoleService
+  ) {}
 
   ngOnInit(): void {
+    this.initForm();
+    this.getAllRoles();
+    this.patchInitialValues();
+  }
+
+  private initForm(): void {
     this.createForm = this.formBuilder.group({
-      id: new FormControl(null),
-      email: new FormControl(null, [Validators.required, Validators.maxLength(100)]),
-      roles: [[]],
+      employeeCode: new FormControl({ value: '', disabled: this.isUpdate }),
+      fullName: new FormControl({ value: '', disabled: this.isUpdate }),
+      email: new FormControl(null, [Validators.required, Validators.email]),
+      roles: new FormControl([], Validators.required),
     });
-    const rolesArray = this.rolesForm.split(',').map((res: any) => res.trim());
+  }
+
+  private getAllRoles(): void {
+    this.roleService.selectRole().subscribe({
+      next: (res) => {
+        if (res && res.data) {
+          this.listOfOption = res.data;
+        }
+      },
+      error: () => {
+        this.toastService.openErrorToast('Không thể tải danh sách vai trò');
+      }
+    });
+  }
+
+  private patchInitialValues(): void {
+    const roleCodes = this.rolesForm?.map((r: any) => r.code) || [];
     setTimeout(() => {
-      this.createForm.get('email')?.setValue(this.emailForm);
-      this.createForm.get('roles')?.setValue(rolesArray);
+      this.createForm.patchValue({
+        employeeCode: this.employeeCodeForm,
+        fullName: this.fullNameForm,
+        email: this.emailForm,
+        roles: roleCodes
+      });
     });
   }
 
@@ -58,32 +78,32 @@ export class FormAccountManagementComponent implements OnInit {
     this.modal.destroy();
   }
 
-  handleOkModal() {
+  handleOkModal(): void {
     for (const i in this.createForm.controls) {
       this.createForm.controls[i].markAsDirty();
       this.createForm.controls[i].updateValueAndValidity();
     }
+
     if (this.createForm.valid) {
       const data = this.createForm.value;
-      data.email = data.email ? data.email : null;
-      data.roleNames = data.roles ? data.roles : null;
-      this.accountService.updateRole(data.email, data.roleNames).subscribe(res => {
-        if (res && res.code === "OK") {
-          this.toastService.openSuccessToast('Cập nhật vai trò thành công');
-          this.clickSave.emit();
-          this.clickCancel.emit();
-          this.isLoading = true;
-          this.handleCancelModal();
-        } else {
-          this.toastService.openErrorToast(res.body.msgCode);
+      this.accountService.updateRole(data.email, data.roles).subscribe({
+        next: (res) => {
+          if (res.code === 'OK') {
+            this.toastService.openSuccessToast('Cập nhật vai trò thành công');
+            this.clickSave.emit();
+            this.clickCancel.emit();
+            this.handleCancelModal();
+          } else {
+            this.toastService.openErrorToast(res?.body?.msgCode || 'Cập nhật thất bại');
+          }
+        },
+        error: (err) => {
+          this.toastService.openErrorToast(err.error.msgCode || 'Lỗi hệ thống');
+        },
+        complete: () => {
+          this.spinner.hide().then();
         }
-      }, error => {
-        this.toastService.openErrorToast(error.error.msgCode);
-      }, () => {
-        this.spinner.hide().then();
       });
     }
   }
-
-
 }

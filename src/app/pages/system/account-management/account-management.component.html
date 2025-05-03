@@ -51,40 +51,74 @@
       <thead>
       <tr>
         <th nzWidth="70px" style="text-align: center">STT</th>
-        <th *ngFor="let column of columns" [nzSortFn]="column.compare" [nzWidth]="column.width" style="text-align: center">
-          {{ column.title }}
-        </th>
+        <th nzWidth="200px" style="text-align: center">Mã nhân viên</th>
+        <th nzWidth="200px" style="text-align: center">Họ và tên</th>
+        <th nzWidth="250px" style="text-align: center">Email</th>
+        <th nzWidth="200px" style="text-align: center">Phòng ban</th>
+        <th nzWidth="200px" style="text-align: center">Chức vụ</th>
+        <th nzWidth="140px" style="text-align: center">Quyền</th>
+        <th nzWidth="140px" style="text-align: center">Trạng thái</th>
+        <th nzWidth="140px" style="text-align: center">Ngày tạo</th>
         <th nzWidth="140px" style="text-align: center">Hành động</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let data of sortTable.data; let i = index">
-        <td style="text-align: center">{{(request.currentPage * request.pageSize) + i + 1}}</td>
-        <td style="text-align: center">{{ data.email}}</td>
-        <td style="text-align: center">{{ data.status === 1 ? 'Hoạt động' : 'Không hoạt động'}}</td>
-        <td style="text-align: center">{{ data.active === 1 ? 'Kích hoạt' : 'Chưa kích hoạt'}}</td>
-        <td style="text-align: center">{{ data.roles }}</td>
-        <td style="text-align: center">{{ data.createdDate | date: 'dd/MM/yyyy'}}</td>
+        <td style="text-align: center">{{ (request.currentPage * request.pageSize) + i + 1 }}</td>
+        <td style="text-align: center">{{ data.employeeCode }}</td>
+        <td style="text-align: center">{{ data.fullName }}</td>
+        <td style="text-align: center">{{ data.email }}</td>
+        <td style="text-align: center">{{ data.departmentName }}</td>
+        <td style="text-align: center">{{ data.positionName }}</td>
+        <td style="text-align: center">
+          {{ getRoleNames(data.role) }}
+        </td>
+        <td style="text-align: center">{{ data.status === 1 ? 'Hoạt động' : 'Khóa' }}</td>
+        <td style="text-align: center">{{ data.createdDate | date: 'dd/MM/yyyy' }}</td>
         <td>
           <div nz-row nzGutter="16" nzJustify="center">
             <div nz-col>
-<!--              <span nz-tooltip nzTooltipTitle="Cập nhật">-->
-<!--                <span nz-icon nzType="edit" nzTheme="outline" style="cursor: pointer; color: red"></span>-->
-<!--              </span>-->
-              <app-button-icon class="action__margin" [isEdit] = "true"
-                               [tooltipTitle]="'Cập nhật tài khoản'"
-                               [loading]="isLoading"
-                               (clickAction)="openUpdateModal(data)"></app-button-icon>
+              <app-button-icon
+                class="action__margin"
+                [isEdit]="true"
+                [tooltipTitle]="'Cập nhật tài khoản'"
+                [loading]="isLoading"
+                (clickAction)="openUpdateModal(data)">
+              </app-button-icon>
+
+              <app-button-icon
+                *ngIf="currentTabIndex === 0"
+                class="action__margin"
+                [isLock]="true"
+                [tooltipTitle]="'Khóa tài khoản'"
+                (click)="openModalDelete(data)">
+              </app-button-icon>
+
+              <app-button-icon
+                *ngIf="currentTabIndex === 1"
+                class="action__margin"
+                [isUnlock]="true"
+                [tooltipTitle]="'Mở khóa tài khoản'"
+                (click)="openModalDelete(data)">
+              </app-button-icon>
+
             </div>
-            <div nz-col>
-                <span nz-tooltip nzTooltipTitle="Cấu hình chi tiết">
-                  <span nz-icon nzType="control" nzTheme="outline" style="cursor: pointer; color: red" ></span>
-                </span>
-            </div>
+
           </div>
         </td>
       </tr>
       </tbody>
     </nz-table>
   </nz-collapse-panel>
+  <app-modal-confirm
+    [title]="modalTitle"
+    [isVisible]="isVisibleModalDelete"
+    [textButtonCancel]="'Hủy'"
+    [text]="'Đồng ý'"
+    [isConfirm]="true"
+    [description]="message"
+    (callBack)="callBackModalDelete()"
+    (clickCancel)="onCancelModalDelete()">
+  </app-modal-confirm>
+
 </nz-collapse>

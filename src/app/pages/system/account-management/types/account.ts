@@ -5,16 +5,28 @@ export interface AccountSearchRequest {
   active: number
 }
 
-export interface AccountSearchResponse {
-  id: number
-  fullName: string
-  email: string
-  status: number
-  active: number
-  roles: string
-  createdDate: any
-  updatedDate: any
+export interface Role {
+  code: string;
+  name: string;
+  active: boolean;
+  isMaster: boolean;
+  description: string;
 }
+
+export interface AccountSearchResponse {
+  id: number;
+  fullName: string;
+  employeeCode: string;
+  departmentName: string;
+  positionName: string;
+  email: string;
+  status: number;
+  active: number;
+  role: Role[];
+  createdDate: any;
+  updatedDate: any;
+}
+
 
 export interface Permission {
   id: number;

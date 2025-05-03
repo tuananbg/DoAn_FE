@@ -11,54 +11,14 @@
     <ng-template #nzModalTitle>
       <div [nz-tooltip]="titleTooltip">{{title}}</div>
     </ng-template>
-<!--    <div class="modal-confirm__body" *ngIf="!isCancelLeave && !isNotAllowedCreate && !isDescHTML">-->
-<!--      <div class="modal-confirm__contents" [nz-tooltip]="descriptionTooltip">-->
-<!--        <span *ngIf="!hiddenContent">{{description}}</span>-->
-<!--        <span *ngIf="hiddenContent">{{description}}-->
-<!--          <span class="contents__bold"> {{content}} </span> không?-->
-<!--        </span>-->
-<!--      </div>-->
-<!--    </div>-->
-
-<!--    <div class="modal-confirm__body" *ngIf="isNotAllowedCreate">-->
-<!--      <div class="modal-confirm__contents">-->
-<!--        <span *ngIf="!hiddenContent">-->
-<!--          <span *ngIf="isPartnerCodeErr">Xác nhận đổi trạng thái cảnh báo</span>-->
-<!--        </span>-->
-<!--      </div>-->
-<!--    </div>-->
-
-<!--    <div class="modal-confirm__body" *ngIf="isNotAllowedCreate">-->
-<!--      <div class="modal-confirm__contents">-->
-<!--        <span *ngIf="!hiddenContent">-->
-<!--          <span *ngIf="isPermissionCodeErr">Xác nhận tiếp tục cảnh báo</span>-->
-<!--        </span>-->
-<!--      </div>-->
-<!--    </div>-->
-
-<!--    <div class="modal-confirm__body" *ngIf="isCancelLeave">-->
-<!--      <div class="modal-confirm__contents">-->
-<!--        <span>-->
-<!--          <span *ngIf="!hiddenContent">Dữ liệu nhập chưa được lưu lại, bạn có muốn đóng không?</span>-->
-<!--        </span>-->
-<!--      </div>-->
-<!--    </div>-->
 
     <ng-container *nzModalContent>
       <div class="modal-confirm__body">
         <div class="modal-confirm__contents">
-        <span>
-          <span>Bạn có chắc chắn muốn vô hiệu dữ liệu đã chọn không?</span>
-        </span>
+          <span>{{ description }}</span>
         </div>
       </div>
     </ng-container>
-
-<!--    <div class="modal-confirm__body" *ngIf="isDescHTML">-->
-<!--      <div class="modal-confirm__contents">-->
-<!--        <div [innerHTML]="descriptionHTML"></div>-->
-<!--      </div>-->
-<!--    </div>-->
 
     <div *nzModalFooter class="d-flex justify-content-center">
       <ng-container *ngIf="!hiddenBtnOK && !isCancelLeave">
