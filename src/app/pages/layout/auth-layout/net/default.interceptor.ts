@@ -15,29 +15,37 @@ export class DefaultInterceptor implements HttpInterceptor {
     private loginService: LoginService
   ) {}
 
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let url = req.url;
     if (!url.startsWith('https://') && !url.startsWith('http://')) {
       url = './' + url;
     }
+
     let newReq = req.clone({ url });
+
     const token = localStorage.getItem('token');
     const expirationDate = localStorage.getItem('expireIn');
-    // console.log('Interceptor - Token:', token);
-    if(url.includes("/login") ||
-      url.includes("/auth/change-password") ||
-      url.includes("/auth/forgot-password") ||
-      url.includes("/auth/getForgotCode")){
+
+    const publicUrls = [
+      "/auth/login",
+      "/auth/change-password",
+      "/auth/forgot-password",
+      "/auth/getForgotCode",
+      "/auth/resend-code",
+      "/auth/check-verify-code"
+    ];
+
+    const isPublic = publicUrls.some(u => url.includes(u));
+
+    if (isPublic) {
       return next.handle(newReq).pipe(
         catchError((error) => {
-          console.log('Interceptor - Error:', error);
+          console.log('Interceptor - Error (public):', error);
           return throwError(error);
         })
       );
     }
+
     if (token && expirationDate) {
       const now = new Date().getTime();
       const expirationTime = new Date(parseInt(expirationDate) * 1000).getTime();
@@ -48,15 +56,16 @@ export class DefaultInterceptor implements HttpInterceptor {
         localStorage.removeItem('expirationDate');
       }
     }
+
     if (token && expirationDate) {
       newReq = newReq.clone({
-        headers: newReq.headers
-          .append('Authorization', 'Bearer ' + token)
+        headers: newReq.headers.append('Authorization', 'Bearer ' + token)
       });
     } else {
       this.loginService.comeLogin();
       return throwError('No token available');
     }
+
     return next.handle(newReq).pipe(
       catchError((error) => {
         console.log('Interceptor - Error:', error);

@@ -61,12 +61,10 @@ export class AccountService {
     );
   }
 
-  updateRole(email: any, roleNames: string[]): Observable<any> {
-    return this.httpClient.put(
-      AUTH_API + apiAccountManagement.apiUpdateRole + "/" + email,
-      roleNames,
-    )
+  updateRole(data: { employeeCode: string; email: string; roleCodes: string[] }): Observable<any> {
+    return this.httpClient.put(`${API_CONFIG.BASE_URL}account/update-role`, data);
   }
+
   lock(employeeCode: string): Observable<any> {
     return this.httpClient.put(
       `${API_CONFIG.BASE_URL}account/employee/lock?code=${employeeCode}`,

@@ -24,9 +24,16 @@ export class ActionComponentDirective implements OnInit, AfterViewInit{
   }
 
   checkAuthorize() {
-    const userRole = this.loginService.getUserRole();
-    // console.log("User Role:", userRole);
-    if (userRole === "ADMIN") {
+    let roles: string[] = [];
+
+    const rawRoles = this.loginService.getUserRole(); // "ADMIN,USER"
+    console.log("User Roles (raw):", rawRoles);
+
+    roles = rawRoles.split(',').map(r => r.trim());
+
+    const hasAdminRole = roles.includes('ADMIN');
+
+    if (hasAdminRole) {
       this.renderer.setStyle(this.el.nativeElement, 'display', 'block');
       this.el.nativeElement.hidden = false;
     } else {
@@ -34,7 +41,6 @@ export class ActionComponentDirective implements OnInit, AfterViewInit{
       this.el.nativeElement.hidden = true;
     }
   }
-
 
 
 

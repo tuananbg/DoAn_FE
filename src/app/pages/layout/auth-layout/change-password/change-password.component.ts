@@ -77,7 +77,7 @@ export class ChangePasswordComponent implements OnInit {
     if (this.formUsername.valid) {
       const account = this.formUsername.value['account'];
       this.spinner.show().then();
-      this.http.get(API_CONFIG.BASE_URL + `auth/forgot-password/${account}`).subscribe({
+      this.http.post(API_CONFIG.BASE_URL + `auth/resend-code/${account}`,null).subscribe({
         next: res => {
           this.isTabOne = false;
           this.isTabTwo = true;

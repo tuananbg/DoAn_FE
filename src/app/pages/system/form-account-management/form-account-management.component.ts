@@ -85,10 +85,19 @@ export class FormAccountManagementComponent implements OnInit {
     }
 
     if (this.createForm.valid) {
-      const data = this.createForm.value;
-      this.accountService.updateRole(data.email, data.roles).subscribe({
+      const formData = this.createForm.getRawValue();
+
+      const dto = {
+        employeeCode: formData.employeeCode,
+        email: formData.email,
+        roleCodes: formData.roles
+      };
+
+      console.log("data:",dto)
+
+      this.accountService.updateRole(dto).subscribe({
         next: (res) => {
-          if (res.code === 'OK') {
+          if (res.code === '202') {
             this.toastService.openSuccessToast('Cập nhật vai trò thành công');
             this.clickSave.emit();
             this.clickCancel.emit();
@@ -106,4 +115,5 @@ export class FormAccountManagementComponent implements OnInit {
       });
     }
   }
+
 }
