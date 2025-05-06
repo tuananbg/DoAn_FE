@@ -17,7 +17,7 @@ export class WageService {
 
   search(payload: any, pageable: any): Observable<any> {
     return this.httpClient.post(
-      API_CONFIG.BASE_URL + "wage/search",
+      API_CONFIG.BASE_URL + "allowance/search",
       payload,
       {
         headers: new HttpHeaders({'Content-Type': 'application/json'}),
@@ -31,7 +31,7 @@ export class WageService {
       params = params.set('keyword', keyword);
     }
     return this.httpClient.get(
-      `${API_CONFIG.BASE_URL}wage/list/${status}`,
+      `${API_CONFIG.BASE_URL}allowance/list/${status}`,
       { params }
     );
   }
@@ -39,7 +39,7 @@ export class WageService {
 
   searchForEmployee(employeeCode: any,pageable: any): Observable<any> {
     return this.httpClient.get(
-      API_CONFIG.BASE_URL + "wage/employee-detail/" + employeeCode,
+      API_CONFIG.BASE_URL + "allowance/employee-detail/" + employeeCode,
       {
         headers: new HttpHeaders({'Content-Type': 'application/json'}),
         params: pageable,
@@ -50,11 +50,12 @@ export class WageService {
   create(file: File, wageDTO: any): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('wageName', wageDTO.wageName);
-    formData.append('wageBase', wageDTO.wageBase);
-    formData.append('wageDescription', wageDTO.wageDescription);
+    formData.append('allowanceCode', wageDTO.allowanceCode);
+    formData.append('allowanceName', wageDTO.allowanceName);
+    formData.append('allowanceBase', wageDTO.allowanceBase);
+    formData.append('allowanceDescription', wageDTO.allowanceDescription);
     return this.httpClient.post(
-      API_CONFIG.BASE_URL + "wage/create",
+      API_CONFIG.BASE_URL + "allowance/create",
       formData,
       {
         observe: 'response'
@@ -63,7 +64,7 @@ export class WageService {
   }
 
   createForEmployee(userDetailContractDTO: any): Observable<any> {
-    return this.httpClient.post(API_CONFIG.BASE_URL + "wage/createForEmployee",
+    return this.httpClient.post(API_CONFIG.BASE_URL + "allowance/createForEmployee",
       userDetailContractDTO,
       {
         observe: 'response'
@@ -72,7 +73,7 @@ export class WageService {
 
   getContractId(id: number | undefined): Observable<any> {
     return this.httpClient.get(
-      API_CONFIG.BASE_URL + "wage/detail/" + id,
+      API_CONFIG.BASE_URL + "allowance/detail/" + id,
     );
   }
 
@@ -80,11 +81,12 @@ export class WageService {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('wageId', wageDTO.wageId);
-    formData.append('wageName', wageDTO.wageName);
-    formData.append('wageBase', wageDTO.wageBase);
-    formData.append('wageDescription', wageDTO.wageDescription);
+    formData.append('allowanceCode', wageDTO.allowanceCode);
+    formData.append('allowanceName', wageDTO.allowanceName);
+    formData.append('allowanceBase', wageDTO.allowanceBase);
+    formData.append('allowanceDescription', wageDTO.allowanceDescription);
     return this.httpClient.put(
-      API_CONFIG.BASE_URL + "wage",
+      API_CONFIG.BASE_URL + "allowance/update",
       formData,
       {
         observe: 'response'
@@ -94,26 +96,26 @@ export class WageService {
 
   editForEmployee(payload: any): Observable<any> {
     return this.httpClient.put(
-      API_CONFIG.BASE_URL + "wage/updateForEmployee",
+      API_CONFIG.BASE_URL + "allowance/updateForEmployee",
       payload
     );
   }
 
-  delete(id: string): Observable<any> {
-    return this.httpClient.delete(
-      API_CONFIG.BASE_URL + "wage/delete/" + id,
+  lockAllowance(allowanceCode: string): Observable<any> {
+    return this.httpClient.put(
+      API_CONFIG.BASE_URL + "allowance/lock/" + allowanceCode,null
     );
   }
 
   deleteForEmployee(id: string): Observable<any> {
     return this.httpClient.delete(
-      API_CONFIG.BASE_URL + "wage/deleteForEmployee/" + id,
+      API_CONFIG.BASE_URL + "allowance/deleteForEmployee/" + id,
     );
   }
 
   downLoadFile(fileName: any): Observable<any> {
     const params = new HttpParams().set('fileName', fileName);
-    return this.httpClient.post(API_CONFIG.BASE_URL + "wage/download", null, {
+    return this.httpClient.post(API_CONFIG.BASE_URL + "allowance/download", null, {
       responseType: 'blob',
       observe: 'response',
       params: params

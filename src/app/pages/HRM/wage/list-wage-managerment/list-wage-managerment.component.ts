@@ -39,7 +39,7 @@ export class ListWageManagermentComponent implements OnInit {
   departmentCode: any;
   isLoading = false;
   message: string = '';
-  idWage: any;
+  allowanceCode: any;
   currentTabIndex = 0;
   statusList = ['ACTIVE', 'INACTIVE'];
 
@@ -164,9 +164,10 @@ export class ListWageManagermentComponent implements OnInit {
       nzComponentParams: {
         isUpdate: true,
         idWageForm : data.wageId,
-        wageNameForm : data.wageName,
-        wageBaseForm : data.wageBase,
-        wageDescriptionForm : data.wageDescription,
+        allowanceCodeForm : data.allowanceCode,
+        allowanceNameForm : data.allowanceName,
+        allowanceBaseForm : data.allowanceBase,
+        allowanceDescriptionForm : data.allowanceDescription,
       },
       nzOnOk: () => new Promise((resolve) => setTimeout(resolve, 3000)),
       nzFooter: null,
@@ -183,8 +184,8 @@ export class ListWageManagermentComponent implements OnInit {
   openModalDelete(item: any): void {
     if (!item.totalEmp) {
       this.isVisibleModalDelete = true;
-      this.idWage = item.wageId;
-      this.message = `<span>Bạn có chắc chắn muốn xóa phụ cấp mã <b>${this.idWage}</b> không?</span>`
+      this.allowanceCode = item.wageId;
+      this.message = `<span>Bạn có chắc chắn muốn vô hiệu phụ cấp mã <b>${this.allowanceCode}</b> không?</span>`
     }
   }
 
@@ -194,8 +195,8 @@ export class ListWageManagermentComponent implements OnInit {
   }
 
   callBackModalDelete() {
-    this.wageService.delete(this.idWage).subscribe(res => {
-      if (res && res.code === "OK") {
+    this.wageService.lockAllowance(this.allowanceCode).subscribe(res => {
+      if (res && res.code === "202") {
         const data = res.data;
         this.toastService.openSuccessToast('Xóa phụ cấp thành công');
         this.isVisibleModalDelete = false;

@@ -54,7 +54,7 @@
     </div>
     <div class="list__table">
       <nz-tabset [(nzSelectedIndex)]="currentTabIndex" (nzSelectedIndexChange)="onTabChange($event)">
-        <nz-tab nzTitle="Đang hoạt động"></nz-tab>
+        <nz-tab nzTitle="Hiệu lực"></nz-tab>
         <nz-tab nzTitle="Vô hiệu"></nz-tab>
       </nz-tabset>
 
@@ -64,6 +64,9 @@
         <tr class="ant-header-customize">
           <th nzWidth="60px" class="text-center">
             STT
+          </th>
+          <th nzWidth="200px" class="text-center">
+            Mã phụ cấp
           </th>
           <th nzWidth="200px" class="text-center">
             Tên phụ cấp
@@ -80,6 +83,9 @@
           <th nzWidth="350px" class="text-center">
             Mô tả
           </th>
+          <th nzWidth="200px" class="text-center">
+            Trạng thái
+          </th>
           <th nzWidth="150px" class="text-center">
             Hành động
           </th>
@@ -89,24 +95,31 @@
         <ng-template ngFor let-data let-idx="index" [ngForOf]="rowSelectionTable.data">
           <tr>
             <td class="text-center max-width-60">{{ (request.currentPage * request.pageSize) + idx + 1}}</td>
-            <td class="max-width-200" [nz-tooltip]="data.wageName">{{data.wageName}}</td>
-            <td class="max-width-150 text-center" [nz-tooltip]="data.wageBase | currency: 'VND'">
-              <span style="color: #1e61f3; font-weight: bold">{{data.wageBase | currency: 'VND'}}</span>
+            <td class="max-width-200" [nz-tooltip]="data.allowanceCode">{{data.allowanceCode}}</td>
+            <td class="max-width-200" [nz-tooltip]="data.allowanceName">{{data.allowanceName}}</td>
+            <td class="max-width-150 text-center" [nz-tooltip]="data.allowanceBase | currency: 'VND'">
+              <span style="color: #1e61f3; font-weight: bold">{{data.allowanceBase | currency: 'VND'}}</span>
             </td>
             <td class="max-width-250" [nz-tooltip]="data.attachFile">
               <a style="color: #00a1dd; font-weight: bold"
                  (click)="handleClick(data.attachFile)">{{data.attachFile}}</a>
             </td>
             <td class="max-width-150 text-center" [nz-tooltip]="data.createdDate | date: 'dd/MM/yyyy'">{{data.createdDate | date: 'dd/MM/yyyy'}}</td>
-            <td class="max-width-350 text-center" [nz-tooltip]="data.wageDescription">{{data.wageDescription}}</td>
+            <td class="max-width-350 text-center" [nz-tooltip]="data.allowanceDescription">{{data.allowanceDescription}}</td>
+            <td class="max-width-200 text-center" [nz-tooltip]="'Vô hiệu'" *ngIf="data.status !== 1">
+              <span class="css-badge badge badge-pill bg-danger p-3">Vô hiệu</span></td>
+            <td class="max-width-200 text-center" [nz-tooltip]="'Hoạt động'" *ngIf="data.status === 1">
+              <span class="css-badge badge badge-pill bg-success p-3">Hoạt động</span></td>
             <td class="text-center max-width-150">
               <div class="action">
                 <app-button-icon class="action__margin" [isEdit]="true"
                                  [tooltipTitle]="'Cập nhật phụ cấp'"
                                  [loading]="isLoading"
                                  (clickAction)="openUpdateModal(data)"></app-button-icon>
-                <app-button-icon class="action__margin" [isDelete]="true"
-                                 [tooltipTitle]="'Xóa loại phụ cấp'" (click)="openModalDelete(data)"></app-button-icon>
+                <app-button-icon class="action__margin" [isLock]="true"
+                                 [tooltipTitle]="'Vô hiệu phụ cấp'"
+                                 (click)="openModalDelete(data)">
+                </app-button-icon>
               </div>
             </td>
           </tr>
@@ -127,7 +140,7 @@
   </nz-card>
 </nz-collapse>
 
-<app-modal-confirm title="Xác nhận xóa" [isVisible]="isVisibleModalDelete"
+<app-modal-confirm title="Xác nhận vô hiệu" [isVisible]="isVisibleModalDelete"
                    textButtonCancel="Hủy"
                    [text]="'Đồng ý'"
                    [isConfirm]="true"

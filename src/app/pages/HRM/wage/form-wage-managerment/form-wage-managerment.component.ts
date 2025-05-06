@@ -19,10 +19,11 @@ import {WageService} from "../../../../service/wage.service";
 export class FormWageManagermentComponent implements OnInit {
 
 
-  @Input() wageNameForm?: any;
+  @Input() allowanceCodeForm?: any;
+  @Input() allowanceNameForm?: any;
   @Input() idWageForm?: any;
-  @Input() wageBaseForm?: any;
-  @Input() wageDescriptionForm?: any;
+  @Input() allowanceBaseForm?: any;
+  @Input() allowanceDescriptionForm?: any;
   @Input() isVisibleModal = false;
   @Input() dataChild = null;
   @Input() isUpdate = false;
@@ -47,17 +48,19 @@ export class FormWageManagermentComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm = this.formBuilder.group({
-      wageId: new FormControl(null),
-      wageName: new FormControl(null, [Validators.required, Validators.maxLength(100)]),
-      wageBase: new FormControl(null, [Validators.required]),
+      Id: new FormControl(null),
+      allowanceCode: new FormControl(null, [Validators.required, Validators.maxLength(100)]),
+      allowanceName: new FormControl(null, [Validators.required]),
+      allowanceBase: new FormControl(null, [Validators.required]),
       file: new FormControl(null),
-      wageDescription: new FormControl(null),
+      allowanceDescription: new FormControl(null),
     });
     setTimeout(()=>{
-      this.createForm.get('wageId')?.setValue(this.idWageForm);
-      this.createForm.get('wageName')?.setValue(this.wageNameForm);
-      this.createForm.get('wageBase')?.setValue(this.wageBaseForm);
-      this.createForm.get('wageDescription')?.setValue(this.wageDescriptionForm);
+      this.createForm.get('id')?.setValue(this.idWageForm);
+      this.createForm.get('allowanceCode')?.setValue(this.allowanceCodeForm);
+      this.createForm.get('allowanceName')?.setValue(this.allowanceNameForm);
+      this.createForm.get('allowanceBase')?.setValue(this.allowanceBaseForm);
+      this.createForm.get('allowanceDescription')?.setValue(this.allowanceDescriptionForm);
     });
   }
 
@@ -73,9 +76,10 @@ export class FormWageManagermentComponent implements OnInit {
     if (this.createForm.valid) {
       const data = this.createForm.value;
       data.wageId = data.wageId ? data.wageId : null;
-      data.wageName = data.wageName ? data.wageName.trim() : null;
-      data.wageBase = data.wageBase ? data.wageBase : null;
-      data.wageDescription = data.wageDescription ? data.wageDescription.trim() : null;
+      data.allowanceCode = data.allowanceCode ? data.allowanceCode : null;
+      data.allowanceName = data.allowanceName ? data.allowanceName.trim() : null;
+      data.allowanceBase = data.allowanceBase ? data.allowanceBase : null;
+      data.allowanceDescription = data.allowanceDescription ? data.allowanceDescription.trim() : null;
       if (!this.isUpdate) {
         this.spinner.show().then();
         this.wageService.create(this.file, data).subscribe(res => {

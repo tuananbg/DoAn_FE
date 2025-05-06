@@ -4,14 +4,21 @@
       <div nz-col nzSpan="24">
         <div nz-row>
           <app-input-text-v2 [ngClass]="{'w-100': true}"
-                             formControlName="wageName" [required]="true"
+                             formControlName="allowanceCode" [required]="true"
+                             label="Mã phụ cấp" nz-col nzSpan="24"
+                             [ngStyleCus]="{'padding-left' : '35px'}"
+                             [nzAllowClear]="true"></app-input-text-v2>
+        </div>
+        <div nz-row>
+          <app-input-text-v2 [ngClass]="{'w-100': true}"
+                             formControlName="allowanceName" [required]="true"
                              label="Tên phụ cấp" nz-col nzSpan="24"
                              [ngStyleCus]="{'padding-left' : '35px'}"
                              [nzAllowClear]="true"></app-input-text-v2>
         </div>
         <div nz-row>
           <app-input-text-v2 [ngClass]="{'w-100': true}"
-                             formControlName="wageBase" [required]="true"
+                             formControlName="allowanceBase" [required]="true"
                              [typeInput]="'number'"
                              label="Số tiền phụ cấp" nz-col nzSpan="24"
                              [ngStyleCus]="{'padding-left' : '14px'}"
@@ -40,7 +47,7 @@
         <div nz-row>
           <nz-form-item nz-col nzSpan="24">
             <nz-form-control>
-              <app-input-textarea-v2 formControlName="wageDescription" [maxlength]="'5000'"
+              <app-input-textarea-v2 formControlName="allowanceDescription" [maxlength]="'5000'"
                                      label="Mô tả"
                                      [placeholder]="'Nhập nội dung mô tả'"
                                      [ngClass]="'w-100'"

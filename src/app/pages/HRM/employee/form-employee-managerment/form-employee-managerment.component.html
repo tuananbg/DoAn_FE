@@ -32,17 +32,6 @@
 
     <dxi-item>
       <dx-select-box
-        [items]="lstDepartments"
-        valueExpr="departmentCode"
-        displayExpr="departmentName"
-        [(value)]="newUser.departmentCode"
-        [searchEnabled]="true"
-        placeholder="Chọn phòng ban">
-      </dx-select-box>
-    </dxi-item>
-
-    <dxi-item>
-      <dx-select-box
         [items]="lstPositions"
         valueExpr="positionCode"
         displayExpr="positionName"
@@ -61,6 +50,11 @@
         [searchEnabled]="true"
         placeholder="Chọn giới tính">
       </dx-select-box>
+    </dxi-item>
+
+    <dxi-item>
+      <app-form-textbox label="Nơi sinh" [(value)]="newUser.placeOfBirth" [isEditing]="true"
+                        [validators]="[{ type: 'required' }]"></app-form-textbox>
     </dxi-item>
 
     <dxi-item>

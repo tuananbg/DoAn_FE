@@ -74,7 +74,6 @@ export class EmployeeService {
     }
     formData.append("code", userDetailDTO.code);
     formData.append("fullName", userDetailDTO.fullName);
-    formData.append("departmentCode", userDetailDTO.departmentCode);
     formData.append("positionCode", userDetailDTO.positionCode);
     formData.append("dateOfBirth", userDetailDTO.dateOfBirth);
     formData.append("gender", userDetailDTO.gender);
@@ -84,10 +83,9 @@ export class EmployeeService {
     formData.append("insuranceNumber", userDetailDTO.insuranceNumber);
     formData.append("accountNumber", userDetailDTO.accountNumber);
     formData.append("permanentAddress", userDetailDTO.permanentAddress);
-    formData.append("currentAddress", userDetailDTO.currentAddress);
+    formData.append("placeOfBirth", userDetailDTO.placeOfBirth);
     formData.append("identityNumber", userDetailDTO.identityNumber);
     formData.append("mobile", userDetailDTO.mobile);
-    formData.append("nation", userDetailDTO.nation);
     console.log("data", formData)
     return this.httpClient.post(
       API_CONFIG.BASE_URL + "employee/create",

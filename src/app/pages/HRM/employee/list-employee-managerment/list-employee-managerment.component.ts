@@ -117,20 +117,11 @@ export class ListEmployeeManagermentComponent implements OnInit {
   addContact() {
     this.isAddContactPopupOpened = true;
 
-    // Lấy thời gian hiện tại để tạo mã nhân viên
-    // const currentDate = new Date();
-    // const year = currentDate.getFullYear().toString();
-    // const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-    // const day = currentDate.getDate().toString().padStart(2, '0');
-    // const hours = currentDate.getHours().toString().padStart(2, '0');
-    // const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-    // const employeeCode = `NV${year}${month}${day}${hours}${minutes}`;
 
     // Cập nhật dữ liệu cho form nhân viên mới
     this.contactNewForm.newUser = {
       code: '',
       fullName: '',
-      departmentCode:'',
       positionCode: '',
       dateOfBirth: new Date(),
       gender: '',
@@ -152,7 +143,6 @@ export class ListEmployeeManagermentComponent implements OnInit {
   };
 
   rowClick(e: DxDataGridTypes.RowClickEvent) {
-    // Kiểm tra dữ liệu dòng khi click
     const newEmployeeCode = e.data?.employeeCode;
 
     if (!newEmployeeCode) {
@@ -161,27 +151,11 @@ export class ListEmployeeManagermentComponent implements OnInit {
     }
 
     if (newEmployeeCode !== this.employeeCode) {
-      // console.log(`Cập nhật employeeCode: ${this.employeeCode} => ${newEmployeeCode}`);
       this.employeeCode = newEmployeeCode;
     }
-    // else {
-    //   console.log("Nhấn vào cùng một nhân viên, không cập nhật.");
-    // }
 
-    // console.log(newEmployeeCode);
     this.router.navigate(['infor-employee/', newEmployeeCode]);
   }
-
-
-  onOpenedChange = (value: boolean) => {
-    if (!value) {
-      this.employeeCode == null;
-    }
-  };
-
-  onPinnedChange = () => {
-    this.dataGrid.instance.updateDimensions();
-  };
 
 
   async onExporting(e: any) {
@@ -234,7 +208,6 @@ export class ListEmployeeManagermentComponent implements OnInit {
           this.contactNewForm.newUser = {
             code: '',
             fullName: '',
-            departmentCode: '',
             positionCode: '',
             dateOfBirth: new Date(),
             gender: '',
