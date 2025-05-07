@@ -106,6 +106,11 @@ export class WageService {
       API_CONFIG.BASE_URL + "allowance/lock/" + allowanceCode,null
     );
   }
+  unlockAllowance(allowanceCode: string): Observable<any> {
+    return this.httpClient.put(
+      API_CONFIG.BASE_URL + "allowance/unlock/" + allowanceCode,null
+    );
+  }
 
   deleteForEmployee(id: string): Observable<any> {
     return this.httpClient.delete(

@@ -176,7 +176,7 @@ export class ListContractManagermentComponent implements OnInit {
     if (!item.totalEmp) {
       this.isVisibleModalDelete = true;
       this.idContract = item.contractId;
-      this.message = `<span>Bạn có chắc chắn muốn xóa hợp đồng mã <b>${this.idContract}</b> không?</span>`;
+      this.message = `Bạn có chắc chắn muốn chấm dứt hợp đồng mã ${this.idContract} không?`;
     }
   }
 
@@ -186,9 +186,9 @@ export class ListContractManagermentComponent implements OnInit {
   }
 
   callBackModalDelete(): void {
-    this.contractService.delete(this.idContract).subscribe((res) => {
+    this.contractService.disable(this.idContract).subscribe((res) => {
       if (res && res.code === "OK") {
-        this.toastService.openSuccessToast('Xóa hợp đồng thành công');
+        this.toastService.openSuccessToast('Chấm dứt hợp đồng thành công');
         this.isVisibleModalDelete = false;
       } else {
         this.toastService.openErrorToast(res.msgCode);

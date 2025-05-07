@@ -112,13 +112,28 @@
               <span class="css-badge badge badge-pill bg-success p-3">Hoạt động</span></td>
             <td class="text-center max-width-150">
               <div class="action">
-                <app-button-icon class="action__margin" [isEdit]="true"
-                                 [tooltipTitle]="'Cập nhật phụ cấp'"
-                                 [loading]="isLoading"
-                                 (clickAction)="openUpdateModal(data)"></app-button-icon>
-                <app-button-icon class="action__margin" [isLock]="true"
-                                 [tooltipTitle]="'Vô hiệu phụ cấp'"
-                                 (click)="openModalDelete(data)">
+                <app-button-icon
+                  class="action__margin"
+                  [isEdit]="true"
+                  [tooltipTitle]="'Cập nhật tài khoản'"
+                  [loading]="isLoading"
+                  (clickAction)="openUpdateModal(data)">
+                </app-button-icon>
+
+                <app-button-icon
+                  *ngIf="currentTabIndex === 0"
+                  class="action__margin"
+                  [isLock]="true"
+                  [tooltipTitle]="'Vô hiệu phụ cấp'"
+                  (click)="openModalDelete(data)">
+                </app-button-icon>
+
+                <app-button-icon
+                  *ngIf="currentTabIndex === 1"
+                  class="action__margin"
+                  [isUnlock]="true"
+                  [tooltipTitle]="'Mở khóa phụ cấp'"
+                  (click)="openModalDelete(data)">
                 </app-button-icon>
               </div>
             </td>

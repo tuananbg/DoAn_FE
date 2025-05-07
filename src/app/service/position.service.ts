@@ -55,11 +55,6 @@ export class PositionService {
     );
   }
 
-  getPositionId(id: number | undefined): Observable<any> {
-    return this.httpClient.get(
-      API_CONFIG.BASE_URL + "position/detail/" + id,
-    );
-  }
 
   getSelection(): Observable<any> {
     return this.httpClient.get(
@@ -74,9 +69,14 @@ export class PositionService {
     );
   }
 
-  disable(positionCode: string): Observable<any> {
-    return this.httpClient.post(
-      API_CONFIG.BASE_URL + "position/disable/" + positionCode,null
+  lock(positionCode: string): Observable<any> {
+    return this.httpClient.put(
+      API_CONFIG.BASE_URL + "position/lock/" + positionCode,null
+    );
+  }
+  unlock(positionCode: string): Observable<any> {
+    return this.httpClient.put(
+      API_CONFIG.BASE_URL + "position/unlock/" + positionCode,null
     );
   }
 

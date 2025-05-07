@@ -19,6 +19,7 @@ export class ListWageManagermentComponent implements OnInit {
   isActive = true;
   searchForm!: FormGroup;
   searchFormValue: any;
+  modalTitle = '';
   request: any = {
     listTextSearch: [],
     code: null,
@@ -84,7 +85,7 @@ export class ListWageManagermentComponent implements OnInit {
   onTabChange(index: number): void {
     this.currentTabIndex = index;
     this.request.currentPage = 0;
-    this.fetchData();
+    this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
   fetchData(currentPage?: number , pageSize?: number): void {
@@ -181,12 +182,16 @@ export class ListWageManagermentComponent implements OnInit {
     });
   }
 
-  openModalDelete(item: any): void {
-    if (!item.totalEmp) {
-      this.isVisibleModalDelete = true;
-      this.allowanceCode = item.wageId;
-      this.message = `<span>Bạn có chắc chắn muốn vô hiệu phụ cấp mã <b>${this.allowanceCode}</b> không?</span>`
-    }
+  openModalDelete(data: any): void {
+    this.allowanceCode = data.allowanceCode;
+
+    const isActiveTab = this.currentTabIndex === 0;
+    this.modalTitle = isActiveTab ? 'Xác nhận vô hiệu phụ cấp' : 'Xác nhận mở khóa phụ cấp';
+    this.message = isActiveTab
+      ? `Bạn có chắc chắn muốn vô hiệu phụ cấp mã ${this.allowanceCode} này không?`
+      : `Bạn có chắc chắn muốn mở khóa phụ cấp mã ${this.allowanceCode} này không?`;
+
+    this.isVisibleModalDelete = true;
   }
 
   onCancelModalDelete() {
@@ -194,16 +199,31 @@ export class ListWageManagermentComponent implements OnInit {
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
-  callBackModalDelete() {
-    this.wageService.lockAllowance(this.allowanceCode).subscribe(res => {
-      if (res && res.code === "202") {
-        const data = res.data;
-        this.toastService.openSuccessToast('Xóa phụ cấp thành công');
+  callBackModalDelete(): void {
+    const isActiveTab = this.currentTabIndex === 0;
+    const call$ = isActiveTab
+      ? this.wageService.lockAllowance(this.allowanceCode)
+      : this.wageService.unlockAllowance(this.allowanceCode);
+
+    this.spinner.show().then();
+
+    call$.subscribe({
+      next: (res) => {
+        if (res.code === '202') {
+          this.toastService.openSuccessToast('Cập nhật trạng thái phụ cấp thành công');
+          this.fetchData(this.request.currentPage, this.request.pageSize);
+        } else {
+          this.toastService.openErrorToast(res?.message || 'Thất bại');
+        }
         this.isVisibleModalDelete = false;
-      } else {
-        this.toastService.openErrorToast(res.msgCode);
+      },
+      error: (err) => {
+        this.toastService.openErrorToast(err?.error?.msgCode || 'Lỗi hệ thống');
+        this.isVisibleModalDelete = false;
+      },
+      complete: () => {
+        this.spinner.hide().then();
       }
-      this.fetchData(this.request.currentPage, this.request.pageSize);
     });
   }
 

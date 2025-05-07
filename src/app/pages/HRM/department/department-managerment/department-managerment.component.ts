@@ -19,6 +19,7 @@ export class DepartmentManagermentComponent implements OnInit {
   isActive = true;
   searchForm!: FormGroup;
   searchFormValue: any;
+  modalTitle = '';
   request: any = {
     listTextSearch: [],
     code: null,
@@ -171,14 +172,16 @@ export class DepartmentManagermentComponent implements OnInit {
     });
   }
 
-  openModalDelete(item: any): void {
-    if (!item.totalEmp) {
-      this.isVisibleModalDelete = true;
-      this.departmentCode = item.departmentCode;
-      this.department = item;
-      this.idDepartment = item.departmentId;
-      this.message = `<span>Bạn có chắc chắn muốn xóa phòng ban mã <b>${this.departmentCode}</b> không?</span>`
-    }
+  openModalDelete(data: any): void {
+    this.departmentCode = data.departmentCode;
+
+    const isActiveTab = this.currentTabIndex === 0;
+    this.modalTitle = isActiveTab ? 'Xác nhận vô hiệu phòng ban' : 'Xác nhận mở khóa phòng ban';
+    this.message = isActiveTab
+      ? `Bạn có chắc chắn muốn vô hiệu mã phòng ban ${this.departmentCode} này không?`
+      : `Bạn có chắc chắn muốn mở khóa mã phòng ban ${this.departmentCode} này không?`;
+
+    this.isVisibleModalDelete = true;
   }
 
   onCancelModalDelete() {
@@ -186,64 +189,35 @@ export class DepartmentManagermentComponent implements OnInit {
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
-  callBackModalDelete() {
-    this.departmentService.deleteDepartment(this.idDepartment).subscribe(res => {
-      if (res && res.code === "OK") {
-        const data = res.data;
-        this.toastService.openSuccessToast('Xóa phòng ban thành công');
+  callBackModalDelete(): void {
+    const isActiveTab = this.currentTabIndex === 0;
+    const call$ = isActiveTab
+      ? this.departmentService.lock(this.departmentCode)
+      : this.departmentService.unlock(this.departmentCode);
+
+    this.spinner.show().then();
+
+    call$.subscribe({
+      next: (res) => {
+        if (res.code === '202') {
+          this.toastService.openSuccessToast('Cập nhật trạng thái phòng ban thành công');
+          this.fetchData(this.request.currentPage, this.request.pageSize);
+        } else {
+          this.toastService.openErrorToast(res?.message || 'Thất bại');
+        }
         this.isVisibleModalDelete = false;
-      } else {
-        this.toastService.openErrorToast(res.body.msgCode);
+      },
+      error: (err) => {
+        this.toastService.openErrorToast(err?.error?.msgCode || 'Lỗi hệ thống');
+        this.isVisibleModalDelete = false;
+      },
+      complete: () => {
+        this.spinner.hide().then();
       }
-      this.fetchData(this.request.currentPage, this.request.pageSize);
     });
   }
 
-  async onExporting(e: any) {
-    if (this.searchForm.invalid) return;
 
-    await this.fetchData(this.request.currentPage, this.request.pageSize);
-    this.spinner.show().then();
-
-    if (this.lstData.length === 0) {
-      this.spinner.hide().then(); // đừng quên hide luôn
-      return;
-    }
-
-    const status = this.statusList[this.currentTabIndex];
-
-    this.departmentService.exportEmployee(status).subscribe(
-      async response => {
-        const isJsonBlob = (data: any) => data instanceof Blob && data.type === 'application/json';
-        const responseData = isJsonBlob(response.body) ? await (response.body).text() : response.body || {};
-
-        if (typeof responseData === "string") {
-          const responseJson = JSON.parse(responseData);
-          this.toastService.openErrorToast(responseJson.msgCode);
-        } else {
-          const contentDisposition = response.headers.get('Content-Disposition');
-          let fileName = 'export.xlsx'; // fallback filename
-
-          if (contentDisposition) {
-            const match = contentDisposition.match(/filename\*=UTF-8''(.+)/);
-            if (match && match[1]) {
-              fileName = decodeURIComponent(match[1]);
-            }
-          }
-
-          this.fileManagerService.downloadFile(response, fileName);
-        }
-      },
-      error => {
-        this.toastService.openErrorToast(error);
-      },
-      () => {
-        this.spinner.hide().then();
-      }
-    );
-
-    e.cancel = true;
-  }
 
   onTabChange(index: number): void {
     this.currentTabIndex = index;

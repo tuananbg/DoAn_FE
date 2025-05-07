@@ -120,9 +120,9 @@ export class ContractService {
     );
   }
 
-  delete(id: string): Observable<any> {
-    return this.httpClient.delete(
-      API_CONFIG.BASE_URL + "employee-contract/delete/" + id,
+  disable(id: string): Observable<any> {
+    return this.httpClient.put(
+      API_CONFIG.BASE_URL + "employee-contract/disable/" + id,null
     );
   }
 

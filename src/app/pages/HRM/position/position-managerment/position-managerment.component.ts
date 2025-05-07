@@ -21,6 +21,7 @@ export class PositionManagermentComponent implements OnInit {
   isActive = true;
   searchForm!: FormGroup;
   searchFormValue: any;
+  modalTitle = '';
   request: any = {
     listTextSearch: [],
     code: null,
@@ -185,12 +186,16 @@ export class PositionManagermentComponent implements OnInit {
     });
   }
 
-  openModalDelete(item: any): void {
-    if (!item.totalEmp) {
-      this.isVisibleModalDelete = true;
-      this.positionCode = item.positionCode;
-      this.message = `<span>Bạn có chắc chắn muốn vô hiệu chức vụ <b>${this.positionCode}</b> không?</span>`
-    }
+  openModalDelete(data: any): void {
+    this.positionCode = data.positionCode;
+
+    const isActiveTab = this.currentTabIndex === 0;
+    this.modalTitle = isActiveTab ? 'Xác nhận vô hiệu chức vụ' : 'Xác nhận mở khóa chức vụ';
+    this.message = isActiveTab
+      ? `Bạn có chắc chắn muốn vô hiệu mã chức vụ ${this.positionCode} này không?`
+      : `Bạn có chắc chắn muốn mở khóa mã chức vụ ${this.positionCode} này không?`;
+
+    this.isVisibleModalDelete = true;
   }
 
   onCancelModalDelete() {
@@ -198,56 +203,33 @@ export class PositionManagermentComponent implements OnInit {
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
-  callBackModalDelete() {
-    console.log("code",this.positionCode)
-    this.positionService.disable(this.positionCode).subscribe(res => {
-      if (res && res.code === "202") {
-        const data = res.data;
-        this.toastService.openSuccessToast('Vô hiệu chức vụ thành công');
-        this.isVisibleModalDelete = false;
-      } else {
-        this.toastService.openErrorToast(res.msgCode);
-      }
-      this.fetchData(this.request.currentPage, this.request.pageSize);
-    });
-  }
+  callBackModalDelete(): void {
 
-  openExport() {
-    for (const control in this.searchForm.controls) {
-      if (this.searchForm.contains(control)) {
-        this.searchForm.controls[control].markAsDirty();
-        this.searchForm.controls[control].updateValueAndValidity();
-      }
-    }
-    if (this.searchForm.invalid) return;
-    const formValue = this.searchForm.value;
+    const isActiveTab = this.currentTabIndex === 0;
+    const call$ = isActiveTab
+      ? this.positionService.lock(this.positionCode)
+      : this.positionService.unlock(this.positionCode);
 
-    const queryModel = {
-      positionCode: !formValue.positionCode ? null : formValue.positionCode.trim().toString(),
-      positionName: !formValue.positionName ? null : formValue.positionName.toString(),
-      isActive: formValue.isActive === 0 ? '0' : !formValue.isActive ? null : formValue.isActive.toString(),
-    };
-    const pageable = {
-      sort: this.request.sort
-    };
     this.spinner.show().then();
-    this.positionService.exportPosition(queryModel, pageable).subscribe(async response => {
-      const isJsonBlob = (data: any) => data instanceof Blob && data.type === 'application/json';
-      const responseData = isJsonBlob(response.body) ? await (response.body).text() : response.body || {};
-      if (typeof responseData === "string") {
-        const responseJson = JSON.parse(responseData);
-        this.toastService.openErrorToast(responseJson.msgCode);
-      } else {
-        const currentDate = moment();
-        const formattedDate = currentDate.format('DD-MM-YYYY');
-        this.fileManagerService.downloadFile(response, 'danhsachchucvu_'+formattedDate+'.xlsx');
+
+    call$.subscribe({
+      next: (res) => {
+        if (res.code === '202') {
+          this.toastService.openSuccessToast('Cập nhật trạng thái tài khoản thành công');
+          this.fetchData(this.request.currentPage, this.request.pageSize);
+        } else {
+          this.toastService.openErrorToast(res?.message || 'Thất bại');
+        }
+        this.isVisibleModalDelete = false;
+      },
+      error: (err) => {
+        this.toastService.openErrorToast(err?.error?.msgCode || 'Lỗi hệ thống');
+        this.isVisibleModalDelete = false;
+      },
+      complete: () => {
+        this.spinner.hide().then();
       }
-    }, error => {
-      this.toastService.openErrorToast(error);
-    }, () => {
-      this.spinner.hide().then();
     });
-    this.nzOnSearch();
   }
 
 

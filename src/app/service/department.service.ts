@@ -72,9 +72,15 @@ export class DepartmentService {
     );
   }
 
-  deleteDepartment(id: string): Observable<any> {
-    return this.httpClient.delete(
-      API_CONFIG.BASE_URL + "department/delete/" + id,
+  lock(departmentCode: string): Observable<any> {
+    return this.httpClient.put(
+      API_CONFIG.BASE_URL + "department/lock/" + departmentCode,null
+    );
+  }
+
+  unlock(departmentCode: string): Observable<any> {
+    return this.httpClient.put(
+      API_CONFIG.BASE_URL + "department/unlock/" + departmentCode,null
     );
   }
 
