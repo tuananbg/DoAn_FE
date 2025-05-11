@@ -1,15 +1,13 @@
-<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#3579c2"
-             type="line-scale" [fullScreen]="false"><p style="color: white"> Đang tải... </p>
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#3579c2" type="line-scale" [fullScreen]="false">
+  <p style="color: white"> Đang tải... </p>
 </ngx-spinner>
 
 <div class="ant-breadcrumb-custom">
-  <nz-breadcrumb>
-    <nz-breadcrumb nzSeparator=">">
-      <nz-breadcrumb-item><a>Trang chủ</a></nz-breadcrumb-item>
-      <nz-breadcrumb-item><a>Hành chính nhân sự</a></nz-breadcrumb-item>
-      <nz-breadcrumb-item><a [routerLink]="'/employee'">Danh sách nhân viên</a></nz-breadcrumb-item>
-      <nz-breadcrumb-item><a>Thông tin nhân viên</a></nz-breadcrumb-item>
-    </nz-breadcrumb>
+  <nz-breadcrumb nzSeparator=">">
+    <nz-breadcrumb-item><a>Trang chủ</a></nz-breadcrumb-item>
+    <nz-breadcrumb-item><a>Hành chính nhân sự</a></nz-breadcrumb-item>
+    <nz-breadcrumb-item><a [routerLink]="'/employee'">Danh sách nhân viên</a></nz-breadcrumb-item>
+    <nz-breadcrumb-item><a>Thông tin nhân viên</a></nz-breadcrumb-item>
   </nz-breadcrumb>
 </div>
 
@@ -20,26 +18,25 @@
         <dx-button icon="arrowleft" stylingMode="text" (click)="redirectToPreviousPage()"></dx-button>
       </dxi-item>
       <dxi-item location="before" [text]="contactName"></dxi-item>
-      <dxi-item location="after" locateInMenu="auto" appCheckAuthorize>
-        <dx-button *ngIf="isUserOffice"
-                   text="Chỉnh sửa"
-                   icon="edit"
-                   stylingMode="contained"
-                   type="default"
-                   cssClass="btn-custom-edit"
-                   (onClick)="toggleEdit()">
+      <dxi-item location="after" locateInMenu="auto" *ngIf="isUserOffice">
+        <dx-button
+          text="Chỉnh sửa"
+          icon="edit"
+          stylingMode="contained"
+          type="default"
+          cssClass="btn-custom-edit"
+          (onClick)="toggleEdit()">
         </dx-button>
       </dxi-item>
       <dxi-item location="after" locateInMenu="auto" style="margin-right: 10px;">
-        <app-button-export appCheckAuthorize (clickExport)="onExportPdf()" [buttonClass]="'css-box-shadow'"></app-button-export>
+        <app-button-export (clickExport)="onExportPdf()" [buttonClass]="'css-box-shadow'"></app-button-export>
       </dxi-item>
     </dx-toolbar>
 
-    <div id="contentToConvert" style="padding: 30px 40px;">
+    <div id="contentToConvert" style="padding: 30px 40px;" *ngIf="user">
       <div class="wrapper-title">
-        <h3>Hồ sơ nhân viên - <span style="font-weight: bold;">{{ user.employeeName }}</span></h3>
+        <h3>Hồ sơ nhân viên - <span style="font-weight: bold;">{{ user.fullName }}</span></h3>
       </div>
-
 
       <div class="wrapper-app-panel">
         <div class="data-wrapper">
@@ -47,105 +44,68 @@
             <dx-scroll-view class="panel-scroll">
               <dx-validation-group>
                 <div class="data-part">
-                  <dx-form class="plain-styled-form" labelMode="floating" [class.view-mode]="!isEditing">
+                  <dx-form class="plain-styled-form" labelMode="floating">
                     <dxi-item itemType="group" [colCount]="3">
                       <dxo-col-count-by-screen [xs]="1" [md]="3"></dxo-col-count-by-screen>
 
                       <!-- Avatar -->
                       <dxi-item>
                         <div class="avatar-wrapper">
-                          <div *ngIf="!isEditing" class="avatar-preview">
-                            <app-form-photo [link]="user.avatar"></app-form-photo>
-                          </div>
-                          <dx-file-uploader
-                            *ngIf="isEditing"
-                            [selectButtonText]="'Chọn file ảnh'"
-                            [multiple]="false"
-                            [accept]="'image/*'"
-                            uploadMode="useForm"
-                            (onValueChanged)="onAvatarChanged($event)">
-                          </dx-file-uploader>
+                          <app-form-photo [link]="user.avatar" [size]="200"></app-form-photo>
+
                         </div>
                       </dxi-item>
 
-
-
-                      <!-- Cột phải: Thông tin công việc -->
+                      <!-- Thông tin công việc -->
                       <dxi-item itemType="group" [colCount]="1">
                         <dxi-item>
-                          <app-form-textbox label="Mã nhân viên" [(value)]="user.employeeCode" [isEditing]="isEditing"></app-form-textbox>
+                          <app-form-textbox label="Mã nhân viên" [(value)]="user.code" [isEditing]="false"></app-form-textbox>
                         </dxi-item>
                         <dxi-item>
-                          <app-form-textbox *ngIf="!isEditing" label="Chức vụ" [(value)]="user.positionName" [isEditing]="isEditing"></app-form-textbox>
-                          <dx-select-box *ngIf="isEditing"
-                                         [label]="'Chức vụ'"
-                                         [dataSource]="lstPosition"
-                                         valueExpr="id"
-                                         displayExpr="positionName"
-                                         [searchEnabled]="true"
-                                         [(value)]="user.positionId">
-                          </dx-select-box>
+                          <app-form-textbox label="Chức vụ" [(value)]="user.positionName" [isEditing]="false"></app-form-textbox>
                         </dxi-item>
                         <dxi-item>
-                          <app-form-textbox label="Ngày sinh" [(value)]="user.birthday" [isEditing]="isEditing"></app-form-textbox>
+                          <app-form-textbox label="Ngày sinh" [(value)]="user.dateOfBirth" [isEditing]="false"></app-form-textbox>
                         </dxi-item>
                         <dxi-item>
-                          <app-form-textbox label="Mã số thuế" [(value)]="user.taxCode" [isEditing]="isEditing"></app-form-textbox>
+                          <app-form-textbox label="Mã số thuế" [(value)]="user.taxCode" [isEditing]="false"></app-form-textbox>
                         </dxi-item>
-
                       </dxi-item>
 
-                      <!-- Cột trái: Thông tin cá nhân -->
+                      <!-- Thông tin cá nhân -->
                       <dxi-item itemType="group" [colCount]="1">
                         <dxi-item>
-                          <app-form-textbox label="Nơi sinh" [(value)]="user.placeOfBirth" [isEditing]="isEditing"></app-form-textbox>
+                          <app-form-textbox label="Nơi sinh" [(value)]="user.placeOfBirth" [isEditing]="false"></app-form-textbox>
                         </dxi-item>
                         <dxi-item>
-                          <app-form-textbox label="Phòng ban" [(value)]="user.departmentName" [isEditing]="isEditing"></app-form-textbox>
+                          <app-form-textbox label="Phòng ban" [(value)]="user.departmentName" [isEditing]="false"></app-form-textbox>
                         </dxi-item>
                         <dxi-item>
-                          <app-form-textbox label="Số CMND/CCCD" [(value)]="user.identityNumber" [isEditing]="isEditing"></app-form-textbox>
+                          <app-form-textbox label="Số CMND/CCCD" [(value)]="user.identityNumber" [isEditing]="false"></app-form-textbox>
                         </dxi-item>
                         <dxi-item>
-                          <app-form-textbox label="Địa chỉ hiện tại" [(value)]="user.currentAddress" [isEditing]="isEditing"></app-form-textbox>
+                          <app-form-textbox label="Số tài khoản" [(value)]="user.accountNumber" [isEditing]="false"></app-form-textbox>
                         </dxi-item>
-
                       </dxi-item>
-
                     </dxi-item>
 
-                    <!-- Dòng riêng: Điện thoại - Email - Địa chỉ liên hệ -->
                     <dxi-item itemType="group" [colCount]="3" cssClass="mt-3">
                       <dxo-col-count-by-screen [xs]="1" [md]="3"></dxo-col-count-by-screen>
-
                       <dxi-item>
-                        <app-form-textbox label="Điện thoại" icon="tel" [(value)]="user.mobile" [isEditing]="isEditing"></app-form-textbox>
-                      </dxi-item>
-
-                      <dxi-item>
-                        <app-form-textbox label="Email" icon="email" [(value)]="user.email" [isEditing]="isEditing" [validators]="[{ type: 'email' }]"></app-form-textbox>
+                        <app-form-textbox label="Điện thoại" icon="tel" [(value)]="user.mobile" [isEditing]="false"></app-form-textbox>
                       </dxi-item>
                       <dxi-item>
-                        <app-form-textbox label="Địa chỉ thường trú" [(value)]="user.permanentAddress" [isEditing]="isEditing"></app-form-textbox>
+                        <app-form-textbox label="Email" icon="email" [(value)]="user.email" [isEditing]="false" [validators]="[{ type: 'email' }]"></app-form-textbox>
                       </dxi-item>
-
+                      <dxi-item>
+                        <app-form-textbox label="Địa chỉ thường trú" [(value)]="user.permanentAddress" [isEditing]="false"></app-form-textbox>
+                      </dxi-item>
                     </dxi-item>
-
                   </dx-form>
-
-
                 </div>
               </dx-validation-group>
             </dx-scroll-view>
           </ng-container>
-
-          <dx-load-panel
-            container=".panel"
-            [width]="300"
-            [visible]="isLoading"
-            [showPane]="false"
-            [position]="{ of: '.panel' }">
-          </dx-load-panel>
         </div>
       </div>
 
@@ -154,7 +114,6 @@
         <app-list-qualification-manager [isVisableButton]="true"></app-list-qualification-manager>
         <app-list-wage-for-employee [isVisableButton]="true"></app-list-wage-for-employee>
       </div>
-
     </div>
   </div>
 </dx-scroll-view>

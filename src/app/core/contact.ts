@@ -28,12 +28,12 @@ export interface ContactBase {
 
 export interface Contact {
   id: number;
-  employeeCode: string;
-  employeeName: string;
+  code: string;
+  fullName: string;
   avatar: string;
   departmentName: string;
   positionName: string;
-  birthday:  any;
+  dateOfBirth:  any;
   gender: number;
   placeOfBirth: string;
   taxCode: string;
@@ -41,14 +41,14 @@ export interface Contact {
   permanentAddress: string;
   currentAddress: string;
   identityNumber: string;
+  accountNumber: string;
   mobile: string;
   nation: string;
 
   // Thêm để binding UI
   email: string;
   address: string;
-  departmentId: number;
-  positionId: number;
+  positionCode: string;
   status: ContactStatus;
   isActive: any;
 }

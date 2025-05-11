@@ -1,17 +1,14 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {DataService} from "../../../../service/data.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {EmployeeService} from "../../../../service/employee.service";
-import {ToastService} from "../../../../service/toast.service";
-import {NgxSpinnerService} from "ngx-spinner";
-import {FileManagerService} from "../../../../service/file-manager.service";
-import html2canvas from "html2canvas";
-import * as jspdf from "jspdf";
-import {Subject, Subscription} from "rxjs";
-import {Contact} from "../../../../core/contact";
-import * as moment from "moment/moment";
-import {DepartmentService} from "../../../../service/department.service";
-import {PositionService} from "../../../../service/position.service";
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { EmployeeService } from '../../../../service/employee.service';
+import { ToastService } from '../../../../service/toast.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzModalService, NzModalRef } from 'ng-zorro-antd/modal';
+import * as moment from 'moment';
+import html2canvas from 'html2canvas';
+import * as jspdf from 'jspdf';
+import { Contact } from '../../../../core/contact';
+import { FormEmployeeManagermentComponent } from '../form-employee-managerment/form-employee-managerment.component';
 
 @Component({
   selector: 'app-detail-infor-employee',
@@ -19,210 +16,147 @@ import {PositionService} from "../../../../service/position.service";
   styleUrls: ['./detail-infor-employee.component.less']
 })
 export class DetailInforEmployeeComponent implements OnInit {
-
-  contactId!: number;
+  user!: Contact;
   contactName = 'Quay lại danh sách';
   isLoading = false;
-  isPanelOpened = true;
   isUserOffice = true;
-
-  //employee panel
-  @Input() isOpened = false;
-  @Input() isMarTop = false;
-  @Input() isDisablePinClose = false;
-  @Output() isOpenedChange = new EventEmitter<boolean>();
-  @Output() pinnedChange = new EventEmitter<boolean>();
-  private pinEventSubject = new Subject<boolean>();
-  user!: Contact;
-  isEditing = false;
-  employeeName: any;
-  employeeCode: any;
-  lstDepartment: any[] = [];
-  lstPosition: any[] = [];
-  avatarFile!: File;
-  request: any = {
-    listTextSearch: [],
-    code: null,
-    page: 0,
-    name: null,
-    size: 10, // -: desc | +: asc,
-  };
-
+  employeeCode: string = '';
 
   constructor(
-    private service: DataService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private employeeService: EmployeeService,
     private toastService: ToastService,
     private spinner: NgxSpinnerService,
-    private fileManagerService: FileManagerService,
-    private departmentService: DepartmentService,
-    private positionService: PositionService,
-    private route: ActivatedRoute,
-  ) {
-    this.contactId = Number(this.activatedRoute.snapshot.params['id']);
-  }
+    private modal: NzModalService
+  ) {}
 
   ngOnInit(): void {
-    // console.log("AAAA")
-    this.route.paramMap.subscribe(params => {
-
-      const employeeCode = params.get('code');
-      console.log(employeeCode)
-      if (employeeCode) {
-        this.loadUserByCode(employeeCode);
-      }
-    });
+    const employeeCode = this.activatedRoute.snapshot.paramMap.get('code');
+    if (employeeCode) {
+      this.employeeCode = employeeCode;
+      this.loadUserByCode(employeeCode);
+    }
   }
-
-  parseJwt(token: string): string {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-
-    return JSON.parse(jsonPayload);
-  };
-  refresh = () => {
-    this.isLoading = true;
-  };
 
   redirectToPreviousPage() {
     this.router.navigate(['/employee']);
   }
 
-//  async onExportPdf() {
-  // this.spinner.show().then();
-  // this.employeeService.exportPdf().subscribe(async res => {
-  //   const isJsonBlob = (data: any) => data instanceof Blob && data.type === 'application/json';
-  //   const responseData = isJsonBlob(res.body) ? await (res.body).text() : res.body || {};
-  //   if (typeof responseData === "string") {
-  //     const resJson = JSON.parse(responseData);
-  //     this.toastService.openErrorToast(resJson.msgCode);
-  //   } else {
-  //     const currentDate = moment(new Date()).format('DDMMYYYY');
-  //     this.fileManagerService.downloadFile(res, 'ho_so_nhan_vien_' + currentDate + '.pdf');
-  //     this.toastService.openSuccessToast('Xuất pdf thành công');
-  //   }
-  //   this.spinner.hide().then();
-  // }, error => {
-  //   this.toastService.openErrorToast(error.error.msgCode);
-  //   this.spinner.hide().then();
-  // });
-//  }
-
-  // onExportPdf(){
-  //   this.spinner.show().then();
-  //   var data = document.getElementById('contentToConvert');
-  //   html2canvas(data!).then(canvas => {
-  //     var imgWidth = 208;
-  //     var pageHeight = 295;
-  //     var imgHeight = canvas.height * imgWidth / canvas.width;
-  //     var heightLeft = imgHeight;
-  //
-  //     const contentDataURL = canvas.toDataURL('image/png')
-  //     let pdf = new jspdf.default('p', 'mm', 'a4'); // A4 size page of PDF
-  //     var position = 0;
-  //     pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
-  //     pdf.save('ho_so_nhan_vien.pdf'); // Generated
-  //     setTimeout(() =>{
-  //       this.spinner.hide().then();
-  //     }, 2000);
-  //   }, error => {
-  //     this.toastService.openErrorToast("Lỗi xuất file PDF");
-  //     this.spinner.hide().then();
-  //   });
-  // }
-
-  toggleEdit = () => {
-    this.isEditing = !this.isEditing;
-  };
-
-  private loadImages(container: HTMLElement): Promise<void> {
-    const images = Array.from(container.getElementsByTagName('img'));
-    const loadPromises = images.map(img => {
-      if (img.complete) {
-        return Promise.resolve();
-      }
-      return new Promise<void>((resolve, reject) => {
-        img.onload = () => resolve();
-        img.onerror = () => reject();
-      });
-    });
-    return Promise.all(loadPromises).then(() => {});
-  }
-
-  onExportPdf() {
-    const data = document.getElementById('contentToConvert');
-
-    if (data) {
-      this.spinner.show().then();
-
-      this.loadImages(data).then(() => {
-        html2canvas(data, { useCORS: true }).then(canvas => {
-          const imgWidth = 208;
-          const pageHeight = 295;
-          const imgHeight = canvas.height * imgWidth / canvas.width;
-          let heightLeft = imgHeight;
-
-          const contentDataURL = canvas.toDataURL('image/png');
-          let pdf = new jspdf.default('p', 'mm', 'a4'); // A4 size page of PDF
-          let position = 0;
-
-          pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-          heightLeft -= pageHeight;
-
-          while (heightLeft > 0) {
-            position = heightLeft - imgHeight;
-            pdf.addPage();
-            pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
-          }
-
-          pdf.save('Ho so CBNV_' + this.employeeCode + '_.pdf');
-          setTimeout(() => {
-            this.spinner.hide().then();
-          }, 2000);
-        }).catch(error => {
-          this.toastService.openErrorToast("Lỗi xuất file PDF");
-          this.spinner.hide().then();
-        });
-      }).catch(() => {
-        this.toastService.openErrorToast("Lỗi tải hình ảnh");
-        this.spinner.hide().then();
-      });
-    } else {
-      this.toastService.openErrorToast("Không tìm thấy nội dung để xuất PDF");
-      this.spinner.hide().then();
-    }
-  }
-
-  loadUserByCode = (employeeCode: string) => {
+  loadUserByCode(employeeCode: string) {
     this.isLoading = true;
-    this.employeeService.getEmployeeCode(employeeCode).subscribe(res => {
-      if (res && res.code === "OK") {
-        this.user = res.data;
-        this.user.birthday = moment(res.data.birthday).format('DD/MM/YYYY');
+    this.employeeService.getEmployeeCode(employeeCode).subscribe(
+      (res) => {
+        if (res && res.code === 'OK') {
+          this.user = res.data;
+          this.user.dateOfBirth = moment(this.user.dateOfBirth).format('YYYY-MM-DD');
+        } else {
+          this.toastService.openErrorToast(res.msgCode || 'Không tìm thấy nhân viên');
+        }
         this.isLoading = false;
-        this.isEditing = false;
-      } else {
-        this.toastService.openErrorToast(res.msgCode);
+      },
+      () => {
+        this.toastService.openErrorToast('Lỗi khi tải thông tin nhân viên');
+        this.isLoading = false;
       }
-    });
-  };
+    );
+  }
+
   onAvatarChanged(event: any) {
     const file = event.value[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.user.avatar = e.target.result; // base64 string ảnh
+        this.user.avatar = e.target.result;
       };
       reader.readAsDataURL(file);
     }
   }
 
+  toggleEdit() {
+    const modal: NzModalRef = this.modal.create({
+      nzTitle: 'Chỉnh sửa thông tin nhân viên',
+      nzContent: FormEmployeeManagermentComponent,
+      nzWidth: '800px',
+      nzComponentParams: {
+        newUser: { ...this.user },
+        isCreateMode: false
+      },
+      nzFooter: [
+        {
+          label: 'Hủy',
+          onClick: () => modal.destroy()
+        },
+        {
+          label: 'Lưu',
+          type: 'primary',
+          loading: false,
+          onClick: (componentInstance: FormEmployeeManagermentComponent) => {
+            const updatedUser = componentInstance.getNewContactData();
+            const avatarFile = componentInstance.avatarFile;
+
+            if (!updatedUser.code || !updatedUser.fullName) {
+              this.toastService.openWarningToast('Vui lòng nhập đầy đủ thông tin');
+              return;
+            }
+
+            this.spinner.show().then(() => {
+              this.employeeService.editEmployee(avatarFile, updatedUser).subscribe(res=>{
+                  if (res && res.code === "202"){
+                    this.toastService.openSuccessToast('Cập nhật thành công');
+                    this.loadUserByCode(this.employeeCode);
+                    this.spinner.hide().then();
+                    modal.destroy();
+                  }
+                  else {
+                    this.toastService.openErrorToast(res.body?.msgCode || "Lỗi không xác định");
+                  }
+                  this.spinner.hide().then();
+              }, error => {
+                this.toastService.openErrorToast(error.error?.msgCode || "Lỗi kết nối");
+                this.spinner.hide().then();
+              });
+            });
+          }
+        }
+      ]
+    });
+  }
 
 
+  async onExportPdf() {
+    const data = document.getElementById('contentToConvert');
+    if (!data) {
+      this.toastService.openErrorToast('Không tìm thấy nội dung để xuất PDF');
+      return;
+    }
+
+    this.spinner.show().then();
+    await html2canvas(data, { useCORS: true }).then((canvas) => {
+      const imgWidth = 208;
+      const pageHeight = 295;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+
+      const pdf = new jspdf.default('p', 'mm', 'a4');
+      let position = 0;
+
+      const contentDataURL = canvas.toDataURL('image/png');
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save('Ho_so_CBNV_' + this.employeeCode + '.pdf');
+      this.spinner.hide().then();
+    }).catch(() => {
+      this.toastService.openErrorToast('Lỗi khi xuất PDF');
+      this.spinner.hide().then();
+    });
+  }
 }

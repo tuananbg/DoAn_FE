@@ -1,12 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, Input, OnInit } from '@angular/core';
 import { PositionService } from "../../../../service/position.service";
-import { DepartmentService } from "../../../../service/department.service";
-import {getSizeQualifier} from "../../../../service/screen.service";
+import { getSizeQualifier } from "../../../../service/screen.service";
 import DevExpress from "devextreme";
 import EditorStyle = DevExpress.common.EditorStyle;
-import {EmployeeService} from "../../../../service/employee.service";
-import {AccountService} from "../../../../service/account.service";
 
 @Component({
   selector: 'app-form-employee-managerment',
@@ -21,44 +17,60 @@ export class FormEmployeeManagermentComponent implements OnInit {
   ];
   lstDepartments: any[] = [];
   lstPositions: any[] = [];
-  newUser = {
+  @Input() isCreateMode: boolean = false;
+  // Biến chính dùng cho binding form
+  @Input() newUser: any = {
+    id: '',
     code: '',
     fullName: '',
-    positionCode:'',
+    positionCode: '',
     dateOfBirth: new Date(),
     gender: '',
     placeOfBirth: '',
     taxCode: '',
-    insuranceNumber: '',
+    // insuranceNumber: '',
     accountNumber: '',
     permanentAddress: '',
     currentAddress: '',
     identityNumber: '',
-    mobile: '',
+    phone: '',
     nation: ''
-  }
+  };
+
   avatarFile!: File;
   stylingMode: EditorStyle = 'outlined';
   getSizeQualifier = getSizeQualifier;
-  getNewContactData = () => ({...this.newUser})
-
-  @Input() genderCode: any;
 
   constructor(
-    private positionService: PositionService,
-  ) {
-  }
+    private positionService: PositionService
+  ) {}
 
   ngOnInit(): void {
     this.fetchPositions();
+
+    // Nếu chỉnh sửa → ép kiểu ngày
+    if (this.newUser?.dateOfBirth) {
+      this.newUser.dateOfBirth = new Date(this.newUser.dateOfBirth);
+    }
   }
 
-  valueChanged(e : any) {
-    if(e.value!=null){
-      this.newUser.dateOfBirth = e.value;
-    }else{
-      this.newUser.dateOfBirth = new Date();
-    }
+  getNewContactData = () => {
+    return {
+      id: this.newUser.id,
+      code: this.newUser.code,
+      fullName: this.newUser.fullName,
+      positionCode: this.newUser.positionCode,
+      dateOfBirth: this.formatDate(this.newUser.dateOfBirth),
+      gender: this.newUser.gender,
+      placeOfBirth: this.newUser.placeOfBirth,
+      taxCode: this.newUser.taxCode,
+      insuranceNumber: this.newUser.insuranceNumber,
+      accountNumber: this.newUser.accountNumber,
+      permanentAddress: this.newUser.permanentAddress,
+      currentAddress: this.newUser.currentAddress,
+      identityNumber: this.newUser.identityNumber,
+      mobile: this.newUser.mobile,
+    };
   }
 
   onValueChanged(e: any) {
@@ -67,6 +79,24 @@ export class FormEmployeeManagermentComponent implements OnInit {
       this.avatarFile = files[0];
     }
   }
+
+  valueChanged(e: any) {
+    if (e.value != null) {
+      this.newUser.dateOfBirth = e.value;
+    } else {
+      this.newUser.dateOfBirth = new Date();
+    }
+  }
+
+  formatDate(dateStr: string): string {
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return ''; // Kiểm tra ngày hợp lệ
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
 
   fetchPositions() {
     this.positionService.getSelection().subscribe(
@@ -78,6 +108,4 @@ export class FormEmployeeManagermentComponent implements OnInit {
       (error) => console.error("Lỗi lấy danh sách chức vụ:", error)
     );
   }
-
-
 }

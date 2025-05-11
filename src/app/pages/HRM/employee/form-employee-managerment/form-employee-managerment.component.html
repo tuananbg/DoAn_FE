@@ -21,8 +21,13 @@
     <dxo-col-count-by-screen [xs]="1" [sm]="2" [md]="2" [lg]="3"></dxo-col-count-by-screen>
 
     <dxi-item>
-      <app-form-textbox label="Mã nhân viên" [(value)]="newUser.code" [isEditing]="true"
-                        [validators]="[{ type: 'required' }]"></app-form-textbox>
+      <dx-text-box
+        [(value)]="newUser.code"
+        [readOnly]="!isCreateMode"
+        label="Mã nhân viên"
+        stylingMode="outlined">
+      </dx-text-box>
+
     </dxi-item>
 
     <dxi-item>
@@ -59,6 +64,7 @@
 
     <dxi-item>
       <dx-date-box
+        [(value)]="newUser.dateOfBirth"
         (onValueChanged)="valueChanged($event)"
         label="Ngày sinh"
         id="birth-date"
@@ -67,6 +73,7 @@
         displayFormat="dd/MM/yyyy"
       >
       </dx-date-box>
+
     </dxi-item>
   </dxi-item>
 
@@ -79,7 +86,7 @@
     </dxi-item>
 
     <dxi-item>
-      <app-form-textbox label="Địa chỉ hiện tại" [(value)]="newUser.currentAddress" [isEditing]="true"></app-form-textbox>
+      <app-form-textbox label="Email" [(value)]="newUser.email" [isEditing]="false"></app-form-textbox>
     </dxi-item>
 
     <dxi-item>

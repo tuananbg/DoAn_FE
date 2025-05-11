@@ -106,18 +106,27 @@ export class EmployeeService {
 
   editEmployee(avatarFile: File, userDetailDTO: any): Observable<any> {
     const formData = new FormData();
-    formData.append('id', userDetailDTO.id);
-    formData.append('avatarFile', avatarFile);
-    formData.append('employeeCode', userDetailDTO.employeeCode);
-    formData.append('employeeName', userDetailDTO.employeeName);
-    formData.append('gender', userDetailDTO.gender);
-    formData.append('phone', userDetailDTO.phone);
-    formData.append('birthday', userDetailDTO.birthday);
-    formData.append('address', userDetailDTO.address);
-    formData.append('departmentId', userDetailDTO.departmentId);
-    formData.append('positionId', userDetailDTO.positionId);
+    if (avatarFile) {
+      formData.append("avatarFile", avatarFile);
+    }
+    formData.append("id",userDetailDTO.id)
+    formData.append("code", userDetailDTO.code);
+    formData.append("fullName", userDetailDTO.fullName);
+    formData.append("dateOfBirth", userDetailDTO.dateOfBirth);
+    formData.append("positionCode", userDetailDTO.positionCode);
+    formData.append("gender", userDetailDTO.gender);
+    const formattedDate = new Date(userDetailDTO.dateOfBirth).toISOString().split("T")[0];
+    formData.append("dateOfBirth", formattedDate);
+    formData.append("taxCode", userDetailDTO.taxCode);
+    formData.append("insuranceNumber", userDetailDTO.insuranceNumber);
+    formData.append("accountNumber", userDetailDTO.accountNumber);
+    formData.append("permanentAddress", userDetailDTO.permanentAddress);
+    formData.append("placeOfBirth", userDetailDTO.placeOfBirth);
+    formData.append("identityNumber", userDetailDTO.identityNumber);
+    formData.append("mobile", userDetailDTO.mobile);
+    console.log("data", formData)
     return this.httpClient.put(
-      API_CONFIG.BASE_URL,
+      API_CONFIG.BASE_URL+"employee/update",
       formData,
     );
   }

@@ -5,7 +5,7 @@
         <dxi-item location="before" cssClass="accent">
           <div *dxTemplate style="display: flex; padding: 5px 40px;">
             <app-form-textbox
-              [(value)]="user.employeeName"
+              [(value)]="user.fullName"
               [isEditing]="isEditing"
               [isEditText]="true"
             >
@@ -68,34 +68,34 @@
                     <div *dxTemplate>
                       <app-form-textbox
                         label="Mã nhân viên"
-                        [(value)]="user.employeeCode"
+                        [(value)]="user.code"
                         [isEditing]="isEditing"
                       ></app-form-textbox>
                     </div>
                   </dxi-item>
 
-                  <dxi-item itemType="group">
-                    <dxi-item cssClass="accent">
-                      <div *dxTemplate>
-                        <app-form-textbox
-                          *ngIf="!isEditing"
-                          label="Phòng ban"
-                          [(value)]="user.departmentName"
-                          [isEditing]="isEditing"
-                        ></app-form-textbox>
-                        <dx-select-box
-                          *ngIf="isEditing"
-                          [label]="'Phòng ban'"
-                          [dataSource]="lstDepartment"
-                          valueExpr="departmentId"
-                          displayExpr="departmentName"
-                          [searchEnabled]="true"
-                          (onValueChanged)="onDepartmentChanged($event)"
-                          [(value)]="user.departmentId">
-                        </dx-select-box>
-                      </div>
-                    </dxi-item>
-                  </dxi-item>
+<!--                  <dxi-item itemType="group">-->
+<!--                    <dxi-item cssClass="accent">-->
+<!--                      <div *dxTemplate>-->
+<!--                        <app-form-textbox-->
+<!--                          *ngIf="!isEditing"-->
+<!--                          label="Phòng ban"-->
+<!--                          [(value)]="user."-->
+<!--                          [isEditing]="isEditing"-->
+<!--                        ></app-form-textbox>-->
+<!--                        <dx-select-box-->
+<!--                          *ngIf="isEditing"-->
+<!--                          [label]="'Phòng ban'"-->
+<!--                          [dataSource]="lstDepartment"-->
+<!--                          valueExpr="positionCode"-->
+<!--                          displayExpr="departmentName"-->
+<!--                          [searchEnabled]="true"-->
+<!--                          (onValueChanged)="onDepartmentChanged($event)"-->
+<!--                          [(value)]="user.departmentId">-->
+<!--                        </dx-select-box>-->
+<!--                      </div>-->
+<!--                    </dxi-item>-->
+<!--                  </dxi-item>-->
 
                   <dxi-item itemType="group">
                     <dxi-item cssClass="accent">
@@ -113,22 +113,28 @@
                           valueExpr="id"
                           displayExpr="positionName"
                           [searchEnabled]="true"
-                          [(value)]="user.positionId"
+                          [(value)]="user.positionCode"
                         >
                         </dx-select-box>
                       </div>
                     </dxi-item>
                   </dxi-item>
 
-                  <dxi-item cssClass="accent">
-                    <div *dxTemplate>
-                      <app-form-textbox
-                        label="Ngày sinh"
-                        [(value)]="user.birthday"
-                        [isEditing]="isEditing"
-                      ></app-form-textbox>
-                    </div>
-                  </dxi-item>
+                  <dx-date-box
+                    *ngIf="isEditing"
+                    [(value)]="user.dateOfBirth"
+                    [displayFormat]="'dd/MM/yyyy'"
+                    [type]="'date'"
+                    [label]="'Ngày sinh'">
+                  </dx-date-box>
+
+                  <app-form-textbox
+                    *ngIf="!isEditing"
+                    label="Ngày sinh"
+                    [(value)]="user.dateOfBirth"
+                    [isEditing]="false">
+                  </app-form-textbox>
+
                 </dxi-item>
               </dxi-item>
 

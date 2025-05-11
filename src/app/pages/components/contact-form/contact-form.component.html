@@ -28,7 +28,7 @@
             <app-form-textbox
               *dxTemplate
               label="Mã nhân viên"
-              [(value)]="contactData.employeeCode"
+              [(value)]="contactData.code"
               [isEditing]="isEditing"
             ></app-form-textbox>
           </dxi-item>
@@ -36,7 +36,7 @@
             <app-form-textbox
               *dxTemplate
               label="Tên nhân viên"
-              [(value)]="contactData.employeeName"
+              [(value)]="contactData.fullName"
               [isEditing]="isEditing"
             ></app-form-textbox>
           </dxi-item>
@@ -76,7 +76,7 @@
           <app-form-textbox
             *dxTemplate
             label="Ngày sinh"
-            [(value)]="contactData.birthday"
+            [(value)]="contactData.dateOfBirth"
             [isEditing]="isEditing"
           ></app-form-textbox>
         </dxi-item>

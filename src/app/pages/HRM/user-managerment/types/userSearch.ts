@@ -1,7 +1,7 @@
 export interface UserSearchRequest {
   fullname: string
   gender: number | null
-  birthday: string
+  dateOfBirth: string
   provinceId: number | null
   departmentId: number | null
   contract_createdate: string
@@ -13,7 +13,7 @@ export interface UserSearchResponse {
   email: string
   fullName: string
   gender: number
-  birthday: string
+  dateOfBirth: string
   birthPlace: string
   address: string
   provinceName: string

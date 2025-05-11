@@ -133,8 +133,8 @@ export class ListEmployeeManagermentComponent implements OnInit {
       currentAddress: '',
       identityNumber: '',
       mobile: '',
-      nation: 'Việt Nam'
     };
+    this.contactNewForm.isCreateMode = true;
   }
 
   refresh = () => {
@@ -219,7 +219,6 @@ export class ListEmployeeManagermentComponent implements OnInit {
             currentAddress: '',
             identityNumber: '',
             mobile: '',
-            nation: 'Việt Nam'
           };
 
           // Cập nhật danh sách

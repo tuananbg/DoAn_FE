@@ -133,7 +133,7 @@ export class PanelEmployeeManagermentComponent implements OnInit, OnChanges, Aft
     this.employeeService.getEmployeeCode(code).subscribe(res => {
       if (res && res.code === "OK") {
         this.user = res.data;
-        this.user.birthday = moment(res.data.birthday).format('DD/MM/YYYY');
+        this.user.dateOfBirth = moment(res.data.dateOfBirth).format('DD/MM/YYYY');
         this.isLoading = false;
         this.isEditing = false;
       } else {
@@ -210,12 +210,12 @@ export class PanelEmployeeManagermentComponent implements OnInit, OnChanges, Aft
   //   });
   // }
 
-  onDepartmentChanged(event: any) {
+  onPosition(event: any) {
     const selectedDepartmentId = event.value;
     this.positionService.getSelection().subscribe((response: any) => {
       if (response && response.code === "OK") {
         this.lstPosition = response.data.data;
-        this.lstPosition = this.lstPosition.filter(position => position.departmentId === selectedDepartmentId);
+        this.lstPosition = this.lstPosition.filter(position => position.positionCode === selectedDepartmentId);
         this.lstPosition.sort((a, b) => a.positionName.localeCompare(b.positionName));
       }
     });

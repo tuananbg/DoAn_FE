@@ -15,7 +15,7 @@ export class UserManagermentComponent implements OnInit {
   searchUserRequest: UserSearchRequest = {
     fullname: '',
     gender: null,
-    birthday: '',
+    dateOfBirth: '',
     provinceId: null,
     departmentId: null,
     contract_createdate: '',
@@ -42,7 +42,7 @@ export class UserManagermentComponent implements OnInit {
     {
       title: 'Ngày sinh',
       width: '100px',
-      compare: (a: any, b: any) => a.birthday - b.birthday,
+      compare: (a: any, b: any) => a.dateOfBirth - b.dateOfBirth,
     },
     {
       title: 'Email',
