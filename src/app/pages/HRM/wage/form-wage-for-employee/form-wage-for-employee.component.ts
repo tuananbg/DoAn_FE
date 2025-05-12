@@ -7,6 +7,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {en_US, NzI18nService} from "ng-zorro-antd/i18n";
 import {WageService} from "../../../../service/wage.service";
 import {EmployeeService} from "../../../../service/employee.service";
+import { AllowanceDTO } from '../../../../core/contact';
 
 @Component({
   selector: 'app-form-wage-for-employee',
@@ -15,13 +16,13 @@ import {EmployeeService} from "../../../../service/employee.service";
 })
 export class FormWageForEmployeeComponent implements OnInit {
 
-  @Input() wageIdForm?: any;
-  @Input() idUserWageForm?: any;
-  @Input() licenseDateForm?: any;
-  @Input() empSignForm?: any;
+  @Input() allowanceCode?: any;
   @Input() isVisibleModal = false;
   @Input() dataChild = null;
   @Input() isUpdate = false;
+  @Input() employeeCode!: string;
+  @Input() id: any;
+
   @Output() clickCancel = new EventEmitter();
   @Output() clickSave = new EventEmitter();
 
@@ -29,8 +30,8 @@ export class FormWageForEmployeeComponent implements OnInit {
   isLoading = false;
   licenseDate: any;
   idUserDetail: any;
-  lstWageType = [];
   payloadWage = {wageName: null, createdDate: null};
+  lstWageType: AllowanceDTO[] = [];
   lstEmployee: any[] = [];
   payloadEmployee = {
     employeeCode: null,
@@ -57,19 +58,12 @@ export class FormWageForEmployeeComponent implements OnInit {
   ngOnInit(): void {
     this.i18n.setLocale(en_US);
     this.createForm = this.formBuilder.group({
-      id: new FormControl(null),
-      wageId: new FormControl(null, [Validators.required, Validators.maxLength(100)]),
-      licenseDate: new FormControl(null, [Validators.required]),
-      empSign: new FormControl(null, [Validators.required]),
+      allowanceCode: [null, Validators.required]
     });
     setTimeout(() => {
-      this.createForm.get('id')?.setValue(this.idUserWageForm);
-      this.createForm.get('wageId')?.setValue(this.wageIdForm);
-      this.createForm.get('licenseDate')?.setValue(this.licenseDateForm);
-      this.createForm.get('empSign')?.setValue(this.empSignForm);
+      this.createForm.get('allowanceCode')?.setValue(this.allowanceCode);
     });
     this.fetchWage();
-    this.fetchEmployee();
   }
 
   handleCancelModal(): void {
@@ -84,21 +78,20 @@ export class FormWageForEmployeeComponent implements OnInit {
     if (this.createForm.valid) {
       const data = this.createForm.value;
       data.id = data.id ? data.id : null;
-      data.contractId = data.wageId === 0 ? 0 : !data.wageId ? null : data.wageId;
-      data.licenseDate = data.licenseDate ? data.licenseDate : null;
-      data.empSign = data.empSign ? data.empSign : null;
-      data.userDetailId = this.idUserDetail;
+      data.allowanceCode = data.allowanceCode ? data.allowanceCode : null;
+      console.log("employeeCode2",this.employeeCode);
+      data.employeeCode = this.employeeCode;
       if (!this.isUpdate) {
         this.spinner.show().then();
         this.wageService.createForEmployee(data).subscribe(res => {
-          if (res && res.body.code === "OK") {
-            this.toastService.openSuccessToast('Thêm mới hợp đồng cho nhân viên thành công');
+          if (res && res.code === "201") {
+            this.toastService.openSuccessToast('Thêm mới phụ cấp cho nhân viên thành công');
             this.clickSave.emit();
             this.createForm.reset();
             this.isLoading = true;
             this.handleCancelModal();
           } else {
-            this.toastService.openErrorToast(res.body.msgCode);
+            this.toastService.openErrorToast(res.msgCode);
             this.spinner.hide().then();
           }
         }, error => {
@@ -127,30 +120,20 @@ export class FormWageForEmployeeComponent implements OnInit {
     }
   }
 
-  fetchWage() {
-    this.wageService.search(this.payloadWage, {page: 0, size: -1}).subscribe(res => {
-      if (res && res.code === "OK") {
-        this.lstWageType = res.data.data;
-        // this.lstWageType.sort((a, b) => a.contractCode.localeCompare(b.contractCode));
+  fetchWage(): void {
+    this.wageService.search(this.payloadWage, { page: 0, size: -1 }).subscribe(
+      (res) => {
+        if (res && res.code === 'OK') {
+          this.lstWageType = (res.data || []).map((item: AllowanceDTO) => ({
+            ...item,
+            displayLabel: `${item.allowanceCode} - ${item.allowanceName}`
+          }));
+        }
+      },
+      (error) => {
+        console.error(error);
       }
-    }, (error: any) => {
-      console.log(error);
-    })
-  }
-
-  fetchEmployee() {
-    this.employeeService.searchEmployee(null, {page: 0, size: -1}).subscribe(res => {
-      if (res && res.code === "OK") {
-        this.lstEmployee = res.data.data;
-        this.lstEmployee = this.lstEmployee.map(item => ({
-          ...item,
-          employeeName: item.employeeName + " - " + item.employeeCode
-        }));
-        this.lstEmployee.sort((a, b) => a.employeeName.localeCompare(b.employeeName));
-      }
-    }, (error: any) => {
-      console.log(error);
-    })
+    );
   }
 
 

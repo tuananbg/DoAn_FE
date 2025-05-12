@@ -31,7 +31,7 @@ export class DetailQualificationManagerComponent implements OnInit {
   createForm!: FormGroup;
   isLoading = false;
   licenseDate: any;
-  employeeCode: any;
+  @Input() employeeCode: any;
   constructor(
     private modal: NzModalRef,
     private router: Router,
@@ -42,7 +42,6 @@ export class DetailQualificationManagerComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private i18n: NzI18nService
   ) {
-    this.employeeCode = this.activatedRoute.snapshot.params['code'];
   }
 
   ngOnInit(): void {

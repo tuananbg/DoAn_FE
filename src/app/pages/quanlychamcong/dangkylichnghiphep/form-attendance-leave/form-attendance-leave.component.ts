@@ -4,7 +4,7 @@ import {ToastService} from "../../../../service/toast.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {AttendanceLeaveService} from "../../../../service/attendance-leave.service";
 import {EmployeeService} from "../../../../service/employee.service";
-import {differenceInCalendarDays} from "date-fns";
+import {differenceInCalendarDays, format} from "date-fns";
 
 @Component({
   selector: 'app-form-attendance-leave',
@@ -103,8 +103,8 @@ export class FormAttendanceLeaveComponent implements OnInit, OnChanges {
       const data = this.createForm.value;
       data.id = this.idChild ? this.idChild : null;
       data.leaveCategory = data.leaveCategory === 0 ? 0 : !data.leaveCategory ? null : data.leaveCategory;
-      data.startDay = data.startDay ? data.startDay : null;
-      data.endDay = data.endDay ? data.endDay : null;
+      data.startDay = data.startDay ? format(new Date(data.startDay), 'yyyy-MM-dd HH:mm:ss') : null;
+      data.endDay = data.endDay ? format(new Date(data.endDay), 'yyyy-MM-dd HH:mm:ss') : null;
       // data.totalTime = data.totalTime ? data.totalTime : null;
       data.employeeCode = this.employeeCode ? this.employeeCode : null;
       data.reviewerCode = data.reviewerCode ? data.reviewerCode : null;

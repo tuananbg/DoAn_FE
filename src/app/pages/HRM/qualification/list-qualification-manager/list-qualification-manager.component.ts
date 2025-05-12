@@ -48,7 +48,7 @@ export class ListQualificationManagerComponent implements OnInit {
   isLoading = false;
   message = '';
   idQualification: any;
-  employeeCode: any;
+  @Input() employeeCode: any;
 
   @Input() isVisableButton = true;
 
@@ -63,7 +63,6 @@ export class ListQualificationManagerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.employeeCode = this.activatedRoute.snapshot.params['code'];
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
@@ -110,6 +109,9 @@ export class ListQualificationManagerComponent implements OnInit {
       nzContent: DetailQualificationManagerComponent,
       nzWidth: '700px',
       nzViewContainerRef: this.viewContainerRef,
+      nzComponentParams: {
+        employeeCode: this.employeeCode
+      },
       nzOnOk: () => new Promise((resolve) => setTimeout(resolve, 3000)),
       nzFooter: null,
       nzMaskClosable: false,
@@ -136,6 +138,7 @@ export class ListQualificationManagerComponent implements OnInit {
         majorForm: data.major,
         descriptionForm: data.description,
         licenseDateForm: data.licenseDate,
+        employeeCode: this.employeeCode
       },
       nzOnOk: () => new Promise((resolve) => setTimeout(resolve, 3000)),
       nzFooter: null,

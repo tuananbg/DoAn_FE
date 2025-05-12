@@ -21,7 +21,7 @@ export class FormWageManagermentComponent implements OnInit {
 
   @Input() allowanceCodeForm?: any;
   @Input() allowanceNameForm?: any;
-  @Input() idWageForm?: any;
+  @Input() id?: any;
   @Input() allowanceBaseForm?: any;
   @Input() allowanceDescriptionForm?: any;
   @Input() isVisibleModal = false;
@@ -48,7 +48,7 @@ export class FormWageManagermentComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm = this.formBuilder.group({
-      Id: new FormControl(null),
+      id: new FormControl(null),
       allowanceCode: new FormControl(null, [Validators.required, Validators.maxLength(100)]),
       allowanceName: new FormControl(null, [Validators.required]),
       allowanceBase: new FormControl(null, [Validators.required]),
@@ -56,7 +56,7 @@ export class FormWageManagermentComponent implements OnInit {
       allowanceDescription: new FormControl(null),
     });
     setTimeout(()=>{
-      this.createForm.get('id')?.setValue(this.idWageForm);
+      this.createForm.get('id')?.setValue(this.id);
       this.createForm.get('allowanceCode')?.setValue(this.allowanceCodeForm);
       this.createForm.get('allowanceName')?.setValue(this.allowanceNameForm);
       this.createForm.get('allowanceBase')?.setValue(this.allowanceBaseForm);
@@ -75,7 +75,6 @@ export class FormWageManagermentComponent implements OnInit {
     }
     if (this.createForm.valid) {
       const data = this.createForm.value;
-      data.wageId = data.wageId ? data.wageId : null;
       data.allowanceCode = data.allowanceCode ? data.allowanceCode : null;
       data.allowanceName = data.allowanceName ? data.allowanceName.trim() : null;
       data.allowanceBase = data.allowanceBase ? data.allowanceBase : null;
@@ -83,7 +82,7 @@ export class FormWageManagermentComponent implements OnInit {
       if (!this.isUpdate) {
         this.spinner.show().then();
         this.wageService.create(this.file, data).subscribe(res => {
-          if (res && res.body.code === "OK") {
+          if (res && res.body.code === "201") {
             this.toastService.openSuccessToast('Thêm mới phụ cấp thành công');
             this.clickSave.emit();
             this.createForm.reset();
@@ -102,7 +101,7 @@ export class FormWageManagermentComponent implements OnInit {
         });
       } else {
         this.wageService.edit(this.file, data).subscribe(res => {
-          if (res && res.body.code === "OK") {
+          if (res && res.body.code === "202") {
             this.toastService.openSuccessToast('Cập nhật phụ cấp thành công');
             this.clickSave.emit();
             this.clickCancel.emit();

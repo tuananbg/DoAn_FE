@@ -3,36 +3,24 @@
     <div nz-row class="mt-2">
       <div nz-col nzSpan="24">
         <div nz-row>
-          <app-select [ngClass]="'w-100'" [data]="lstWageType" [valueField]="'wageId'"
-                      [labelField]="'wageName'"
-                      [placeHolder]="'--Tất cả--'" [required]="true"
-                      [openSearchModal]="false" [getObjectValue]="true"
-                      [ngStyleCus]="{'padding-left' : '39px'}"
-                      [labelHorizontal]="false" formControlName="wageId" labelContent="Tên phụ cấp:">
+          <app-select
+            class="w-100"
+            [data]="lstWageType"
+            [valueField]="'allowanceCode'"
+            [labelField]="'displayLabel'"
+            [placeHolder]="'--Chọn phụ cấp--'"
+            [required]="true"
+            [openSearchModal]="false"
+            [getObjectValue]="false"
+            [labelHorizontal]="false"
+            [ngStyleCus]="{ 'padding-left': '39px' }"
+            formControlName="allowanceCode"
+            labelContent="Tên phụ cấp:">
           </app-select>
-        </div>
-        <div nz-row>
-          <app-date-picker formControlName="licenseDate" placeHolder="dd/mm/yyyy"
-                           [format]="'dd/MM/yyyy'"
-                           labelContent="Ngày hiệu lực"
-                           [ngClass]="'w-100'"
-                           [required]="true"
-                           [ngStyleCus]="{'padding-left' : '28px'}"
-                           [span]="24"></app-date-picker>
-        </div>
-        <div nz-row>
-          <div nz-col nzSpan="24">
-            <app-select [ngClass]="'w-100'" [data]="lstEmployee" [valueField]="'employeeName'" [placeHolder]="'--Tất cả--'"
-                        [required]="true"
-                        [labelField]="'employeeName'" [openSearchModal]="false" [getObjectValue]="true"
-                        [ngStyleCus]="{'padding-left' : '33px'}"
-                        [labelHorizontal]="false" formControlName="empSign" labelContent="Người ký kết:">
-            </app-select>
-          </div>
-        </div>
-        <div nz-row>
+
 
         </div>
+
       </div>
     </div>
   </form>

@@ -164,7 +164,7 @@ export class ListWageManagermentComponent implements OnInit {
       nzViewContainerRef: this.viewContainerRef,
       nzComponentParams: {
         isUpdate: true,
-        idWageForm : data.wageId,
+        id : data.id,
         allowanceCodeForm : data.allowanceCode,
         allowanceNameForm : data.allowanceName,
         allowanceBaseForm : data.allowanceBase,

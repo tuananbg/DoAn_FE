@@ -25,6 +25,9 @@
             STT
           </th>
           <th  nzWidth="150px" class="text-center">
+            Mã phụ cấp
+          </th>
+          <th  nzWidth="150px" class="text-center">
             Tên phụ cấp
           </th>
           <th nzWidth="150px" class="text-center">
@@ -32,12 +35,6 @@
           </th>
           <th nzWidth="250px" class="text-center">
             File mềm
-          </th>
-          <th nzWidth="150px" class="text-center">
-            Ngày hiệu lực
-          </th>
-          <th nzWidth="250px" class="text-center">
-            Người ký kết
           </th>
           <th nzWidth="250px" class="text-center">
             Mô tả
@@ -51,16 +48,16 @@
         <ng-template ngFor let-data let-idx="index" [ngForOf]="rowSelectionTable.data">
           <tr>
             <td class="text-center max-width-60">{{ (request.currentPage * request.pageSize) + idx + 1}}</td>
-            <td class="max-width-150" [nz-tooltip]="data.wageName">{{data.wageName}}</td>
-            <td class="max-width-150 text-center" [nz-tooltip]="data.wageBase | currency: 'VND'">
-              <span style="color: #1e61f3; font-weight: bold">{{data.wageBase | currency: 'VND'}}</span></td>
+            <td class="max-width-150" [nz-tooltip]="data.allowanceCode">{{data.allowanceCode}}</td>
+            <td class="max-width-150" [nz-tooltip]="data.allowanceName">{{data.allowanceName}}</td>
+            <td class="max-width-150 text-center" [nz-tooltip]="data.allowanceBase | currency: 'VND'">
+              <span style="color: #1e61f3; font-weight: bold">{{data.allowanceBase | currency: 'VND'}}</span></td>
             <td class="max-width-250" [nz-tooltip]="data.attachFile">
               <a style="color: #00a1dd; font-weight: bold" (click)="handleClick(data.attachFile)">{{data.attachFile}}</a>
             </td>
-            <td class="max-width-150 text-center" [nz-tooltip]="data.licenseDate | date: 'dd/MM/yyyy'">{{ data.licenseDate | date: 'dd/MM/yyyy' }}</td>
-            <td class="max-width-250" [nz-tooltip]="data.empSign">{{data.empSign}}</td>
-            <td class="max-width-250" [nz-tooltip]="data.wageDescription">
-              {{ data.wageDescription.length > 100 ? (data.wageDescription | slice:0:50) + '...' : data.wageDescription }}
+<!--            <td class="max-width-150 text-center" [nz-tooltip]="data.licenseDate | date: 'dd/MM/yyyy'">{{ data.licenseDate | date: 'dd/MM/yyyy' }}</td>-->
+            <td class="max-width-250" [nz-tooltip]="data.allowanceDescription">
+              {{ data.allowanceDescription.length > 100 ? (data.allowanceDescription | slice:0:50) + '...' : data.allowanceDescription }}
             </td>
             <td appCheckAuthorize *ngIf="isVisableButton" class="text-center max-width-150" nzRight="0px">
               <div class="action">

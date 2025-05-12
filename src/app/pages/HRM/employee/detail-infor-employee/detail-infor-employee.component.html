@@ -111,8 +111,8 @@
 
       <div>
         <app-list-contract-for-employee [isVisableButton]="true"></app-list-contract-for-employee>
-        <app-list-qualification-manager [isVisableButton]="true"></app-list-qualification-manager>
-        <app-list-wage-for-employee [isVisableButton]="true"></app-list-wage-for-employee>
+        <app-list-qualification-manager [isVisableButton]="true " [employeeCode]="user.code"></app-list-qualification-manager>
+        <app-list-wage-for-employee [isVisableButton]="true" [employeeCode]="user.code">></app-list-wage-for-employee>
       </div>
     </div>
   </div>

@@ -65,6 +65,13 @@ export const newContact: ContactBase = {
   address: '',
 }
 
+export interface AllowanceDTO {
+  allowanceCode: string;
+  allowanceName: string;
+  displayLabel?: string;
+  [key: string]: any; // Cho phép thêm các trường khác nếu backend trả thêm
+}
+
 export const REGEX = {
   MOBILE: /(^[+]?(|0-9)+([0-9]){6,}$)/,
   VN_PHONE_NUMBER: /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/,

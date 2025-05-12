@@ -4,7 +4,7 @@ import {ToastService} from "../../../../service/toast.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {EmployeeService} from "../../../../service/employee.service";
 import {AttendanceOTService} from "../../../../service/attendance-ot.service";
-import {differenceInCalendarDays} from "date-fns";
+import {differenceInCalendarDays, format} from "date-fns";
 
 @Component({
   selector: 'app-form-attendance-ot',
@@ -94,8 +94,9 @@ export class FormAttendanceOtComponent implements OnInit, OnChanges {
     if (this.createForm.valid) {
       const data = this.createForm.value;
       // data.attendanceOtID = this.idChild ? this.idChild : null;
-      data.startDay = data.startDay ? data.startDay : null;
-      data.startTime = data.startTime ? data.startTime : null;
+      data.startDay = data.startDay ? format(new Date(data.startDay), 'yyyy-MM-dd HH:mm:ss') : null;
+      data.startTime = data.startTime ? format(new Date(data.startTime), 'yyyy-MM-dd HH:mm:ss') : null;
+      data.endTime = data.endTime ? format(new Date(data.endTime), 'yyyy-MM-dd HH:mm:ss') : null;
       data.totalTime = data.totalTime ? data.totalTime : null;
       data.employeeCode = this.employeeCode ? this.employeeCode : null;
       data.followCode = data.followCode ? data.followCode : null;

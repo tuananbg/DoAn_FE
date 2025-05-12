@@ -16,9 +16,8 @@ export class WageService {
   }
 
   search(payload: any, pageable: any): Observable<any> {
-    return this.httpClient.post(
-      API_CONFIG.BASE_URL + "allowance/search",
-      payload,
+    return this.httpClient.get(
+      API_CONFIG.BASE_URL + "allowance/select",
       {
         headers: new HttpHeaders({'Content-Type': 'application/json'}),
         params: pageable,
@@ -64,7 +63,7 @@ export class WageService {
   }
 
   createForEmployee(userDetailContractDTO: any): Observable<any> {
-    return this.httpClient.post(API_CONFIG.BASE_URL + "allowance/createForEmployee",
+    return this.httpClient.post(API_CONFIG.BASE_URL + "allowance/employee-detail/create",
       userDetailContractDTO,
       {
         observe: 'response'
@@ -80,7 +79,7 @@ export class WageService {
   edit(file: File, wageDTO: any): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('wageId', wageDTO.wageId);
+    formData.append('id', wageDTO.id);
     formData.append('allowanceCode', wageDTO.allowanceCode);
     formData.append('allowanceName', wageDTO.allowanceName);
     formData.append('allowanceBase', wageDTO.allowanceBase);

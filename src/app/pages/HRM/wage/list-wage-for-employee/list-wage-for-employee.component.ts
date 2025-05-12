@@ -34,9 +34,9 @@ export class ListWageForEmployeeComponent implements OnInit {
   isLoading = false;
   message: string = '';
   idUserDetailWage: any;
-  employeeCode: any;
 
   @Input() isVisableButton = true;
+  @Input() employeeCode!: string;
 
   constructor(
     private wageService: WageService,
@@ -50,43 +50,54 @@ export class ListWageForEmployeeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.employeeCode = this.activatedRoute.snapshot.params['code'];
     this.fetchData(this.request.currentPage, this.request.pageSize);
   }
 
-  fetchData(currentPage?: number, pageSize?: number){
+  fetchData(currentPage?: number, pageSize?: number): void {
     const pageable = {
       page: currentPage,
       size: pageSize,
       sort: this.request.sort,
     };
-    const queryModel = {
-      userDetailId : this.employeeCode
-    };
+
     this.spinner.show().then();
-    this.wageService. searchForEmployee(this.employeeCode,pageable).subscribe(res => {
-      if (res && res.code === "OK") {
-        this.lstData = res.data.data;
-        this.total = res.data.dataCount;
-        this.spinner.hide().then();
-        if (this.lstData.length === 0) {
-          if (this.request.currentPage !== 0) {
+    this.wageService.searchForEmployee(this.employeeCode, pageable).subscribe(
+      res => {
+        if (res && res.code === "OK") {
+          const pageData = res.data || {};
+          const content = pageData.content || [];
+
+          this.lstData = content.map((item: any) => ({
+            allowanceCode: item.allowanceCode,
+            employeeCode: item.employeeCode,
+            allowanceName: item.allowanceName,
+            allowanceBase: item.allowanceBase,
+            allowanceDescription: item.allowanceDescription,
+            attachFile: item.attachFile,
+          }));
+
+          this.total = pageData.totalElements || 0;
+
+          // Auto back one page if current page empty
+          if (this.lstData.length === 0 && this.request.currentPage !== 0) {
             this.request.currentPage = this.request.currentPage - 1;
             this.fetchData(this.request.currentPage, this.request.pageSize);
           }
+        } else {
+          this.toastService.openErrorToast(res.body?.msgCode || 'Lỗi lấy dữ liệu');
         }
         this.spinner.hide().then();
-      } else {
-        this.toastService.openErrorToast(res.body.msgCode);
+      },
+      error => {
+        this.toastService.openErrorToast(error.error?.msgCode || 'Lỗi kết nối');
+        this.spinner.hide().then();
+      },
+      () => {
+        this.spinner.hide().then();
       }
-      this.spinner.hide().then();
-    }, error => {
-      this.toastService.openErrorToast(error.error.msgCode);
-      this.spinner.hide().then();
-    }, () => {
-      this.spinner.hide().then();
-    });
+    );
   }
+
 
   nzOnSearch(): void {
     this.request.currentPage = 0;
@@ -95,11 +106,15 @@ export class ListWageForEmployeeComponent implements OnInit {
 
 
   openCreateModal(): void {
+    console.log("employeeCode1",this.employeeCode);
     const modalRef = this.modal.create({
       nzTitle: 'Thêm mới phụ cấp cho nhân viên',
       nzContent: FormWageForEmployeeComponent,
       nzWidth: '700px',
       nzViewContainerRef: this.viewContainerRef,
+      nzComponentParams: {
+        employeeCode: this.employeeCode
+      },
       nzOnOk: () => new Promise((resolve) => setTimeout(resolve, 3000)),
       nzFooter: null,
       nzMaskClosable: false,
@@ -119,11 +134,10 @@ export class ListWageForEmployeeComponent implements OnInit {
       nzWidth: '700px',
       nzViewContainerRef: this.viewContainerRef,
       nzComponentParams: {
+        employeeCode: this.employeeCode,
         isUpdate: true,
-        idUserWageForm : data.userDetailWageId,
-        wageIdForm: data.wageId,
-        licenseDateForm: data.licenseDate,
-        empSignForm: data.empSign,
+        allowanceCode: data.allowanceCode,
+        id: data.id,
       },
       nzOnOk: () => new Promise((resolve) => setTimeout(resolve, 3000)),
       nzFooter: null,

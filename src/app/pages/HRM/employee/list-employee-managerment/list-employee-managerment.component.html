@@ -71,16 +71,8 @@
     <dxi-column dataField="positionName" caption="Chức vụ" [hidingPriority]="5" [minWidth]="150"></dxi-column>
     <dxi-column dataField="phone" caption="Số điện thoại" [hidingPriority]="5" [minWidth]="150"></dxi-column>
     <dxi-column dataField="genderName" caption="Giới tính" [hidingPriority]="5" [minWidth]="100"></dxi-column>
-    <dxi-column dataField="address" caption="Địa chỉ" [hidingPriority]="5" [minWidth]="100"></dxi-column>
+      <dxi-column dataField="permanentAddress" caption="Địa chỉ" [hidingPriority]="5" [minWidth]="100"></dxi-column>
   </dx-data-grid>
-
-<!--  <app-panel-employee-managerment-->
-<!--    [employeeCode]="employeeCode"-->
-<!--    [(isOpened)]="isPanelOpened"-->
-<!--    (isOpenedChange)="onOpenedChange($event)"-->
-<!--    (pinnedChange)="onPinnedChange()"-->
-<!--  >-->
-<!--  </app-panel-employee-managerment>-->
 
   <app-form-popup appCheckAuthorize [(visible)]="isAddContactPopupOpened" (save)="handleOkModal()" titleText="Thêm nhân viên mới">
       <app-form-employee-managerment></app-form-employee-managerment>

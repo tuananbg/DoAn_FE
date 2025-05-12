@@ -68,8 +68,11 @@
           <th nzWidth="200px" class="text-center">
             Mã phòng ban
           </th>
-          <th nzWidth="200px" class="text-center">
+          <th nzWidth="150px" class="text-center">
             Tên phòng ban
+          </th>
+          <th nzWidth="150px" class="text-center">
+           Ngày tạo
           </th>
           <th nzWidth="200px" class="text-center">
             Trạng thái
@@ -85,6 +88,7 @@
             <td class="text-center max-width-200">{{ (request.currentPage * request.pageSize) + idx + 1}}</td>
             <td class="max-width-150" [nz-tooltip]="data.departmentCode">{{data.departmentCode}}</td>
             <td class="max-width-150" [nz-tooltip]="data.departmentName">{{data.departmentName}}</td>
+            <td class="max-width-150 text-center" [nz-tooltip]="data.createdDate | date: 'dd/MM/yyyy'">{{ data.createdDate | date: 'dd/MM/yyyy' }}</td>
             <td class="max-width-100 text-center" [nz-tooltip]="'Vô hiệu'" *ngIf="data.status === 0">
               <span class="css-badge badge badge-pill bg-danger p-3">Vô hiệu</span></td>
             <td class="max-width-100 text-center" [nz-tooltip]="'Hoạt động'" *ngIf="data.status === 1">
