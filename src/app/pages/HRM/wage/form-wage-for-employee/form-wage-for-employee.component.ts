@@ -84,7 +84,8 @@ export class FormWageForEmployeeComponent implements OnInit {
       if (!this.isUpdate) {
         this.spinner.show().then();
         this.wageService.createForEmployee(data).subscribe(res => {
-          if (res && res.code === "201") {
+          console.log("res",res)
+          if (res && res?.body.code === "201") {
             this.toastService.openSuccessToast('Thêm mới phụ cấp cho nhân viên thành công');
             this.clickSave.emit();
             this.createForm.reset();
@@ -102,8 +103,8 @@ export class FormWageForEmployeeComponent implements OnInit {
         });
       } else {
         this.wageService.editForEmployee(data).subscribe(res => {
-          if (res && res.code === "OK") {
-            this.toastService.openSuccessToast('Cập nhật hợp đồng cho nhân viên thành công');
+          if (res && res?.body.code === "202") {
+            this.toastService.openSuccessToast('Cập nhật phụ cấp cho nhân viên thành công');
             this.clickSave.emit();
             this.clickCancel.emit();
             this.isLoading = true;

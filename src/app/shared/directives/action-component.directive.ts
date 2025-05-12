@@ -27,7 +27,7 @@ export class ActionComponentDirective implements OnInit, AfterViewInit{
     let roles: string[] = [];
 
     const rawRoles = this.loginService.getUserRole(); // "ADMIN,USER"
-    console.log("User Roles (raw):", rawRoles);
+    // console.log("User Roles (raw):", rawRoles);
 
     roles = rawRoles.split(',').map(r => r.trim());
 

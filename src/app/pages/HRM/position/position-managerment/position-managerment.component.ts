@@ -173,6 +173,9 @@ export class PositionManagermentComponent implements OnInit {
         descriptionForm: data.positionDescription,
         departmentIdForm: data.departmentId,
         isActive: data.isActive,
+        departmentCodeForm: data.departmentCode,
+        positionCategoryForm: data.positionCategoryCode,
+        jobGroupForm: data.jobGroupCode
       },
       nzOnOk: () => new Promise((resolve) => setTimeout(resolve, 3000)),
       nzFooter: null,
@@ -221,10 +224,12 @@ export class PositionManagermentComponent implements OnInit {
           this.toastService.openErrorToast(res?.message || 'Thất bại');
         }
         this.isVisibleModalDelete = false;
+        this.spinner.hide().then();
       },
       error: (err) => {
         this.toastService.openErrorToast(err?.error?.msgCode || 'Lỗi hệ thống');
         this.isVisibleModalDelete = false;
+        this.spinner.hide().then();
       },
       complete: () => {
         this.spinner.hide().then();
