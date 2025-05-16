@@ -21,7 +21,7 @@
     </div>
     <div class="list__head-right">
       <div class="list__head-btn">
-        <app-button-create (clickCreate)="openCreateModal()" [loading]="isLoading"></app-button-create>
+        <app-button-create (clickCreate)="onCreateTask()" [loading]="isLoading"></app-button-create>
       </div>
     </div>
   </div>
@@ -59,15 +59,6 @@
               </ng-container>
             </dx-sortable>
 
-            <div class="add-task">
-              <dx-button
-                icon="plus"
-                text="Thêm task"
-                stylingMode="text"
-                width="100%"
-                (onClick)="openCreateModal()"
-              ></dx-button>
-            </div>
           </dx-scroll-view>
         </div>
       </dx-sortable>

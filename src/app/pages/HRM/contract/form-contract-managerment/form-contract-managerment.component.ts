@@ -24,10 +24,9 @@ import {EmployeeService} from "../../../../service/employee.service";
 })
 export class FormContractManagermentComponent implements OnInit {
 
-  @Input() contractCodeForm?: string;
-  @Input() contractTypeForm?: string;
-  @Input() idContractForm?: number;
+  @Input() formData?: any;
   @Input() isUpdate = false;
+  @Input() isRenew = false;
 
   @Output() clickCancel = new EventEmitter();
   @Output() clickSave = new EventEmitter();
@@ -69,14 +68,18 @@ export class FormContractManagermentComponent implements OnInit {
     });
 
     this.getEmployees();
-    if (this.isUpdate) {
+    if (this.isRenew && this.formData) {
       this.createForm.patchValue({
-        id: this.idContractForm ?? null,
-        contractCode: this.contractCodeForm ?? null,
-        contractType: this.contractTypeForm ?? null
-        // Các trường còn lại sẽ do người dùng nhập
+        id: this.formData.id ?? null,
+        contractType: this.formData.contractType ?? null,
+        contractEffectiveDate: this.formData.contractEndDate ?? null,
+        basicSalaryInsurance: this.formData.basicSalaryInsurance ?? null,
+        basicSalary: this.formData.basicSalary ?? null,
+        employeeCode: this.formData.employeeCode ?? null,
+        attachFile: this.formData.attachFile ?? null,
       });
     }
+
   }
 
   getEmployees(): void {
@@ -116,14 +119,12 @@ export class FormContractManagermentComponent implements OnInit {
 
       this.spinner.show().then();
 
-      const observable = this.isUpdate
-        ? this.contractService.edit(this.file, data)
-        : this.contractService.create(this.file, data);
+      const observable =  this.contractService.create(this.file, data)
 
       observable.subscribe(
         res => {
           if (res?.body?.code === "201") {
-            const msg = this.isUpdate ? 'Cập nhật' : 'Thêm mới';
+            const msg = this.isRenew ? 'Tái ký' : 'Thêm mới';
             this.toastService.openSuccessToast(`${msg} hợp đồng thành công`);
             this.clickSave.emit();
             this.handleCancelModal();

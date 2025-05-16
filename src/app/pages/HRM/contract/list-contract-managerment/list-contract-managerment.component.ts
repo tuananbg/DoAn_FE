@@ -159,9 +159,25 @@ export class ListContractManagermentComponent implements OnInit {
       nzViewContainerRef: this.viewContainerRef,
       nzComponentParams: {
         isUpdate: true,
-        idContractForm: data.id,
-        contractCodeForm: data.contractCode,
-        contractTypeForm: data.contractType
+        formData: data
+      },
+      nzFooter: null,
+      nzMaskClosable: false
+    });
+    modalRef.afterClose.subscribe(rs => {
+      this.isLoading = true;
+      if (this.isLoading) this.nzOnSearch();
+    });
+  }
+  openRenewModal(data?: any): void {
+    const modalRef = this.modal.create({
+      nzTitle: 'Cập nhật hợp đồng',
+      nzContent: FormContractManagermentComponent,
+      nzWidth: '700px',
+      nzViewContainerRef: this.viewContainerRef,
+      nzComponentParams: {
+        isRenew: true,
+        formData: data
       },
       nzFooter: null,
       nzMaskClosable: false

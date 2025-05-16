@@ -26,8 +26,8 @@ export class TaskKanbanCardComponent implements  OnInit{
     this.router.navigate(['/task/detail']);
   }
 
-  navigateToDetails = (projectId: any, taskId: any) => {
-    this.router.navigate(['/task/detail/', projectId,taskId]);
+  navigateToDetails = (taskCode: any) => {
+    this.router.navigate(['/task/update', taskCode]);
   };
 
 

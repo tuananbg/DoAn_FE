@@ -53,6 +53,10 @@ export class TaskBoardManagementComponent implements OnInit, OnChanges {
               private projectService:ProjectService,
               private activatedRoute: ActivatedRoute,
   ) {
+    const nav = this.router.getCurrentNavigation();
+    const state = nav?.extras?.state as { projectName?: string };
+
+    this.projectName = state?.projectName ?? '';
     this.idProject = this.activatedRoute.snapshot.params['id'];
   }
 
@@ -95,29 +99,6 @@ export class TaskBoardManagementComponent implements OnInit, OnChanges {
       }
     });
   }
-
-
-  // loadProject(): void {
-  //   this.spinner.show().then();
-  //
-  //   this.projectService.getProjectId(this.idProject).subscribe({
-  //     next: (res) => {
-  //       if (res && res.code === "OK") {
-  //         this.projectName = res.data.projectName;
-  //       } else {
-  //         this.toastService.openErrorToast(res.msgCode || "Không thể lấy thông tin dự án");
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.error(err);
-  //       this.toastService.openErrorToast("Không kết nối được đến máy chủ");
-  //     },
-  //     complete: () => {
-  //       this.spinner.hide().then();
-  //     }
-  //   });
-  // }
-
 
 
   refresh() {
@@ -189,19 +170,9 @@ export class TaskBoardManagementComponent implements OnInit, OnChanges {
 
   }
 
-  // addTask() {
-  //   this.addTaskEvent.emit();
-  // }
-
-  openCreateModal(): void {
-    this.isUpdate = false
-    this.router.navigate(['/task/add/', this.idProject], {
-      state: {
-        page: this.request,
-        isUpdate: this.isUpdate
-      }
-    })
-  }
+  onCreateTask = () => {
+    this.router.navigate(['/task/add']);
+  };
 
 
 

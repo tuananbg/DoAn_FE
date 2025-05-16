@@ -8,7 +8,7 @@
     <dx-button
       icon="edit"
       stylingMode="text"
-      (onClick)="navigateToDetails(task.projectId, task.id)"
+      (onClick)="navigateToDetails(task.taskCode)"
     ></dx-button>
     <div class="card-content">
       <div class="card-subject dx-theme-text-color">{{ task.taskName.length > 40 ? (task.taskName | slice:0:40) + '...' :task.taskName }}</div>

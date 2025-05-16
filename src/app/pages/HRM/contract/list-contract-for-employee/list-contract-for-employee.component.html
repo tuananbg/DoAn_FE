@@ -25,10 +25,11 @@
           <th  nzWidth="150px" class="text-center">Số hợp đồng</th>
           <th nzWidth="150px" class="text-center">Loại hợp đồng</th>
           <th nzWidth="150px" class="text-center">File mềm</th>
+          <th nzWidth="150px" class="text-center">Ngày ký kết</th>
           <th nzWidth="150px" class="text-center">Ngày hiệu lực</th>
           <th nzWidth="150px" class="text-center">Ngày hết hạn</th>
           <th nzWidth="150px" class="text-center">Thời hạn</th>
-          <th nzWidth="150px" class="text-center">Ngày ký kết</th>
+
         </tr>
         </thead>
         <tbody>
@@ -37,13 +38,12 @@
             <td class="text-center max-width-60">{{ (request.currentPage * request.pageSize) + idx + 1}}</td>
             <td class="max-width-150" [nz-tooltip]="data.contractNumber">{{data.contractNumber}}</td>
             <td class="max-width-150 text-center" [nz-tooltip]="data.contractType">{{data.contractType}}</td>
-            <td class="max-width-250" [nz-tooltip]="data.attachFile">
-              <a style="color: #00a1dd; font-weight: bold" (click)="handleClick(data.attachFile)">{{data.attachFile}}</a>
-            </td>
-            <td class="max-width-150 text-center" [nz-tooltip]="data.effectiveDate | date: 'dd/MM/yyyy'">{{ data.effectiveDate | date: 'dd/MM/yyyy' }}</td>
-            <td class="max-width-150 text-center" [nz-tooltip]="data.expiredDate | date: 'dd/MM/yyyy'">{{ data.expiredDate | date: 'dd/MM/yyyy' }}</td>
+            <td class="max-width-250" [nz-tooltip]="data.attachFile"><a style="color: #00a1dd; font-weight: bold" (click)="handleClick(data.attachFile)">{{data.attachFile}}</a></td>
+            <td class="max-width-150 text-center" [nz-tooltip]="data.contractSignDate | date: 'dd/MM/yyyy'">{{ data.contractSignDate | date: 'dd/MM/yyyy' }}</td>
+            <td class="max-width-150 text-center" [nz-tooltip]="data.contractEffectiveDate | date: 'dd/MM/yyyy'">{{ data.contractEffectiveDate | date: 'dd/MM/yyyy' }}</td>
+            <td class="max-width-150 text-center" [nz-tooltip]="data.contractEndDate | date: 'dd/MM/yyyy'">{{ data.contractEndDate | date: 'dd/MM/yyyy' }}</td>
             <td class="max-width-150 text-center" [nz-tooltip]="data.contractTerm">{{data.contractTerm}}</td>
-            <td class="max-width-150 text-center" [nz-tooltip]="data.signDate | date: 'dd/MM/yyyy'">{{ data.signDate | date: 'dd/MM/yyyy' }}</td>
+
           </tr>
         </ng-template>
         </tbody>

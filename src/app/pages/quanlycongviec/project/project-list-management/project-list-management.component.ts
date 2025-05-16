@@ -106,13 +106,15 @@ export class ProjectListManagementComponent implements OnInit {
     })
   }
 
-  getListTask(projectId: any){
-    this.router.navigate(['/task-board/'+projectId], {
+  getListTask(project: any) {
+    this.router.navigate(['/task-board/' + project.id], {
       state: {
-        page: this.request
+        page: this.request,
+        projectName: project.projectName
       }
-    })
+    });
   }
+
 
 
 }

@@ -25,6 +25,7 @@ export class ButtonIconComponent implements OnInit {
   @Input() isDownloadAllFile = false;
   @Input() isClose = false;
   @Input() isSyn = false;
+  @Input() isRenew = false;
   @Input() tooltipTitle = ''
   @Output() clickAction = new EventEmitter();
 

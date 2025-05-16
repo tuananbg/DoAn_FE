@@ -64,39 +64,18 @@
                 [nzNoResult]="'Không có kết quả tìm kiếm'" [nzScroll]="{ x: SCROLL_TABLE.SCROLL_X}">
         <thead>
         <tr class="ant-header-customize">
-          <th nzWidth="100px" class="text-center">
-            STT
-          </th>
-          <th nzWidth="150px" class="text-center">
-            Mã nhân viên
-          </th>
-          <th nzWidth="150px" class="text-center">
-            Tên nhân viên
-          </th>
-          <th nzWidth="150px" class="text-center">
-            Số hợp đồng
-          </th>
-          <th nzWidth="150px" class="text-center">
-            Loại hợp đồng
-          </th>
-          <th nzWidth="250px" class="text-center">
-            File đính kèm
-          </th>
-          <th nzWidth="150px" class="text-center">
-            Ngày hiệu lực
-          </th>
-          <th nzWidth="150px" class="text-center">
-            Ngày hết hiệu lực
-          </th>
-          <th nzWidth="150px" class="text-center">
-            Thời hạn
-          </th>
-          <th nzWidth="150px" class="text-center">
-            Trạng thái
-          </th>
-          <th nzWidth="100px" class="text-center">
-            Hành động
-          </th>
+          <th nzWidth="100px" class="text-center">STT</th>
+          <th nzWidth="150px" class="text-center">Mã nhân viên</th>
+          <th nzWidth="150px" class="text-center">Tên nhân viên</th>
+          <th nzWidth="150px" class="text-center">Số hợp đồng</th>
+          <th nzWidth="150px" class="text-center">Loại hợp đồng</th>
+          <th nzWidth="250px" class="text-center">File đính kèm</th>
+          <th nzWidth="150px" class="text-center">Ngày ký</th>
+          <th nzWidth="150px" class="text-center">Ngày hiệu lực</th>
+          <th nzWidth="150px" class="text-center">Ngày hết hiệu lực</th>
+          <th nzWidth="150px" class="text-center">Thời hạn</th>
+          <th nzWidth="150px" class="text-center">Trạng thái</th>
+          <th nzWidth="150px" class="text-center"  *ngIf="currentTabIndex !== 3 && currentTabIndex !==2">Hành động</th>
         </tr>
         </thead>
         <tbody>
@@ -106,28 +85,32 @@
             <td class="max-width-150" [nz-tooltip]="data.employeeCode">{{data.employeeCode}}</td>
             <td class="max-width-150" [nz-tooltip]="data.employeeName">{{data.employeeName}}</td>
             <td class="max-width-150" [nz-tooltip]="data.contractNumber">{{data.contractNumber}}</td>
-            <td class="max-width-150 text-center" [nz-tooltip]="data.contractType">{{data.contractType}}</td>
-            <td class="max-width-250" [nz-tooltip]="data.attachFile"><a style="color: #00a1dd; font-weight: bold"
-                 (click)="handleClick(data.attachFile)">{{data.attachFile}}</a>
-            </td>
-            <td class="max-width-150" [nz-tooltip]="data.effectiveDate | date:'dd/MM/yyyy'">
-              {{ data.effectiveDate | date:'dd/MM/yyyy' }}
-            </td>
-            <td class="max-width-150" [nz-tooltip]="data.expiredDate | date:'dd/MM/yyyy'">
-              {{ data.expiredDate | date:'dd/MM/yyyy' }}
-            </td>
-
+            <td class="max-width-150 text-center" [nz-tooltip]="data.contractTypeDisplace">{{data.contractType}}</td>
+            <td class="max-width-250" [nz-tooltip]="data.attachFile"><a style="color: #6fa5f1; font-weight: bold" (click)="handleClick(data.attachFile)">{{data.attachFile}}</a></td>
+            <td class="max-width-150" [nz-tooltip]="data.contractSignDate | date:'dd/MM/yyyy'">{{ data.contractSignDate | date:'dd/MM/yyyy' }}</td>
+            <td class="max-width-150" [nz-tooltip]="data.contractEffectiveDate | date:'dd/MM/yyyy'">{{ data.contractEffectiveDate | date:'dd/MM/yyyy' }}</td>
+            <td class="max-width-150" [nz-tooltip]="data.contractEndDate | date:'dd/MM/yyyy'">{{ data.contractEndDate | date:'dd/MM/yyyy' }}</td>
             <td class="max-width-150" [nz-tooltip]="data.contractTerm">{{data.contractTerm}}</td>
             <td class="max-width-150" [nz-tooltip]="data.contractStatus">{{data.contractStatus}}</td>
 
-            <td class="text-center max-width-100">
+            <td class="text-center max-width-150">
               <div class="action">
-                <app-button-icon class="action__margin" [isEdit]="true"
-                                 [tooltipTitle]="'Cập nhật hợp đồng'"
-                                 [loading]="isLoading"
-                                 (clickAction)="openUpdateModal(data)"></app-button-icon>
                 <app-button-icon
-                  *ngIf="currentTabIndex !== 3"
+                  *ngIf="currentTabIndex !== 3 && currentTabIndex !==2"
+                  class="action__margin" [isRenew]="true"
+                  [tooltipTitle]="'Tái ký hợp đồng'"
+                  [loading]="isLoading"
+                  (clickAction)="openRenewModal(data)">
+                </app-button-icon>
+<!--                <app-button-icon-->
+<!--                  *ngIf="currentTabIndex !== 3 && currentTabIndex !==2"-->
+<!--                  class="action__margin" [isEdit]="true"-->
+<!--                  [tooltipTitle]="'Cập nhật hợp đồng'"-->
+<!--                  [loading]="isLoading"-->
+<!--                  (clickAction)="openUpdateModal(data)">-->
+<!--                </app-button-icon>-->
+                <app-button-icon
+                  *ngIf="currentTabIndex !== 3 && currentTabIndex !==2"
                   class="action__margin"
                   [isLock]="true"
                   [tooltipTitle]="'Chấm dứt hợp đồng'"

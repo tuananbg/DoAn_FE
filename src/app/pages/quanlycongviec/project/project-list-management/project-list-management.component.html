@@ -38,7 +38,7 @@
               <i style="font-size: 20px;" class="fa-solid fa-pen-to-square"></i>
             </button>
           </div>
-          <div class="wrapper-card-content" (click)="getListTask(project.id)">
+          <div class="wrapper-card-content" (click)="getListTask(project)">
             <p>Từ ngày {{ project.startDay | date: 'dd/MM/yyyy' }} đến ngày {{ project.endDay | date: 'dd/MM/yyyy'}}</p>
             <div class="card-content-footer">
               <p style="color: #f87171; font-weight: bold;">Công việc chưa làm: {{ project.taskTodo}} </p>
