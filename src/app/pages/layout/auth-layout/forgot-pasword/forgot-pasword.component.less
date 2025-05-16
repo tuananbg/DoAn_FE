@@ -8,14 +8,14 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.login-wrapper {
+.password-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
 }
 
-.login-card {
+.password-card {
   background: rgba(10, 3, 29, 0.3);
   padding: 40px 30px;
   border-radius: 18px;
@@ -27,32 +27,26 @@
   border: 1px solid rgba(0, 187, 255, 0.3);
 }
 
+/* Logo */
 .icon-container img {
   width: 60px;
   height: 60px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
+/* Tiêu đề */
 .title {
-  margin: 0 0 16px;
+  margin: 0;
+  margin-bottom: 20px;
   color: #ffffff;
   font-size: 20px;
   font-weight: bold;
 }
 
-.login-label {
-  font-size: 14px;
-  color: #ddd;
-  margin-bottom: 14px;
-  display: block;
-}
-
-.field-group {
-  margin-bottom: 18px;
-}
-
+/* Input style */
 .full-width {
   width: 100%;
+  margin-bottom: 18px;
 }
 
 mat-form-field {
@@ -60,37 +54,56 @@ mat-form-field {
   border-radius: 6px;
 }
 
-/* Button */
+/* Button nhóm */
 .button-group {
   display: flex;
-  flex-direction: column;
-  margin-top: 10px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
 }
 
-.button-group button {
-  width: 100%;
-  background: linear-gradient(90deg, #0099ff, #0055aa);
-  color: #fff;
-  font-weight: bold;
-  border-radius: 6px;
-}
-
-/* Forgot password link */
-.forgot-password {
-  margin-top: 12px;
-  font-size: 13px;
+.button-group a {
+  font-size: 14px;
   color: #6ec1ff;
+  cursor: pointer;
   text-decoration: none;
-  transition: 0.2s ease-in-out;
 }
-.forgot-password:hover {
+.button-group a:hover {
   text-decoration: underline;
 }
 
-/* Error text */
-.text-danger {
+button[mat-raised-button] {
+  min-width: 120px;
+  font-weight: bold;
+  background: linear-gradient(90deg, #0099ff, #0055aa);
+  color: #fff;
+  border-radius: 6px;
+}
+
+/* Footer nhỏ */
+.footer {
+  margin-top: 25px;
+  font-size: 12px;
+  color: #888;
+}
+
+/* Error text chung */
+.form-error {
   color: #ff4d4f;
   font-size: 13px;
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Error nhỏ dưới input */
+.validation-error {
+  text-align: left;
+  font-size: 13px;
+  color: #ff4d4f;
+  margin-top: -10px;
+  margin-bottom: 10px;
 }
 
 /* Animation */
@@ -105,42 +118,30 @@ mat-form-field {
   }
 }
 
-/* ----------------------------------
-   Material Field Custom Styling
----------------------------------- */
-
-/* Text color */
+/* Material field ánh sáng */
 .mat-input-element {
   color: #ffffff !important;
 }
-
-/* Placeholder */
 .mat-form-field-infix input::placeholder {
   color: #e0e0e0 !important;
   opacity: 1;
 }
-
-/* Label */
 .mat-form-field-label,
 .mat-form-field-label:not(.mat-form-field-empty),
 .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
   color: #ffffff !important;
   font-weight: 500;
 }
-
-/* Focus border */
+.mat-form-field-outline {
+  border-color: #cccccc50;
+}
 .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
   border-color: #00ccff !important;
   box-shadow: 0 0 0 2px rgba(0, 204, 255, 0.4);
   transition: all 0.3s ease;
 }
 
-/* Non-focused border */
-.mat-form-field-outline {
-  border-color: #cccccc50;
-}
-
-/* Icons */
+/* Icon và mắt mật khẩu */
 .mat-form-field-prefix mat-icon,
 .mat-form-field-suffix mat-icon,
 .mat-icon-button {
@@ -149,11 +150,10 @@ mat-form-field {
   font-size: 20px;
 }
 
-/* Error (Invalid) styles */
+/* Trạng thái lỗi */
 .mat-form-field-invalid .mat-form-field-outline-thick {
   border-color: rgba(255, 0, 0, 0.6);
 }
-
 .mat-form-field-invalid .mat-input-element,
 .mat-form-field-invalid .mat-form-field-label,
 .mat-form-field-invalid .mat-form-field-prefix mat-icon,
@@ -161,43 +161,3 @@ mat-form-field {
   color: #ffffff !important;
   opacity: 1 !important;
 }
-
-.remember-me {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 10px;
-  color: #fff;
-  font-size: 14px;
-}
-
-.mat-checkbox-label {
-  color: #ffffff !important;
-}
-
-.mat-checkbox-inner-container {
-  margin-right: 6px;
-}
-::ng-deep .mat-form-field-prefix .mat-icon {
-  color: white !important;
-}
-::ng-deep input::placeholder {
-  color: rgba(140, 136, 136, 0.76) !important; /* hoặc bất kỳ màu nào bạn muốn */
-  opacity: 1;              /* tránh bị mờ */
-}
-
-::ng-deep .mat-form-field-wrapper {
-  padding-bottom: 0 !important;
-}
-.link-row {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 12px;
-  font-size: 13px;
-}
-
-.link-row .forgot-password {
-  margin-top: 0; /* xóa margin-top mặc định */
-}
-
-
-

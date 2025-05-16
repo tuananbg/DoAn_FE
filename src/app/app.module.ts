@@ -170,6 +170,7 @@ import { PopUpImgComponent } from './pages/components/pop-up-img/pop-up-img.comp
 import {NzInputNumberModule} from "ng-zorro-antd/input-number";
 import {MatIconModule} from "@angular/material/icon";
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import {ForgotPaswordComponent} from "./pages/layout/auth-layout/forgot-pasword/forgot-pasword.component";
 
 registerLocaleData(en);
 const antDesignIcons = AllIcons as {
@@ -271,7 +272,8 @@ const INTERCEPTOR_PROVIDES = [
     StatusIndicatorComponent,
     ProjectListManagementComponent,
     CreateProjectManagementComponent,
-    PopUpImgComponent
+    PopUpImgComponent,
+    ForgotPaswordComponent
   ],
   imports: [
     BrowserModule,

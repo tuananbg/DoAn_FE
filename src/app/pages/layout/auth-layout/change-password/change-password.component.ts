@@ -15,50 +15,36 @@ import { API_CONFIG } from "../../../../config/api-config";
   styleUrls: ['./change-password.component.less']
 })
 export class ChangePasswordComponent implements OnInit {
-  isMessageError = false;
-  isMessageErrorTwo = false;
   isMessageErrorThree = false;
 
-  messageError = '';
-  messageErrorTwo = '';
   messageErrorThree = '';
 
   @Output() submitEM = new EventEmitter();
   hidePassword: boolean = true;
 
-  isTabOne = true;
-  isTabTwo = false;
-  isTabThree = false;
-
-  registerFormData = {
+  changePasswordFormData = {
     account: '',
-    password: '',
-    confirmPassword: ''
+    currentPassword: '',
+    newPassword: '',
+    confirmNewPassword: ''
   };
-
   formUsername: FormGroup = new FormGroup({
     account: new FormControl('', [Validators.required])
   });
 
-  formCodeConfirm: FormGroup = new FormGroup({
-    code: new FormControl('', [Validators.required]),
-  });
-
   formChangePasswordConfirm: FormGroup = new FormGroup({
     account: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required]),
-    confirmPassword: new FormControl('', [Validators.required]),
+    currentPassword: new FormControl('', [Validators.required]),
+    newPassword: new FormControl('', [Validators.required]),
+    confirmNewPassword: new FormControl('', [Validators.required]),
   });
 
+
   constructor(
-    private loginService: LoginService,
     private auth: AuthService,
-    private toastService: ToastService,
     private spinner: NgxSpinnerService,
     private router: Router,
-    private http: HttpClient,
-    private notification: NzNotificationService,
-    private fb: FormBuilder
+    private notification: NzNotificationService
   ) {}
 
   ngOnInit(): void {}
@@ -68,80 +54,24 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   onChangeTab(): void {
-    this.isTabOne = true;
-    this.isTabTwo = false;
-    this.isTabThree = false;
-  }
 
-  verifyUsernameFormSubmit(): void {
-    if (this.formUsername.valid) {
-      const account = this.formUsername.value['account'];
-      this.spinner.show().then();
-      this.http.post(API_CONFIG.BASE_URL + `auth/resend-code/${account}`,null).subscribe({
-        next: res => {
-          this.isTabOne = false;
-          this.isTabTwo = true;
-          this.isMessageError = false;
-          this.formChangePasswordConfirm.get('account')?.setValue(account);
-          this.notification.success("Thành công", "Mã xác thực đã được gửi.");
-          this.spinner.hide().then();
-        },
-        error: err => {
-          this.isMessageError = true;
-          this.messageError = "Tài khoản không tồn tại!";
-          this.spinner.hide().then();
-        }
-      });
-    } else {
-      Object.values(this.formUsername.controls).forEach(control => {
-        if (control.invalid) {
-          control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
-        }
-      });
-      this.spinner.hide().then();
-    }
-  }
-
-  verifyFormSubmit(): void {
-    if (this.formCodeConfirm.valid) {
-      const code = this.formCodeConfirm.value['code'];
-      this.http.get(API_CONFIG.BASE_URL + `auth/check-verify-code/${code}`).subscribe({
-        next: res => {
-          this.isTabTwo = false;
-          this.isTabThree = true;
-          this.isMessageErrorTwo = false;
-        },
-        error: err => {
-          this.isMessageError = false;
-          this.isMessageErrorTwo = true;
-          this.messageErrorTwo = "Sai mã xác nhận, vui lòng nhập lại!";
-        }
-      });
-    } else {
-      Object.values(this.formCodeConfirm.controls).forEach(control => {
-        if (control.invalid) {
-          control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
-        }
-      });
-    }
   }
 
   verifyFormChangePasswordSubmit(): void {
     if (this.formChangePasswordConfirm.valid) {
-      this.registerFormData.account = this.formChangePasswordConfirm.value['account'];
-      this.registerFormData.password = this.formChangePasswordConfirm.value['password'];
-      this.registerFormData.confirmPassword = this.formChangePasswordConfirm.value['confirmPassword'];
+      this.changePasswordFormData.account = this.formChangePasswordConfirm.value['account'];
+      this.changePasswordFormData.currentPassword = this.formChangePasswordConfirm.value['currentPassword'];
+      this.changePasswordFormData.newPassword = this.formChangePasswordConfirm.value['newPassword'];
+      this.changePasswordFormData.confirmNewPassword = this.formChangePasswordConfirm.value['confirmNewPassword'];
 
-      if (this.registerFormData.password !== this.registerFormData.confirmPassword) {
+      if (this.changePasswordFormData.newPassword !== this.changePasswordFormData.confirmNewPassword) {
         this.isMessageErrorThree = true;
         this.messageErrorThree = "Mật khẩu xác nhận không khớp!";
         return;
       }
 
       this.spinner.show().then();
-      this.http.post(API_CONFIG.BASE_URL + 'auth/change-password', this.registerFormData).subscribe({
+      this.auth.changePassword(this.changePasswordFormData).subscribe({
         next: res => {
           this.notification.success("Thành công", "Đổi mật khẩu thành công");
           this.spinner.hide().then();

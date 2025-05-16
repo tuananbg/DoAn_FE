@@ -113,7 +113,7 @@ export class FormAttendanceLeaveComponent implements OnInit, OnChanges {
       if (!this.isUpdate) {
         this.spinner.show().then();
         this.attendanceLeaveService.createAttendanceLeave(data).subscribe(res => {
-          if (res && res.body.code === "200") {
+          if (res && res.body.code === "201") {
             this.toastService.openSuccessToast('Đăng ký lịch nghỉ thành công');
             this.clickSave.emit();
             this.createForm.reset();
@@ -129,7 +129,7 @@ export class FormAttendanceLeaveComponent implements OnInit, OnChanges {
         });
       } else {
         this.attendanceLeaveService.editAttendanceLeave(data).subscribe(res => {
-          if (res && res.code === "201") {
+          if (res && res.code === "202") {
             this.toastService.openSuccessToast('Sửa lịch nghỉ phép thành công');
             this.clickSave.emit();
           } else {

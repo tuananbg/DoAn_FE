@@ -33,7 +33,10 @@
       </div>
       <div class="button-group">
         <button mat-raised-button color="primary" type="submit">Đăng nhập</button>
-        <a class="forgot-password" [routerLink]="'/auth/changePassword'">Forgot Password?</a>
+        <div class="link-row">
+          <a class="forgot-password" [routerLink]="'/auth/changePassword'">Đổi mật khẩu</a>
+          <a class="forgot-password" [routerLink]="'/auth/forgotPassword'">Quên mật khẩu?</a>
+        </div>
       </div>
     </form>
   </div>

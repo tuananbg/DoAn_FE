@@ -1,0 +1,74 @@
+
+<div class="password-wrapper">
+  <div class="password-card">
+    <div class="icon-container">
+      <img src="assets/images/logo.png" alt="logo" />
+    </div>
+    <h2 class="title">Quên mật khẩu</h2>
+
+    <!-- Tab 1: Gửi mã xác nhận bằng tên đăng nhập -->
+    <form *ngIf="isTabOne" [formGroup]="formUsername" (ngSubmit)="verifyUsernameFormSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-icon matPrefix>person</mat-icon>
+        <input type="text" matInput placeholder="Tên đăng nhập" formControlName="account">
+      </mat-form-field>
+
+      <div class="validation-error" *ngIf="formUsername.controls['account'].errors && (formUsername.controls['account'].dirty || formUsername.controls['account'].touched)">
+        <div *ngIf="formUsername.controls['account'].errors?.['required']">Tên đăng nhập không được để trống!</div>
+      </div>
+
+      <div *ngIf="isMessageError" class="form-error">
+        <mat-icon>error</mat-icon> {{ messageError }}
+      </div>
+
+      <div class="button-group">
+        <a routerLink="/auth/login">Đăng nhập</a>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!formUsername.valid">Gửi mã xác nhận</button>
+      </div>
+    </form>
+
+    <!-- Tab 2: Nhập mã xác nhận -->
+    <form *ngIf="isTabTwo" [formGroup]="formCodeConfirm" (ngSubmit)="verifyFormSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-icon matPrefix>vpn_key</mat-icon>
+        <input matInput placeholder="Nhập mã xác nhận" formControlName="code">
+      </mat-form-field>
+
+      <div *ngIf="isMessageErrorTwo" class="form-error">
+        <mat-icon>error</mat-icon> {{ messageErrorTwo }}
+      </div>
+
+      <div class="button-group">
+        <a (click)="onChangeTab()">Quay lại</a>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!formCodeConfirm.valid">Xác nhận</button>
+      </div>
+    </form>
+
+    <!-- Tab 3: Đổi mật khẩu -->
+    <form *ngIf="isTabThree" [formGroup]="formChangePasswordConfirm" (ngSubmit)="verifyFormChangePasswordSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-icon matPrefix>lock</mat-icon>
+        <input [type]="hidePassword ? 'password' : 'text'" matInput placeholder="Mật khẩu mới" formControlName="password">
+        <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility()">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-icon matPrefix>lock</mat-icon>
+        <input [type]="hidePassword ? 'confirmPassword' : 'text'" matInput placeholder="Nhập lại mật khẩu" formControlName="confirmPassword">
+        <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility()">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <div *ngIf="isMessageErrorThree" class="form-error">
+        <mat-icon>error</mat-icon> {{ messageErrorThree }}
+      </div>
+
+      <div class="button-group">
+        <a (click)="onChangeTab()">Quay lại</a>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!formChangePasswordConfirm.valid">Xác nhận</button>
+      </div>
+    </form>
+  </div>
+</div>

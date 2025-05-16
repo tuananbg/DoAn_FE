@@ -52,6 +52,7 @@ import {TaskListGridComponent} from "./pages/quanlycongviec/task-employee/task-l
 import {
   TaskDetailManagementComponent
 } from "./pages/quanlycongviec/task-employee/task-detail-management/task-detail-management.component";
+import {ForgotPaswordComponent} from "./pages/layout/auth-layout/forgot-pasword/forgot-pasword.component";
 
 const routes: Routes = [
   {
@@ -70,6 +71,10 @@ const routes: Routes = [
       {
         path: 'changePassword',
         component: ChangePasswordComponent
+      },
+      {
+        path: 'forgotPassword',
+        component: ForgotPaswordComponent
       }
     ]
   },
