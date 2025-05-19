@@ -60,7 +60,7 @@ export class PositionManagermentFormComponent implements OnInit {
     this.createForm = this.formBuilder.group({
       id: new FormControl(null),
       positionName: new FormControl(null, [Validators.required, Validators.maxLength(100)]),
-      positionCode: new FormControl(null, [Validators.required, Validators.maxLength(100)]),
+      positionCode: [{ value: '', disabled: true }],
       positionDescription: new FormControl(null),
       departmentCode: new FormControl(null, [Validators.required]),
       positionCategory: new FormControl(null, [Validators.required]),

@@ -58,7 +58,7 @@ export class FormAttendanceLeaveComponent implements OnInit, OnChanges {
           this.createForm.get('startDay')?.setValue(this.objectChild.startDay);
           this.createForm.get('endDay')?.setValue(this.objectChild.endDay);
           // this.createForm.get('totalTime')?.setValue(this.objectChild.totalTime);
-          this.createForm.get('reviewerCode')?.setValue(this.objectChild.reviewerCode);
+          // this.createForm.get('reviewerCode')?.setValue(this.objectChild.reviewerCode);
           this.createForm.get('description')?.setValue(this.objectChild.description);
         });
       } else {
@@ -74,8 +74,8 @@ export class FormAttendanceLeaveComponent implements OnInit, OnChanges {
       startDay: new FormControl(null, [Validators.required]),
       endDay: new FormControl(null, [Validators.required]),
       // totalTime: new FormControl(null),
-      employeeCode: new FormControl(null),
-      reviewerCode: new FormControl(null, [Validators.required]),
+      // employeeCode: new FormControl(null),
+      // reviewerCode: new FormControl(null, [Validators.required]),
       // trackerId: new FormControl(null, [Validators.required]),
       description: new FormControl(null, [Validators.maxLength(5000)])
     })
@@ -106,8 +106,8 @@ export class FormAttendanceLeaveComponent implements OnInit, OnChanges {
       data.startDay = data.startDay ? format(new Date(data.startDay), 'yyyy-MM-dd HH:mm:ss') : null;
       data.endDay = data.endDay ? format(new Date(data.endDay), 'yyyy-MM-dd HH:mm:ss') : null;
       // data.totalTime = data.totalTime ? data.totalTime : null;
-      data.employeeCode = this.employeeCode ? this.employeeCode : null;
-      data.reviewerCode = data.reviewerCode ? data.reviewerCode : null;
+      // data.employeeCode = this.employeeCode ? this.employeeCode : null;
+      // data.reviewerCode = data.reviewerCode ? data.reviewerCode : null;
       // data.trackerId = data.trackerId ? data.trackerId : null;
       data.description = data.description ? data.description.trim() : null;
       if (!this.isUpdate) {

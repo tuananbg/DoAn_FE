@@ -31,7 +31,7 @@ export class ListEmployeeManagermentComponent implements OnInit {
   isAddContactPopupOpened = false;
   isLoading = false;
   currentTabIndex = 0;
-  statusList = ['EMPLOYMENT', 'RETIRED'];
+  statusList = ['EMPLOYMENT', 'WAITING_FOR_SIGNING','WAITING_FOR_ONBOARD','RETIRED'];
 
   employeeCode: string | null = null;
   request: any = {

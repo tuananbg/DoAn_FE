@@ -17,10 +17,12 @@
   </nz-breadcrumb>
 </div>
 <div class="view-wrapper list-page crm-contact-list">
-  <nz-tabset [(nzSelectedIndex)]="currentTabIndex" (nzSelectedIndexChange)="onTabChange($event)" style="margin-bottom: 12px">
-    <nz-tab nzTitle="Đang làm việc"></nz-tab>
-    <nz-tab nzTitle="Đã nghỉ việc"></nz-tab>
-  </nz-tabset>
+    <nz-tabset [(nzSelectedIndex)]="currentTabIndex" (nzSelectedIndexChange)="onTabChange($event)" style="margin-bottom: 12px">
+      <nz-tab nzTitle="Đang làm việc"></nz-tab>
+      <nz-tab nzTitle="Chờ ký hợp đồng"></nz-tab>
+      <nz-tab nzTitle="Chờ làm việc"></nz-tab>
+      <nz-tab nzTitle="Nghỉ việc"></nz-tab>
+    </nz-tabset>
 
   <dx-data-grid
     class="grid theme-dependent"
@@ -56,15 +58,14 @@
         <div class="grid-header"><i class="fa-solid fa-users-viewfinder" style="margin-right: 7px;"></i>Nhân viên</div>
       </dxi-item>
       <dxi-item name="exportButton">
-        <app-button-export appCheckAuthorize (clickExport)="onExporting($event)" [buttonClass]="'css-box-shadow'"></app-button-export>
+        <app-button-export [appCheckAuthorize]="['ADMIN', 'MANAGER']" (clickExport)="onExporting($event)" [buttonClass]="'css-box-shadow'"></app-button-export>
       </dxi-item>
-      <dxi-item location="after" locateInMenu="auto" appCheckAuthorize>
-        <app-button-create appCheckAuthorize (clickCreate)="addContact()" [loading]="isLoading"></app-button-create>
+      <dxi-item location="after" locateInMenu="auto">
+        <app-button-create [appCheckAuthorize]="['ADMIN', 'MANAGER']" (clickCreate)="addContact()" [loading]="isLoading"></app-button-create>
       </dxi-item>
 
       <dxi-item name="searchPanel" locateInMenu="auto"></dxi-item>
     </dxo-toolbar>
-
     <dxi-column dataField="employeeCode" caption="Mã nhân viên" sortOrder="desc" [hidingPriority]="5" [minWidth]="150"></dxi-column>
     <dxi-column dataField="employeeName" caption="Tên nhân viên" sortOrder="asc" [hidingPriority]="5" [minWidth]="150"></dxi-column>
     <dxi-column dataField="departmentName" caption="Phòng ban" [hidingPriority]="5" [minWidth]="150"></dxi-column>
@@ -74,7 +75,7 @@
       <dxi-column dataField="permanentAddress" caption="Địa chỉ" [hidingPriority]="5" [minWidth]="100"></dxi-column>
   </dx-data-grid>
 
-  <app-form-popup appCheckAuthorize [(visible)]="isAddContactPopupOpened" (save)="handleOkModal()" titleText="Thêm nhân viên mới">
+  <app-form-popup [appCheckAuthorize]="['ADMIN', 'MANAGER']" [(visible)]="isAddContactPopupOpened" (save)="handleOkModal()" titleText="Thêm nhân viên mới">
       <app-form-employee-managerment></app-form-employee-managerment>
   </app-form-popup>
 

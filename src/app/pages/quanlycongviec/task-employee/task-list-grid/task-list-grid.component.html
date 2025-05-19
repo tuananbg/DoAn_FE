@@ -22,8 +22,8 @@
       <strong style="font-size: 18px;">Công việc của tôi</strong>
     </div>
     <div style="display: flex; gap: 10px;">
-      <app-button-export appCheckAuthorize (clickExport)="onExporting($event)" [buttonClass]="'css-box-shadow'"></app-button-export>
-      <app-button-create appCheckAuthorize (clickCreate)="onCreateTask()" [loading]="isLoading"></app-button-create>
+      <app-button-export [appCheckAuthorize]="['ADMIN', 'MANAGER']" (clickExport)="onExporting($event)" [buttonClass]="'css-box-shadow'"></app-button-export>
+      <app-button-create [appCheckAuthorize]="['ADMIN', 'MANAGER']" (clickCreate)="onCreateTask()" [loading]="isLoading"></app-button-create>
     </div>
   </div>
 

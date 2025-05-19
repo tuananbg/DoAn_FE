@@ -68,8 +68,8 @@ export class FormAttendanceOtComponent implements OnInit, OnChanges {
       startTime: new FormControl(null, [Validators.required]),
       endTime: new FormControl(null, [Validators.required]),
       totalTime: new FormControl(null),
-      employeeCode: new FormControl(null),
-      followCode: new FormControl(null, [Validators.required]),
+      // employeeCode: new FormControl(null),
+      // followCode: new FormControl(null, [Validators.required]),
       descriptionOt: new FormControl(null, [Validators.maxLength(5000)])
     })
     this.fetchEmployee();
@@ -98,8 +98,8 @@ export class FormAttendanceOtComponent implements OnInit, OnChanges {
       data.startTime = data.startTime ? format(new Date(data.startTime), 'yyyy-MM-dd HH:mm:ss') : null;
       data.endTime = data.endTime ? format(new Date(data.endTime), 'yyyy-MM-dd HH:mm:ss') : null;
       data.totalTime = data.totalTime ? data.totalTime : null;
-      data.employeeCode = this.employeeCode ? this.employeeCode : null;
-      data.followCode = data.followCode ? data.followCode : null;
+      // data.employeeCode = this.employeeCode ? this.employeeCode : null;
+      // data.followCode = data.followCode ? data.followCode : null;
       data.descriptionOt = data.descriptionOt ? data.descriptionOt.trim() : null;
       if (!this.isUpdate) {
         this.spinner.show().then();

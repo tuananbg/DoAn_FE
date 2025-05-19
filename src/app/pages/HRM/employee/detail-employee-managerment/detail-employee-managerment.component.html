@@ -24,7 +24,7 @@
       </dxi-item>
       <dxi-item location="before" [text]="contactName"></dxi-item>
       <dxi-item location="after" locateInMenu="auto" style="margin-right: 10px;">
-        <app-button-export appCheckAuthorize (clickExport)="onExportPdf()" [buttonClass]="'css-box-shadow'"></app-button-export>
+        <app-button-export [appCheckAuthorize]="['ADMIN', 'MANAGER']" (clickExport)="onExportPdf()" [buttonClass]="'css-box-shadow'"></app-button-export>
 <!--        <dx-button-->
 <!--          text="Xuất file PDF"-->
 <!--          type="default"-->

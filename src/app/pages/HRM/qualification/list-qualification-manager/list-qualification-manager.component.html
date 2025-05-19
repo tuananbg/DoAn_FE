@@ -12,7 +12,7 @@
       </div>
       <div *ngIf="isVisableButton" class="list__head-right">
         <div class="list__head-btn">
-          <app-button-create appCheckAuthorize (clickCreate)="openCreateModal()" [loading]="isLoading"></app-button-create>
+          <app-button-create [appCheckAuthorize]="['ADMIN', 'MANAGER']" (clickCreate)="openCreateModal()" [loading]="isLoading"></app-button-create>
         </div>
       </div>
     </div>
@@ -39,7 +39,7 @@
           <th nzWidth="150px" class="text-center">
             Mô tả
           </th>
-          <th appCheckAuthorize *ngIf="isVisableButton" nzWidth="150px" class="text-center" nzRight="0px">
+          <th [appCheckAuthorize]="['ADMIN', 'MANAGER']" *ngIf="isVisableButton" nzWidth="150px" class="text-center" nzRight="0px">
             Hành động
           </th>
         </tr>
@@ -55,7 +55,7 @@
             <td class="max-width-200" [nz-tooltip]="data.description">
               {{ data.description.length > 100 ? (data.description | slice:0:50) + '...' : data.description }}
             </td>
-            <td appCheckAuthorize *ngIf="isVisableButton" class="text-center max-width-150" nzRight="0px">
+            <td [appCheckAuthorize]="['ADMIN', 'MANAGER']" *ngIf="isVisableButton" class="text-center max-width-150" nzRight="0px">
               <div class="action">
                 <app-button-icon class="action__margin" [isEdit] = "true"
                                  [tooltipTitle]="'Cập nhật bằng cấp'"

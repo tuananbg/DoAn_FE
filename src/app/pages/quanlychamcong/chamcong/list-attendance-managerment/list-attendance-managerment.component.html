@@ -18,7 +18,7 @@
         <form [formGroup]="form" style="width: 100%;">
           <div style="width: 100%;">
             <app-select
-              appCheckAuthorize
+              [appCheckAuthorize]="['ADMIN', 'MANAGER']"
               style="width: 100%;"
               [data]="lstEmployee"
               [valueField]="'employeeCode'"

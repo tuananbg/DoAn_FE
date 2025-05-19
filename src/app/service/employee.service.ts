@@ -67,6 +67,15 @@ export class EmployeeService {
     );
   }
 
+  getListSelectForDepartment(): Observable<any> {
+    return this.httpClient.get(
+      `${API_CONFIG.BASE_URL}employee/select-department`,
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      }
+    );
+  }
+
   createEmployee(avatarFile: File, userDetailDTO: any): Observable<any> {
     const formData = new FormData();
     if (avatarFile) {

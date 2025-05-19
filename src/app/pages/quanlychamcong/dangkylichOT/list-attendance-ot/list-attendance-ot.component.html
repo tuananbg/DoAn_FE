@@ -44,7 +44,7 @@
       </div>
       <div class="list__head-right">
         <div class="list__head-btn" style="display: flex; gap: 8px;">
-          <app-button-export appCheckAuthorize (clickExport)="openExport()" [buttonClass]="'css-box-shadow'"></app-button-export>
+          <app-button-export [appCheckAuthorize]="['ADMIN', 'MANAGER']" (clickExport)="openExport()" [buttonClass]="'css-box-shadow'"></app-button-export>
           <app-button-create (clickCreate)="openCreateModal()" [loading]="isLoading"></app-button-create>
         </div>
       </div>

@@ -47,7 +47,7 @@
       </div>
       <div class="list__head-right">
         <div class="list__head-btn" style="display: flex; gap: 10px;">
-          <app-button-export appCheckAuthorize (clickExport)="onExporting($event)" [buttonClass]="'css-box-shadow'"></app-button-export>
+          <app-button-export [appCheckAuthorize]="['ADMIN', 'MANAGER']" (clickExport)="onExporting($event)" [buttonClass]="'css-box-shadow'"></app-button-export>
           <app-button-create (clickCreate)="openCreateModal()" [loading]="isLoading"></app-button-create>
         </div>
       </div>
@@ -56,6 +56,7 @@
       <nz-tabset [(nzSelectedIndex)]="currentTabIndex" (nzSelectedIndexChange)="onTabChange($event)">
         <nz-tab nzTitle="Hiệu lực"></nz-tab>
         <nz-tab nzTitle="Sắp hết hạn"></nz-tab>
+        <nz-tab nzTitle="Chưa hiệu lực"></nz-tab>
         <nz-tab nzTitle="Hết hạn"></nz-tab>
         <nz-tab nzTitle="Vô hiệu"></nz-tab>
       </nz-tabset>

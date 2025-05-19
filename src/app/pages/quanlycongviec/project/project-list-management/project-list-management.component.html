@@ -20,7 +20,7 @@
       </div>
     </div>
     <div class="list__head-right">
-      <div appCheckAuthorize class="list__head-btn">
+      <div [appCheckAuthorize]="['ADMIN', 'MANAGER']" class="list__head-btn">
         <app-button-create (clickCreate)="openCreateModal()" [loading]="isLoading"
                            [text]="'Thêm mới dự án'"></app-button-create>
         <!--        <router-outlet></router-outlet>-->
@@ -34,7 +34,7 @@
           <div class="wrapper-card-header">
             <h5 class="project-title">{{ project.projectName }}</h5>
             <h5 class="project-title">{{ project.projectStatus }}</h5>
-            <button appCheckAuthorize class="btn-edit" nz-button nzType="text" nzShape="circle" (click)="onEdit(project.id)">
+            <button [appCheckAuthorize]="['ADMIN', 'MANAGER']" class="btn-edit" nz-button nzType="text" nzShape="circle" (click)="onEdit(project.id)">
               <i style="font-size: 20px;" class="fa-solid fa-pen-to-square"></i>
             </button>
           </div>

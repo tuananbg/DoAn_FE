@@ -12,7 +12,7 @@
       <i class="fa-solid fa-house" style="margin-right: 5px;"></i>
       <span><a [routerLink]="'/dashboard'">Trang chủ</a></span>
     </li>
-    <li appCheckAuthorize nz-submenu nzTitle="Hành chính nhân sự" nzIcon="usergroup-add" [nzOpen]="subMenuQLNS">
+    <li [appCheckAuthorize]="['ADMIN', 'MANAGER']" nz-submenu nzTitle="Hành chính nhân sự" nzIcon="usergroup-add" [nzOpen]="subMenuQLNS">
       <ul>
         <li nz-menu-item [nzMatchRouter]="true">
           <!--              <i nz-icon nzTheme="outline"></i>-->
@@ -38,7 +38,7 @@
     </li>
     <li nz-submenu nzTitle="Quản lý lịch làm việc" nzIcon="calendar" [nzOpen]="subMenuLLV">
       <ul>
-        <li nz-menu-item [nzMatchRouter]="true">
+        <li [appCheckAuthorize]="['ADMIN', 'MANAGER']" nz-menu-item [nzMatchRouter]="true">
           <span><a [routerLink]="'/attendance'">Chấm công</a></span>
         </li>
         <li nz-menu-item [nzMatchRouter]="true">
@@ -51,15 +51,15 @@
     </li>
     <li nz-submenu nzTitle="Quản lý công việc" nzIcon="carry-out" [nzOpen]="subMenuQLCV">
       <ul>
-        <li appCheckAuthorize nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/project'">Dự án</a></span>
+        <li [appCheckAuthorize]="['ADMIN', 'MANAGER']" nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/project'">Dự án</a></span>
         </li>
-        <li appCheckAuthorize nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/task-list'">Danh sách công việc</a></span>
+        <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/task-list'">Danh sách công việc</a></span>
         </li>
         <li nz-menu-item [nzMatchRouter]="true"><span><a
           [routerLink]="'/project-person'">Việc của tôi</a></span></li>
       </ul>
     </li>
-    <li appCheckAuthorize nz-submenu nzTitle="Quản trị hệ thống" nzIcon="database" [nzOpen]="subMenuQLHT">
+    <li [appCheckAuthorize]="['ADMIN']" nz-submenu nzTitle="Quản trị hệ thống" nzIcon="database" [nzOpen]="subMenuQLHT">
       <ul>
         <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/register'">Tạo tài khoản</a></span></li>
         <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/account'">Quản lý tài khoản</a></span></li>

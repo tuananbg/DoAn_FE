@@ -1,22 +1,28 @@
-import {AfterViewInit, Directive, DoCheck, ElementRef, Input, OnInit, Renderer2} from '@angular/core';
-import {LoginService} from "../../service/login.service";
+import {
+  AfterViewInit,
+  Directive,
+  ElementRef,
+  Input,
+  OnInit,
+  Renderer2
+} from '@angular/core';
+import { LoginService } from '../../service/login.service';
 
 @Directive({
   selector: '[appCheckAuthorize]'
 })
-export class ActionComponentDirective implements OnInit, AfterViewInit{
+export class ActionComponentDirective implements OnInit, AfterViewInit {
 
-  // @Input() jhiActionComponent!: string;
-
-  userComponent: any;
+  @Input('appCheckAuthorize') allowedRoles: string[] = [];
 
   constructor(
     private el: ElementRef,
     private renderer: Renderer2,
-    private loginService:LoginService,
+    private loginService: LoginService,
   ) { }
 
   ngAfterViewInit(): void {
+    // optional logic
   }
 
   ngOnInit(): void {
@@ -24,16 +30,12 @@ export class ActionComponentDirective implements OnInit, AfterViewInit{
   }
 
   checkAuthorize() {
-    let roles: string[] = [];
-
     const rawRoles = this.loginService.getUserRole(); // "ADMIN,USER"
-    // console.log("User Roles (raw):", rawRoles);
+    const userRoles = rawRoles.split(',').map(r => r.trim());
 
-    roles = rawRoles.split(',').map(r => r.trim());
+    const isAuthorized = userRoles.some(role => this.allowedRoles.includes(role));
 
-    const hasAdminRole = roles.includes('ADMIN');
-
-    if (hasAdminRole) {
+    if (isAuthorized) {
       this.renderer.setStyle(this.el.nativeElement, 'display', 'block');
       this.el.nativeElement.hidden = false;
     } else {
@@ -41,7 +43,4 @@ export class ActionComponentDirective implements OnInit, AfterViewInit{
       this.el.nativeElement.hidden = true;
     }
   }
-
-
-
 }

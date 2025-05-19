@@ -179,7 +179,7 @@
               <dxi-item location="after" [visible]="!isEditing">
                 <dx-button
                   *ngIf="!isUserOffice"
-                  appCheckAuthorize
+                  [appCheckAuthorize]="['ADMIN', 'MANAGER']"
                   text="Chỉnh sửa"
                   icon="edit"
                   stylingMode="contained"
@@ -199,7 +199,7 @@
               <dxi-item location="after" [visible]="!isEditing">
                 <dx-button
                   *ngIf="!isUserOffice"
-                  appCheckAuthorize
+                  [appCheckAuthorize]="['ADMIN', 'MANAGER']"
                   text="Chi tiết"
                   stylingMode="outlined"
                   type="normal"

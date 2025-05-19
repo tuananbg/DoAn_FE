@@ -279,7 +279,7 @@ export class ListAttendanceManagermentComponent implements OnInit {
   }
 
   fetchEmployee() {
-    this.employeeService.getListSelect().subscribe(res => {
+    this.employeeService.getListSelectForDepartment().subscribe(res => {
       if (res && res.code === "OK") {
         this.lstEmployee = res.data.map((item: any) => ({
           ...item,
