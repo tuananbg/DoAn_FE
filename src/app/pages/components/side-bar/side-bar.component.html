@@ -53,7 +53,7 @@
       <ul>
         <li [appCheckAuthorize]="['ADMIN', 'MANAGER']" nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/project'">Dự án</a></span>
         </li>
-        <li nz-menu-item [nzMatchRouter]="true"><span><a [routerLink]="'/task-list'">Danh sách công việc</a></span>
+        <li nz-menu-item [appCheckAuthorize]="['ADMIN', 'MANAGER']" [nzMatchRouter]="true"><span><a [routerLink]="'/task-list'">Danh sách công việc</a></span>
         </li>
         <li nz-menu-item [nzMatchRouter]="true"><span><a
           [routerLink]="'/project-person'">Việc của tôi</a></span></li>

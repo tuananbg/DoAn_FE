@@ -103,19 +103,19 @@
                 <app-button-icon class="action__margin" [isCheckCircle]="true"
                                  [tooltipTitle]="'Duyệt đơn'"
                                  [loading]="isLoading"
-                                 [disabled] ="employeeCode !== 'ADMIN' && data.followCode != employeeCode"
+                                 [disabled] ="data.followCode != employeeCode"
                                  (clickAction)="approvedModal(data)">
                 </app-button-icon>
                 <app-button-icon class="action__margin" [isUnCheckCircle]="true"
                                  [tooltipTitle]="'Từ chối'"
                                  [loading]="isLoading"
-                                 [disabled] ="employeeCode !== 'ADMIN' && data.followCode != employeeCode"
+                                 [disabled] =" data.followCode != employeeCode"
                                  (clickAction)="rejectModal(data)">
                 </app-button-icon>
                 <app-button-icon class="action__margin" [isEdit]="true"
                                  [tooltipTitle]="'Sửa đơn'"
                                  [loading]="isLoading"
-                                 [disabled] ="employeeCode !== 'ADMIN' && data.employeeCode != employeeCode"
+                                 [disabled] =" data.employeeCode != employeeCode"
                                  (clickAction)="openUpdateModal(data)"></app-button-icon>
 <!--                <app-button-icon class="action__margin" [isDelete]="true"-->
 <!--                                 [disabled] ="data.employeeId != idUserDetailId"-->

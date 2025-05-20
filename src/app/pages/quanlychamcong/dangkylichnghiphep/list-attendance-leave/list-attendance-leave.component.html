@@ -95,21 +95,37 @@
             </td>
             <td class="text-center max-width-270" nzRight="0" *ngIf="isShowActionColumn">
               <div class="action">
+<!--                <app-button-icon class="action__margin" [isCheckCircle] = "true"-->
+<!--                                 [tooltipTitle]="'Duyệt đơn'"-->
+<!--                                 [loading]="isLoading"-->
+<!--                                 [disabled]="employeeCode !== 'ADMIN' && data.reviewerCode != employeeCode"-->
+<!--                                 (clickAction)="approvedModal(data)"></app-button-icon>-->
+<!--                <app-button-icon class="action__margin" [isUnCheckCircle]="true"-->
+<!--                                 [tooltipTitle]="'Từ chối'"-->
+<!--                                 [loading]="isLoading"-->
+<!--                                 [disabled]="employeeCode !== 'ADMIN' && data.reviewerCode != employeeCode"-->
+<!--                                 (clickAction)="rejectModal(data)">-->
+<!--                </app-button-icon>-->
+<!--                <app-button-icon class="action__margin" [isEdit] = "true"-->
+<!--                                 [tooltipTitle]="'Sửa đơn'"-->
+<!--                                 [loading]="isLoading"-->
+<!--                                 [disabled]="employeeCode !== 'ADMIN' && data.employeeCode != employeeCode"-->
+<!--                                 (clickAction)="openUpdateModal(data)"></app-button-icon>-->
                 <app-button-icon class="action__margin" [isCheckCircle] = "true"
                                  [tooltipTitle]="'Duyệt đơn'"
                                  [loading]="isLoading"
-                                 [disabled]="employeeCode !== 'ADMIN' && data.reviewerCode != employeeCode"
+                                 [disabled]="data.reviewerCode != employeeCode"
                                  (clickAction)="approvedModal(data)"></app-button-icon>
                 <app-button-icon class="action__margin" [isUnCheckCircle]="true"
                                  [tooltipTitle]="'Từ chối'"
                                  [loading]="isLoading"
-                                 [disabled]="employeeCode !== 'ADMIN' && data.reviewerCode != employeeCode"
+                                 [disabled]=" data.reviewerCode != employeeCode"
                                  (clickAction)="rejectModal(data)">
                 </app-button-icon>
                 <app-button-icon class="action__margin" [isEdit] = "true"
                                  [tooltipTitle]="'Sửa đơn'"
                                  [loading]="isLoading"
-                                 [disabled]="employeeCode !== 'ADMIN' && data.employeeCode != employeeCode"
+                                 [disabled]=" data.employeeCode != employeeCode"
                                  (clickAction)="openUpdateModal(data)"></app-button-icon>
               </div>
             </td>
