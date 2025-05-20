@@ -200,6 +200,11 @@ export class ListEmployeeManagermentComponent implements OnInit {
   handleOkModal() {
     if (this.contactNewForm.getNewContactData()) {
       const data = this.contactNewForm.getNewContactData();
+      if (data.dateOfBirth && isNaN(new Date(data.dateOfBirth).getTime())) {
+        console.log(data.dateOfBirth);
+        this.toastService.openErrorToast("Ngày sinh không hợp lệ");
+        return;
+      }
       const avatarFile = this.contactNewForm.avatarFile;
       this.spinner.show().then();
       this.employeeService.createEmployee(avatarFile, data).subscribe(res => {

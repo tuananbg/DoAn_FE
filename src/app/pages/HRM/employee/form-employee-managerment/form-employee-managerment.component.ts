@@ -60,7 +60,7 @@ export class FormEmployeeManagermentComponent implements OnInit {
       code: this.newUser.code,
       fullName: this.newUser.fullName,
       positionCode: this.newUser.positionCode,
-      dateOfBirth: this.formatDate(this.newUser.dateOfBirth),
+      dateOfBirth: this.newUser.dateOfBirth,
       gender: this.newUser.gender,
       placeOfBirth: this.newUser.placeOfBirth,
       taxCode: this.newUser.taxCode,

@@ -67,6 +67,15 @@ export class EmployeeService {
     );
   }
 
+  getListSelectContract(): Observable<any> {
+    return this.httpClient.get(
+      `${API_CONFIG.BASE_URL}employee/select-contract`,
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      }
+    );
+  }
+
   getListSelectForDepartment(): Observable<any> {
     return this.httpClient.get(
       `${API_CONFIG.BASE_URL}employee/select-department`,

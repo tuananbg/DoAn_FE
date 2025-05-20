@@ -83,8 +83,8 @@ export class FormContractManagermentComponent implements OnInit {
   }
 
   getEmployees(): void {
-    this.employeeService.getList(null, 'EMPLOYMENT', null).subscribe((res) => {
-      const list = res?.data?.content || [];
+    this.employeeService.getListSelectContract().subscribe((res) => {
+      const list = res?.data || [];
       this.employeeOptions = list.map((emp: any) => ({
         label: `${emp.employeeCode} - ${emp.employeeName}`,
         value: emp.employeeCode
