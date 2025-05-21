@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit {
   totalEmployee:any;
   totalBirthDayMonth:any;
   totalLateWork:any;
-  totalLeaveWork:any;
+  totalTaskProcess:any;
   employeeCode: any;
 
 
@@ -92,7 +92,7 @@ export class DashboardComponent implements OnInit {
           this.totalEmployee = res.data.totalEmployee;
           this.totalBirthDayMonth = res.data.totalBirthDayMonth;
           this.totalLateWork = res.data.totalLateWork;
-          this.totalLeaveWork = res.data.totalLeaveWork;
+          this.totalTaskProcess = res.data.totalTaskProcess;
         } else {
           this.toastService.openErrorToast(res.body.msgCode);
         }

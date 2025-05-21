@@ -48,17 +48,6 @@ export class ContractService {
     )
   }
 
-
-  searchForEmployee(payload: any, pageable: any): Observable<any> {
-    return this.httpClient.post(
-      API_CONFIG.BASE_URL + "employee-contract/searchForEmployee",
-      {
-        headers: new HttpHeaders({'Content-Type': 'application/json'}),
-        params: pageable,
-      }
-    )
-  }
-
   create(file: File, contractDTO: any): Observable<any> {
     const formData = new FormData();
     if (file) {

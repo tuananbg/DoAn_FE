@@ -99,14 +99,14 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
     this.checkIsViewOrUpdate();
     console.log("createBy",this.createBy)
     this.addForm = this.formBuilder.group({
-      taskCode: new FormControl({ value: '', disabled: this.isUpdate }, [Validators.required]),
+      taskCode: new FormControl({ value: '', disabled: true }),
       taskName: new FormControl({ value: '', disabled: this.isUpdate }, [Validators.required, Validators.maxLength(500)]),
       taskDescription: new FormControl(),
       taskStatus: new FormControl( [Validators.required]),
       startDay: new FormControl(null, [Validators.required]),
       endDay: new FormControl(null, [Validators.required]),
       employeeCode: new FormControl( [Validators.required]),
-      managerCode:new FormControl([Validators.required]),
+      managerCode: new FormControl({ value: '', disabled: true }),
       projectCode: new FormControl({ value: '', disabled: this.isUpdate }, [Validators.required]),
       priority: new FormControl(null, [Validators.required]),
       duration: new FormControl(null),
@@ -177,7 +177,7 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
       data.taskCode = data.taskCode.trim() || null;
       data.taskName = data.taskName.trim() || null;
       data.taskDescription = data.taskDescription.trim() || null;
-      data.managerCode = data.managerCode ? data.managerCode : null;
+      // data.managerCode = data.managerCode ? data.managerCode : null;
       data.startDay = data.startDay ? format(new Date(data.startDay), 'yyyy-MM-dd HH:mm:ss') : null;
       data.endDay = data.endDay ? format(new Date(data.endDay), 'yyyy-MM-dd HH:mm:ss') : null;
       data.taskStatus = data.taskStatus ? data.taskStatus : null;
@@ -239,7 +239,7 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
   }
 
   fetchEmployee() {
-    this.employeeService.getListSelect().subscribe(res => {
+    this.employeeService.getListSelectForDepartment().subscribe(res => {
       if (res && res.code === "OK") {
         this.lstEmployee = res.data;
         this.listOfOption =  this.lstEmployee.map(res => `${res.employeeName} - ${res.employeeCode}`);

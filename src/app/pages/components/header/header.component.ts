@@ -82,7 +82,7 @@ export class HeaderComponent implements OnInit, DoCheck {
 
   navigateToDetails = () => {
     this.visible = false;
-    this.router.navigate(['/detail-employee/' + this.employeeCode], {state: {page: this.request}});
+    this.router.navigate(['/infor-employee/' + this.employeeCode], {state: {page: this.request}});
   };
 
   navigateToChangePass = () => {
