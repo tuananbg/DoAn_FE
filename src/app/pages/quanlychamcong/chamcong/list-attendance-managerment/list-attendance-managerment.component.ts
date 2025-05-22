@@ -93,21 +93,6 @@ export class ListAttendanceManagermentComponent implements OnInit {
     this.fetchEmployee();
   }
 
-  // nzOnSearch(): void {
-  //   this.request.currentPage = 0;
-  //   // this.fetchData(this.request.currentPage, this.request.pageSize);
-  // }
-
-  // parseJwt(token: string): string {
-  //   const base64Url = token.split('.')[1];
-  //   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  //   const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
-  //     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  //   }).join(''));
-  //
-  //   return JSON.parse(jsonPayload);
-  // };
-
   fetchData(currentPage?: number, pageSize?: number) {
     const pageable = {
       page: currentPage,
@@ -168,14 +153,6 @@ export class ListAttendanceManagermentComponent implements OnInit {
     });
   }
 
-
-  // onEmployeeCodeChange(employeeCode: string) {
-  //   if (employeeCode) {
-  //     this.loadAttendanceId(employeeCode);
-  //   }
-  // }
-
-
   loadStartDate(): void {
     this.isLoadingOne = true;
     // 👇 Lấy employeeCode từ form ra
@@ -206,7 +183,6 @@ export class ListAttendanceManagermentComponent implements OnInit {
       this.isLoadingOne = false;
     }, 3000);
   }
-
 
   loadEndDate(): void {
     this.isLoadingTwo = true;
@@ -292,46 +268,28 @@ export class ListAttendanceManagermentComponent implements OnInit {
     });
   }
 
-
-  // onOptionChangeDepartment(event: any): void {
-  //   const selectedValue = event;
-  //   console.log("Selected option:", selectedValue);
-  //   const queryModel = this.payloadEmployee;
-  //   queryModel.departmentId = event;
-  //   this.selectedOptionEmployee = "";
-  //   this.fetchEmployee();
-  // }
-
-  onOptionChangeEmployee(event: any): void {
-    const selectedValue = event;
-    console.log("Selected option:", selectedValue);
-  }
-
   openExport() {
-    const queryModel = {
-      employeeCode: null,
-      employeeId: this.selectedOptionEmployee ? this.selectedOptionEmployee  : null,
-      employeeName: null,
-      departmentId: null,
-      workingDay: this.currentDate ? this.currentDate : null,
-    };
+    const monthCode = moment(this.currentDate).format('YYYYMM');
     this.spinner.show().then();
-    this.attendanceService.exportAttendance(queryModel).subscribe(async response => {
-      const isJsonBlob = (data: any) => data instanceof Blob && data.type === 'application/json';
-      const responseData = isJsonBlob(response.body) ? await (response.body).text() : response.body || {};
-      if (typeof responseData === "string") {
-        const responseJson = JSON.parse(responseData);
-        this.toastService.openErrorToast(responseJson.msgCode);
-      } else {
-        const currentDate = moment();
-        const formattedDate = currentDate.format('DD-MM-YYYY');
-        this.fileManagerService.downloadFile(response, 'bang_thong_ke_cham_cong_'+formattedDate+'.xlsx');
+
+    this.attendanceService.exportAttendance(monthCode).subscribe({
+      next: async (response) => {
+        try {
+          await this.fileManagerService.downloadBlobResponse(response, 'bang_thong_ke_cham_cong.xlsx');
+        } catch (err: any) {
+          this.toastService.openErrorToast(err.msgCode || 'Xuất file thất bại');
+          this.spinner.hide().then();
+        }
+      },
+      error: (error) => {
+        this.toastService.openErrorToast(error?.msgCode || 'Lỗi kết nối máy chủ');
+        this.spinner.hide().then();
+        },
+      complete: () => {
+        this.spinner.hide().then();
       }
-    }, error => {
-      this.toastService.openErrorToast(error.body.msgCode);
-    }, () => {
-      this.spinner.hide().then();
     });
   }
+
 
 }

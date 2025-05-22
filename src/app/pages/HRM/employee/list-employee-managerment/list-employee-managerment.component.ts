@@ -159,40 +159,23 @@ export class ListEmployeeManagermentComponent implements OnInit {
 
 
   async onExporting(e: any) {
-    if (this.searchForm.invalid) return;
-    const queryModel = null;
-    const pageable = {
-      sort: this.request.sort
-    };
-    await this.fetchData(this.request.currentPage, this.request.pageSize);
-    this.spinner.show().then();
-    if (this.lstData.length === 0) {
-      return;
-    }
-    this.employeeService.exportEmployee(queryModel, pageable).subscribe(async response => {
-      const isJsonBlob = (data: any) => data instanceof Blob && data.type === 'application/json';
-      const responseData = isJsonBlob(response.body) ? await (response.body).text() : response.body || {};
-      if (typeof responseData === "string") {
-        const responseJson = JSON.parse(responseData);
-        this.toastService.openErrorToast(responseJson.msgCode);
-      } else {
-        const contentDisposition = response.headers.get('Content-Disposition');
-        let fileName = 'export.xlsx'; // fallback
-
-        if (contentDisposition) {
-          const match = contentDisposition.match(/filename\*=UTF-8''(.+)/);
-          if (match && match[1]) {
-            fileName = decodeURIComponent(match[1]);
-          }
+    const status = this.statusList[this.currentTabIndex];
+    this.employeeService.exportEmployee(status).subscribe({
+      next: async (response) => {
+        try {
+          await this.fileManagerService.downloadBlobResponse(response, 'bang_thong_ke_cham_cong.xlsx');
+        } catch (err: any) {
+          this.toastService.openErrorToast(err.msgCode || 'Không có dữ liệu phù hợp để tải xuống.');
+          this.spinner.hide().then();
         }
-
-        this.fileManagerService.downloadFile(response, fileName);
-
+      },
+      error: (error) => {
+        this.toastService.openErrorToast(error?.msgCode || 'Lỗi kết nối máy chủ');
+        this.spinner.hide().then();
+      },
+      complete: () => {
+        this.spinner.hide().then();
       }
-    }, error => {
-      this.toastService.openErrorToast(error);
-    }, () => {
-      this.spinner.hide().then();
     });
     e.cancel = true;
   }

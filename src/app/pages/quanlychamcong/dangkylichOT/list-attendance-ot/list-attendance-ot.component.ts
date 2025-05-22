@@ -107,16 +107,6 @@ export class ListAttendanceOtComponent implements OnInit {
     this.isShowActionColumn = this.lstData?.some(item => item.status !== 2 && item.status !== 3);
   }
 
-  // parseJwt(token: string): string {
-  //   const base64Url = token.split('.')[1];
-  //   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  //   const jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
-  //     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  //   }).join(''));
-  //
-  //   return JSON.parse(jsonPayload);
-  // };
-
   fetchData(currentPage?: number, pageSize?: number){
     const formValue = this.searchForm.value;
     const status = this.statusList[this.currentTabIndex];
@@ -251,42 +241,26 @@ export class ListAttendanceOtComponent implements OnInit {
     });
   }
 
-  openExport() {
-    for (const control in this.searchForm.controls) {
-      if (this.searchForm.contains(control)) {
-        this.searchForm.controls[control].markAsDirty();
-        this.searchForm.controls[control].updateValueAndValidity();
+  async onExporting(e: any) {
+    const status = this.statusList[this.currentTabIndex];
+    this.attendanceOTService.exportAttendanceOt(status).subscribe({
+      next: async (response) => {
+        try {
+          await this.fileManagerService.downloadBlobResponse(response, 'bang_don_nghi_phep.xlsx');
+        } catch (err: any) {
+          this.toastService.openErrorToast(err.msgCode || 'Không có dữ liệu phù hợp để tải xuống.');
+          this.spinner.hide().then();
+        }
+      },
+      error: (error) => {
+        this.toastService.openErrorToast(error?.msgCode || 'Lỗi kết nối máy chủ');
+        this.spinner.hide().then();
+      },
+      complete: () => {
+        this.spinner.hide().then();
       }
-    }
-    if (this.searchForm.invalid) return;
-    const formValue = this.searchForm.value;
-
-    const queryModel = {
-      isActive: formValue.isActive === 0 ? '0' : !formValue.isActive ? null : formValue.isActive.toString(),
-      startDay: !formValue.startDay ? null : formValue.startDay,
-      employeeId: !formValue.employeeId ? null : formValue.employeeId,
-    };
-    const pageable = {
-      sort: this.request.sort
-    };
-    this.spinner.show().then();
-    this.attendanceOTService.exportAttendanceOt(queryModel, pageable).subscribe(async response => {
-      const isJsonBlob = (data: any) => data instanceof Blob && data.type === 'application/json';
-      const responseData = isJsonBlob(response.body) ? await (response.body).text() : response.body || {};
-      if (typeof responseData === "string") {
-        const responseJson = JSON.parse(responseData);
-        this.toastService.openErrorToast(responseJson.msgCode);
-      } else {
-        const currentDate = moment();
-        const formattedDate = currentDate.format('DD-MM-YYYY');
-        this.fileManagerService.downloadFile(response, 'danhsachdontangca_'+formattedDate+'.xlsx');
-      }
-    }, error => {
-      this.toastService.openErrorToast(error);
-    }, () => {
-      this.spinner.hide().then();
     });
-    this.nzOnSearch();
+    e.cancel = true;
   }
 
 

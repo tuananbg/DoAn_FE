@@ -37,49 +37,32 @@ export class FileManagerService {
     document.body.removeChild(link);
   }
 
-  uploadMultipleFile(files: any, type: any): Observable<any> {
-    const fileData = new FormData();
-    files.forEach((file: File) => {
-      fileData.append('files', file);
-    });
+  /**
+   * Xử lý download file từ response blob, parse filename từ header nếu có
+   */
+  async downloadBlobResponse(response: any, fallbackFileName = 'export.xlsx') {
+    const isJsonBlob = (data: any) => data instanceof Blob && data.type === 'application/json';
+    const blob = response.body;
 
-    return this.httpClient.post<any>(
-      "http://localhost:8080/" + "dev/file/upload" + '?type=' + type + '&_allow_anonymous=true',
-      fileData, {observe: 'response'})
-  }
-
-  private getFile(id: any): Observable<any> {
-    return this.http.get(
-      "http://localhost:8080/" + "dev/file/" + id + '?_allow_anonymous=true', {
-        responseType: 'blob',
-        observe: 'response',
-      })
-  }
-
-  async downloadFileById(id: any, fileName: any) {
-    const dataFile = await this.getFile(id).toPromise();
-    if (dataFile && dataFile.body.size > 0) {
-      this.downloadFile(dataFile, fileName);
-    } else {
-      // this.toastService.openErrorToast(this.translateService.instant('common.import.error.file-not-found'));
+    if (isJsonBlob(blob)) {
+      const text = await blob.text();
+      const errorData = JSON.parse(text);
+      throw { msgCode: errorData.msgCode || 'Không có dữ liệu phù hợp để tải xuống.' };
     }
-  }
 
-  // ******** EDIT START *************
-  private getFileByPath(path: any): Observable<any> {
-    return this.http.get(
-      "http://localhost:8080/" + "dev/file/downloadByPath" + '?filePath=' + path + '&_allow_anonymous=true', {
-        responseType: 'blob',
-        observe: 'response',
-      })
-  }
-
-  async downloadFileByPath(path: any, fileName: any) {
-    const dataFile = await this.getFileByPath(path).toPromise();
-    if (dataFile && dataFile.body.size > 0) {
-      this.downloadFile(dataFile, fileName);
-    } else {
-      // this.toastService.openErrorToast(this.translateService.instant('common.import.error.file-not-found'));
+    let fileName = fallbackFileName;
+    const contentDisposition = response.headers.get('Content-Disposition');
+    if (contentDisposition) {
+      const match = contentDisposition.match(/filename\*=UTF-8''(.+)/);
+      if (match && match[1]) {
+        fileName = decodeURIComponent(match[1]);
+      }
     }
+
+    this.downloadFile(response, fileName); // fileManagerService.downloadFile()
   }
+
+
+
+
 }

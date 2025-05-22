@@ -60,9 +60,9 @@ export class AttendanceService {
     );
   }
 
-  exportAttendance(payload: any): Observable<any> {
-    return this.httpClient.post(API_CONFIG.BASE_URL + "attendance/exportListFollowMonth",
-      payload,
+  exportAttendance(monthCode: any): Observable<any> {
+    return this.httpClient.get(
+      `${API_CONFIG.BASE_URL}attendance/download/${monthCode}`,
       {
         responseType: 'blob',
         observe: 'response'

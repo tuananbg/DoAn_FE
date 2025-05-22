@@ -67,13 +67,13 @@ export class AttendanceLeaveService {
     );
   }
 
-  exportAttendanceLeave(payload: any, pageable: any): Observable<any> {
-    return this.httpClient.post(API_CONFIG.BASE_URL + "attendance-leave/export",
-      pageable,
+  exportAttendanceLeave(status: any): Observable<any> {
+    return this.httpClient.get(
+      `${API_CONFIG.BASE_URL}attendance-leave/download-xlsx/${status}`,
+
       {
         responseType: 'blob',
-        observe: 'response',
-        params: payload
+        observe: 'response'
       }
     );
   }

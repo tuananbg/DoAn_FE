@@ -219,42 +219,26 @@ export class ListAttendanceLeaveComponent implements OnInit {
     });
   }
 
-  openExport() {
-    for (const control in this.searchForm.controls) {
-      if (this.searchForm.contains(control)) {
-        this.searchForm.controls[control].markAsDirty();
-        this.searchForm.controls[control].updateValueAndValidity();
+  async onExporting(e: any) {
+    const status = this.statusList[this.currentTabIndex];
+    this.attendanceLeaveService.exportAttendanceLeave(status).subscribe({
+      next: async (response) => {
+        try {
+          await this.fileManagerService.downloadBlobResponse(response, 'bang_don_nghi_phep.xlsx');
+        } catch (err: any) {
+          this.toastService.openErrorToast(err.msgCode || 'Không có dữ liệu phù hợp để tải xuống.');
+          this.spinner.hide().then();
+        }
+      },
+      error: (error) => {
+        this.toastService.openErrorToast(error?.msgCode || 'Lỗi kết nối máy chủ');
+        this.spinner.hide().then();
+      },
+      complete: () => {
+        this.spinner.hide().then();
       }
-    }
-    if (this.searchForm.invalid) return;
-    const formValue = this.searchForm.value;
-
-    const queryModel = {
-      isActive: formValue.isActive === 0 ? '0' : !formValue.isActive ? null : formValue.isActive.toString(),
-      startDay: !formValue.startDay ? null : formValue.startDay,
-      endDay: !formValue.endDay ? null : formValue.endDay,
-    };
-    const pageable = {
-      sort: this.request.sort
-    };
-    this.spinner.show().then();
-    this.attendanceLeaveService.exportAttendanceLeave(queryModel, pageable).subscribe(async response => {
-      const isJsonBlob = (data: any) => data instanceof Blob && data.type === 'application/json';
-      const responseData = isJsonBlob(response.body) ? await (response.body).text() : response.body || {};
-      if (typeof responseData === "string") {
-        const responseJson = JSON.parse(responseData);
-        this.toastService.openErrorToast(responseJson.msgCode);
-      } else {
-        const currentDate = moment();
-        const formattedDate = currentDate.format('DD-MM-YYYY');
-        this.fileManagerService.downloadFile(response, 'danhsachdonnghiphep_'+formattedDate+'.xlsx');
-      }
-    }, error => {
-      this.toastService.openErrorToast(error);
-    }, () => {
-      this.spinner.hide().then();
     });
-    this.nzOnSearch();
+    e.cancel = true;
   }
 
   onTabChange(index: number): void {

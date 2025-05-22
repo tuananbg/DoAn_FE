@@ -155,12 +155,12 @@ export class EmployeeService {
     );
   }
 
-  exportEmployee(payload: any, pageable: any): Observable<any> {
-    return this.httpClient.get(API_CONFIG.BASE_URL + "employee/download-xlsx",
+  exportEmployee(status: any): Observable<any> {
+    return this.httpClient.get(
+      `${API_CONFIG.BASE_URL}employee/download-xlsx/${status}`,
       {
         responseType: 'blob',
-        observe: 'response',
-        params: payload
+        observe: 'response'
       }
     );
   }

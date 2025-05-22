@@ -63,13 +63,12 @@ export class AttendanceOTService {
     );
   }
 
-  exportAttendanceOt(payload: any, pageable: any): Observable<any> {
-    return this.httpClient.post(API_CONFIG.BASE_URL + "attendanceOt/export",
-      pageable,
+  exportAttendanceOt(status: any): Observable<any> {
+    return this.httpClient.get(
+      `${API_CONFIG.BASE_URL}attendanceOt/download-xlsx/${status}`,
       {
         responseType: 'blob',
-        observe: 'response',
-        params: payload
+        observe: 'response'
       }
     );
   }
