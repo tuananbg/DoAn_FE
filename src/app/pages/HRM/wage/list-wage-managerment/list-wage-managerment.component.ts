@@ -26,8 +26,8 @@ export class ListWageManagermentComponent implements OnInit {
     page: 1,
     name: null,
     currentPage: 0,
-    pageSize: 10,
-    sort: 'createdDate/desc', // -: desc | +: asc,
+    pageSize: 25,
+    sort: 'modifiedDate/desc', // -: desc | +: asc,
   };
   lstData: any[] = [];
   total = 0;
@@ -94,7 +94,7 @@ export class ListWageManagermentComponent implements OnInit {
     const params: any = {
       page: currentPage,
       size: pageSize,
-      sort: ['createdDate/DESC']
+      sort: ['modifiedDate/DESC']
     };
     if (formValue.wageName) {
       params.wageName = formValue.wageName.toString();

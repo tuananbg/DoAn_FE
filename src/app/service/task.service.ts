@@ -85,12 +85,12 @@ export class TaskService {
     )
   }
 
-  exportEmployee(status: string): Observable<any> {
+  exportTask(status: any): Observable<any> {
     return this.httpClient.get(
-      `${API_CONFIG.BASE_URL}employee-contract/download-xlsx/${status}`,  // <-- thêm status vào URL
+      `${API_CONFIG.BASE_URL}task/download-xlsx/${status}`,
       {
         responseType: 'blob',
-        observe: 'response',
+        observe: 'response'
       }
     );
   }

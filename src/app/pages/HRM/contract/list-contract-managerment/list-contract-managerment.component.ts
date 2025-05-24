@@ -29,7 +29,7 @@ export class ListContractManagermentComponent implements OnInit {
   request: any = {
     currentPage: 0,
     pageSize: 10,
-    sort: ['createdDate/DESC']
+    sort: ['contractEffectiveDate/DESC']
   };
   lstData: any[] = [];
   total = 0;

@@ -28,8 +28,8 @@ export class PositionManagermentComponent implements OnInit {
     page: 1,
     name: null,
     currentPage: 0,
-    pageSize: 10,
-    sort: 'createdDate/desc', // -: desc | +: asc,
+    pageSize: 25,
+    sort: 'modifiedDate/desc', // -: desc | +: asc,
   };
   lstData: any[] = [];
   total = 0;
@@ -255,4 +255,25 @@ export class PositionManagermentComponent implements OnInit {
     this.fetchData(this.request.currentPage, this.request.pageSize); // Gọi API
   }
 
+  async onExporting(e: any) {
+    const status = this.statusList[this.currentTabIndex];
+    this.positionService.exportPosition(status).subscribe({
+      next: async (response) => {
+        try {
+          await this.fileManagerService.downloadBlobResponse(response, 'bang_thong_ke_cham_cong.xlsx');
+        } catch (err: any) {
+          this.toastService.openErrorToast(err.msgCode || 'Không có dữ liệu phù hợp để tải xuống.');
+          this.spinner.hide().then();
+        }
+      },
+      error: (error) => {
+        this.toastService.openErrorToast(error?.msgCode || 'Không có dữ liệu phù hợp để tải xuống.');
+        this.spinner.hide().then();
+      },
+      complete: () => {
+        this.spinner.hide().then();
+      }
+    });
+    e.cancel = true;
+  }
 }

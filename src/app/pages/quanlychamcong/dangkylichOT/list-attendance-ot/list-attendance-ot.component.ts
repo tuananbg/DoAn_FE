@@ -26,8 +26,8 @@ export class ListAttendanceOtComponent implements OnInit {
     page: 1,
     name: null,
     currentPage: 0,
-    pageSize: 10,
-    sort: 'createdDate/desc', // -: desc | +: asc,
+    pageSize: 25,
+    sort: 'modifiedDate/desc', // -: desc | +: asc,
   };
   lstData: any[] = [];
   total = 0;
@@ -253,7 +253,7 @@ export class ListAttendanceOtComponent implements OnInit {
         }
       },
       error: (error) => {
-        this.toastService.openErrorToast(error?.msgCode || 'Lỗi kết nối máy chủ');
+        this.toastService.openErrorToast(error?.msgCode || 'Không có dữ liệu phù hợp để tải xuống.');
         this.spinner.hide().then();
       },
       complete: () => {

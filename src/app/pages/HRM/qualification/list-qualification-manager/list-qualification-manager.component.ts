@@ -29,8 +29,8 @@ export class ListQualificationManagerComponent implements OnInit {
     page: 1,
     name: null,
     currentPage: 0,
-    pageSize: 10,
-    sort: 'createdDate/desc', // -: desc | +: asc,
+    pageSize: 25,
+    sort: 'modifiedDate/desc', // -: desc | +: asc,
   };
   lstData: any[] = [];
   total = 0;

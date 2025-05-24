@@ -33,8 +33,8 @@ export class ListAttendanceManagermentComponent implements OnInit {
     page: 1,
     name: null,
     currentPage: 0,
-    pageSize: 10,
-    sort: 'createdDate/desc', // -: desc | +: asc,
+    pageSize: 25,
+    sort: 'modifiedDate/desc', // -: desc | +: asc,
   };
   isLoadingOne = false;
   isLoadingTwo = false;
@@ -277,12 +277,12 @@ export class ListAttendanceManagermentComponent implements OnInit {
         try {
           await this.fileManagerService.downloadBlobResponse(response, 'bang_thong_ke_cham_cong.xlsx');
         } catch (err: any) {
-          this.toastService.openErrorToast(err.msgCode || 'Xuất file thất bại');
+          this.toastService.openErrorToast(err.msgCode || 'Không có dữ liệu phù hợp để tải xuống.');
           this.spinner.hide().then();
         }
       },
       error: (error) => {
-        this.toastService.openErrorToast(error?.msgCode || 'Lỗi kết nối máy chủ');
+        this.toastService.openErrorToast(error?.msgCode || 'Không có dữ liệu phù hợp để tải xuống.');
         this.spinner.hide().then();
         },
       complete: () => {

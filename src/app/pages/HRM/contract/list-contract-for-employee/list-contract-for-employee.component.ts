@@ -26,7 +26,7 @@ export class ListContractForEmployeeComponent implements OnInit {
     name: null,
     currentPage: 0,
     pageSize: 10,
-    sort: 'createdDate/desc', // -: desc | +: asc,
+    sort: 'contractEffectiveDate/desc', // -: desc | +: asc,
   };
   lstData: any[] = [];
   total = 0;

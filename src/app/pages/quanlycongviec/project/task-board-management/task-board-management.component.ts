@@ -39,8 +39,8 @@ export class TaskBoardManagementComponent implements OnInit, OnChanges {
     page: 1,
     name: null,
     currentPage: 0,
-    pageSize: 10,
-    sort: 'createdDate/desc', // -: desc | +: asc,
+    pageSize: 25,
+    sort: 'modifiedDate/desc', // -: desc | +: asc,
   };
   idProject: any;
   employeeCode: any;
