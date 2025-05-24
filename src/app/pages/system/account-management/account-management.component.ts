@@ -26,7 +26,7 @@ export class AccountManagementComponent implements OnInit {
 
   request: any = {
     currentPage: 0,
-    pageSize: 25,
+    pageSize: 10,
     sort: ['modifiedDate/DESC']
   };
   isVisibleModalDelete = false;

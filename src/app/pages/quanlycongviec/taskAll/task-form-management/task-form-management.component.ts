@@ -66,7 +66,7 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
     page: 1,
     name: null,
     currentPage: 0,
-    pageSize: 25,
+    pageSize: 10,
     sort: 'modifiedDate/desc', // -: desc | +: asc,
   };
 

@@ -33,7 +33,7 @@ export class ListAttendanceManagermentComponent implements OnInit {
     page: 1,
     name: null,
     currentPage: 0,
-    pageSize: 25,
+    pageSize: 10,
     sort: 'modifiedDate/desc', // -: desc | +: asc,
   };
   isLoadingOne = false;
