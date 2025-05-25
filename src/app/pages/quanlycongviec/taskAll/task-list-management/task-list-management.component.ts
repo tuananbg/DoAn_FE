@@ -61,24 +61,6 @@ export class TaskListManagementComponent implements OnInit {
     {code: 3, name: "Cao"},
   ];
 
-  // mapTaskStatus(status: string | number): string {
-  //   const statusMap: any = {
-  //     '1': 'Chưa làm',
-  //     '2': 'Đang xử lý',
-  //     '3': 'Hoàn thành'
-  //   };
-  //   return statusMap[status] || 'Không rõ';
-  // }
-  //
-  // mapPriority(priority: number): string {
-  //   const map: any = {
-  //     1: 'Thấp',
-  //     2: 'Trung bình',
-  //     3: 'Cao'
-  //   };
-  //   return map[priority] || 'Không rõ';
-  // }
-
   request: any = {
     listTextSearch: [],
     code: null,

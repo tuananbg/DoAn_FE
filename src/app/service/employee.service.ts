@@ -66,6 +66,22 @@ export class EmployeeService {
       }
     );
   }
+  getListSelectCreateAccount(): Observable<any> {
+    return this.httpClient.get(
+      `${API_CONFIG.BASE_URL}employee/select-create-account`,
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      }
+    );
+  }
+  getListSelectDepartmentHead(): Observable<any> {
+    return this.httpClient.get(
+      `${API_CONFIG.BASE_URL}employee/select-department-head`,
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      }
+    );
+  }
 
   getListSelectContract(): Observable<any> {
     return this.httpClient.get(

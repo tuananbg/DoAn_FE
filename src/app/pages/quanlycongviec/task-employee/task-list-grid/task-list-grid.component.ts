@@ -147,7 +147,7 @@ export class TaskListGridComponent implements OnInit {
     // Kiểm tra dữ liệu dòng khi click
     const taskCode = e.data?.taskCode;
     console.log("data",e.data)
-    this.router.navigate(['/task/update', taskCode]);
+    this.router.navigate(['/task-person/update', taskCode]);
   }
 
   onOpenedChange = (value: boolean) => {
@@ -161,7 +161,7 @@ export class TaskListGridComponent implements OnInit {
   };
 
   onCreateTask = () => {
-    this.router.navigate(['/task/add']);
+    this.router.navigate(['/task-person/add']);
   };
 
   async onExporting(e: any) {

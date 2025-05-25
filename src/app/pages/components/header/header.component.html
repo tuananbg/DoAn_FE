@@ -11,45 +11,48 @@
            alt="Logo"
       />
     </a>
-    <span class="toolbar-header"><i (click)="toggleCollapsed()" class="fa-solid fa-bars" style="margin-right: 7px;"></i>Hệ thống quản lý nhân sự</span>
-    <span class="toolbar-child"><a href="http://dtdi.vn/" style="color: #1F1F1F;" target="_blank">
-      <i class="fa-solid fa-house-user" style="margin-right: 3px;"></i>Giới thiệu</a></span>
+    <span class="toolbar-header">
+      <i (click)="toggleCollapsed()" class="fa-solid fa-bars" style="margin-right: 7px;"></i>
+      Hệ thống quản lý nhân sự
+    </span>
+    <span class="toolbar-child">
+      <a href="http://dtdi.vn/" style="color: #1F1F1F;" target="_blank">
+        <i class="fa-solid fa-house-user" style="margin-right: 3px;"></i>Giới thiệu
+      </a>
+    </span>
     <div class="menu-divider"></div>
   </div>
-  <div class="d-flex wrapper-right">
+
+  <div class="wrapper-right">
     <a nz-dropdown
        nzPlacement="bottomCenter"
        [nzDropdownMenu]="menu"
        [nzClickHide]="false"
        [(nzVisible)]="visible"
-       style="margin-right: 30px; width: 70%;"
-       class="d-flex"
+       class="user-dropdown"
     >
       <div class="user-info__container">
-        <nz-avatar nzSize="default" nzIcon="user" style="background-color:#1F1F1F;" class="user-info__img"></nz-avatar>
+        <nz-avatar nzSize="default" nzIcon="user" class="user-info__img"></nz-avatar>
         <div class="user-info__description">
           <div class="user-info__welcome">
-            <span style="color: black; font-size: 14px;">{{'Xin chào'}}</span>
+            <span>Xin chào</span>
           </div>
-
           <div class="user-info__name">
             <span>{{employeeName}}</span>
           </div>
         </div>
-        <nz-dropdown-menu #menu="nzDropdownMenu">
-          <ul nz-menu class="wrapper-ul">
-            <li nz-menu-item (click)="navigateToDetails()">
-              <span nz-icon nzType="user" nzTheme="outline"></span> Hồ sơ cá nhân
-            </li>
-            <li nz-menu-item nzDanger (click)="logOut()">
-              <span nz-icon nzType="logout" nzTheme="outline"></span> Đăng xuất
-            </li>
-          </ul>
-        </nz-dropdown-menu>
       </div>
-    </a>
 
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu class="wrapper-ul">
+          <li nz-menu-item (click)="navigateToDetails()">
+            <span nz-icon nzType="user" nzTheme="outline"></span> Hồ sơ cá nhân
+          </li>
+          <li nz-menu-item nzDanger (click)="logOut()">
+            <span nz-icon nzType="logout" nzTheme="outline"></span> Đăng xuất
+          </li>
+        </ul>
+      </nz-dropdown-menu>
+    </a>
   </div>
 </div>
-
-<app-pop-up-img *ngIf="isPopupVisible" [imageUrl]="popupImageUrl" (close)="hidePopup()"></app-pop-up-img>

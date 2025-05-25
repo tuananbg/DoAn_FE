@@ -72,50 +72,61 @@ export class CreateDepartmentComponent implements OnInit {
       this.createForm.controls[i].markAsDirty();
       this.createForm.controls[i].updateValueAndValidity();
     }
-    if (this.createForm.valid) {
-      const data = this.createForm.value;
-      data.departmentCode = data.departmentCode ? data.departmentCode.trim() : null;
-      data.departmentName = data.departmentName ? data.departmentName.trim() : null;
-      data.status = data.status === 0 ? 0 : !data.status ? null : data.status;
-      if (!this.isUpdate) {
-        this.spinner.show().then();
-        this.departmentService.createDepartment(data).subscribe(res => {
-          if (res && res.body.code === "OK") {
+
+    if (!this.createForm.valid) return;
+
+    const data = this.createForm.value;
+    data.departmentCode = data.departmentCode ? data.departmentCode.trim() : null;
+    data.departmentName = data.departmentName ? data.departmentName.trim() : null;
+    data.status = data.status === 0 ? 0 : !data.status ? null : data.status;
+
+    this.spinner.show().then(); // chỉ show 1 lần ở đầu
+
+    if (!this.isUpdate) {
+      // --- THÊM MỚI ---
+      this.departmentService.createDepartment(data).subscribe({
+        next: (res) => {
+          if (res?.body?.code === 'OK') {
             this.toastService.openSuccessToast('Thêm mới phòng ban thành công');
             this.clickSave.emit();
             this.createForm.reset();
             this.isLoading = true;
-            // this.clickCancel.emit();
             this.handleCancelModal();
           } else {
-            this.toastService.openErrorToast(res.body.msgCode);
-            this.spinner.hide().then();
+            this.toastService.openErrorToast(res?.body?.msgCode || 'Lỗi không xác định');
           }
-        }, error => {
-          this.toastService.openErrorToast(error.error.msgCode);
+        },
+        error: (err) => {
+          this.toastService.openErrorToast(err?.error?.msgCode || 'Lỗi hệ thống');
+        },
+        complete: () => {
           this.spinner.hide().then();
-        }, () => {
-          this.spinner.hide().then();
-        });
-      } else {
-        this.departmentService.editDepartment(data, this.idDepartment).subscribe(res => {
-          if (res && res.code === "OK") {
+        }
+      });
+    } else {
+      // --- CẬP NHẬT ---
+      this.departmentService.editDepartment(data, this.idDepartment).subscribe({
+        next: (res) => {
+          if (res?.code === 'OK') {
             this.toastService.openSuccessToast('Cập nhật phòng ban thành công');
             this.clickSave.emit();
             this.clickCancel.emit();
             this.isLoading = true;
             this.handleCancelModal();
           } else {
-            this.toastService.openErrorToast(res.body.msgCode);
+            this.toastService.openErrorToast(res?.body?.msgCode || 'Lỗi không xác định');
           }
-        }, error => {
-          this.toastService.openErrorToast(error.error.msgCode);
-        }, () => {
+        },
+        error: (err) => {
+          this.toastService.openErrorToast(err?.error?.msgCode || 'Lỗi hệ thống');
+        },
+        complete: () => {
           this.spinner.hide().then();
-        });
-      }
+        }
+      });
     }
   }
+
 
   goToList() {
     this.router.navigate(['/department']);

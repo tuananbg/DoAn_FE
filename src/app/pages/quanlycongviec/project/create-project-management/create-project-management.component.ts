@@ -207,7 +207,8 @@ export class CreateProjectManagementComponent implements OnInit, AfterViewChecke
   }
 
   fetchEmployee() {
-    this.employeeService.getListSelect().subscribe(res => {
+    console.log("fetchEmployee");
+    this.employeeService.getListSelectDepartmentHead().subscribe(res => {
       if (res && res.code === "OK") {
         this.lstEmployee = res.data;
         this.listOfOption =  this.lstEmployee.map(res => `${res.employeeName} - ${res.employeeCode}`);

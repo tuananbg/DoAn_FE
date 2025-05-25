@@ -71,7 +71,7 @@ export class RegisterComponent implements OnInit {
   }
 
   fetchEmployee() {
-    this.employeeService.getListSelect().subscribe(res => {
+    this.employeeService.getListSelectCreateAccount().subscribe(res => {
       if (res && res.code === "OK") {
         this.lstEmployee = res.data;
         this.listOfOption =  this.lstEmployee.map(res => `${res.employeeName} - ${res.employeeCode}`);

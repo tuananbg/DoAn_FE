@@ -199,23 +199,28 @@ export class DepartmentManagermentComponent implements OnInit {
 
     call$.subscribe({
       next: (res) => {
-        if (res.code === '202') {
+        if (res?.code === '202') {
           this.toastService.openSuccessToast('Cập nhật trạng thái phòng ban thành công');
           this.fetchData(this.request.currentPage, this.request.pageSize);
         } else {
           this.toastService.openErrorToast(res?.message || 'Thất bại');
         }
-        this.isVisibleModalDelete = false;
+        this.isVisibleModalDelete = false; // ✅ Đảm bảo modal đóng trong next luôn
+        this.spinner.hide().then();        // ✅ Tắt spinner khi có kết quả hợp lệ
       },
       error: (err) => {
-        this.toastService.openErrorToast(err?.error?.msgCode || 'Lỗi hệ thống');
-        this.isVisibleModalDelete = false;
+        const msg = err?.error?.msgCode || 'Lỗi hệ thống';
+        this.toastService.openErrorToast(msg);
+        this.isVisibleModalDelete = false; // ✅ Đảm bảo modal cũng đóng khi lỗi
+        this.spinner.hide().then();        // ✅ Tắt spinner trong nhánh lỗi
       },
       complete: () => {
+        this.isVisibleModalDelete = false; // ✅ Đóng modal trước
         this.spinner.hide().then();
       }
     });
   }
+
 
   onTabChange(index: number): void {
     this.currentTabIndex = index;

@@ -180,6 +180,14 @@ const routes: Routes = [
         component: TaskListGridComponent
       },
       {
+        path: 'task-person/add',
+        component: TaskDetailManagementComponent
+      },
+      {
+        path: 'task-person/update/:taskCode',
+        component: TaskDetailManagementComponent
+      },
+      {
         path: 'task-person/:projectCode',
         component: TaskDetailManagementComponent
       },

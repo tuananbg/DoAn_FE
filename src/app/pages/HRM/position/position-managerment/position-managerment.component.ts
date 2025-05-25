@@ -218,7 +218,7 @@ export class PositionManagermentComponent implements OnInit {
     call$.subscribe({
       next: (res) => {
         if (res.code === '202') {
-          this.toastService.openSuccessToast('Cập nhật trạng thái tài khoản thành công');
+          this.toastService.openSuccessToast('Cập nhật trạng thái chức vụ thành công');
           this.fetchData(this.request.currentPage, this.request.pageSize);
         } else {
           this.toastService.openErrorToast(res?.message || 'Thất bại');

@@ -144,17 +144,6 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  // loadProject() {
-  //   this.projectService.getProjectId(this.idProject).subscribe(res => {
-  //     if (res && res.code === "OK") {
-  //       const dataProject = res.data;
-  //       this.projectName = dataProject.projectName;
-  //     } else {
-  //       this.toastService.openErrorToast(res.msgCode);
-  //     }
-  //   });
-  // }
-
   checkIsViewOrUpdate() {
     console.log('checkIsViewOrUpdate',this.router.url);
     if (this.router.url.includes("/view")) {
@@ -174,7 +163,7 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
     }
     if (this.addForm.valid) {
       const data = this.addForm.getRawValue();
-      data.taskCode = data.taskCode.trim() || null;
+      data.taskCode = data.taskCode ? data.taskCode.trim() : null;
       data.taskName = data.taskName.trim() || null;
       data.taskDescription = data.taskDescription.trim() || null;
       // data.managerCode = data.managerCode ? data.managerCode : null;
@@ -232,10 +221,6 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
 
   goBack() {
     this.router.navigate(['/task-list']);
-  }
-
-  onCancelConfirm() {
-    this.isViewConfirmCancel = false;
   }
 
   fetchEmployee() {
@@ -342,7 +327,7 @@ export class TaskFormManagementComponent implements OnInit, AfterViewChecked {
       data.content = data.content ? data.content : null;
       data.employeeCode = this.createBy ;
       this.timeSheetService.create(data).subscribe(res => {
-        if (res && res.code === "OK") {
+        if (res && res.code === "201") {
           this.toastService.openSuccessToast('Lưu thành công');
           this.addFormTimeSheet.reset();
           this.fetchData();
