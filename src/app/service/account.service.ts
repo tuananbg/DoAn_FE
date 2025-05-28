@@ -29,34 +29,24 @@ export class AccountService {
     );
   }
 
-  getAllRole(): Observable<any> {
-    return this.httpClient.get(AUTH_API + apiAccountManagement.apiGetRoles, httpOptions)
-  }
-
-  getRole(id: any): Observable<any> {
-    return this.httpClient.get(
-      AUTH_API + apiAccountManagement.apiGetRolesDetail + "/" + id,
-    );
-  }
-
   getAllMenuItem(): Observable<any> {
-    return this.httpClient.get(AUTH_API + apiAccountManagement.apiGetMenuItem, httpOptions)
+    return this.httpClient.get(API_CONFIG.BASE_URL + "account/menu-item", httpOptions)
   }
 
   getRoleByRoleName(roleName: string): Observable<any> {
-    return this.httpClient.get(AUTH_API + apiAccountManagement.apiGetRoleByRoleName + roleName, httpOptions)
+    return this.httpClient.get(API_CONFIG.BASE_URL +"account/role/" + roleName, httpOptions)
   }
 
   createAccount(payload: any): Observable<any> {
     return this.httpClient.post(
-      AUTH_API + '/api/v1/account/create-new-account',
+      API_CONFIG.BASE_URL + 'account/create-new-account',
       payload,
     );
   }
 
   updateRoleMenuItem(roleId: any, payload: any): Observable<any> {
     return this.httpClient.post(
-      AUTH_API + apiAccountManagement.apiUpdateRoleMenuItem + "/" + roleId,
+      API_CONFIG.BASE_URL + "account/update-role-menu-item/"  + roleId,
       payload,
     );
   }

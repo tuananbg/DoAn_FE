@@ -17,7 +17,7 @@ export class AuthService {
   }
 
   loginAccount(payload: any): Observable<any> {
-    return this.http.post(AUTH_API + apiAuth.apiLogin, payload);
+    return this.http.post(API_CONFIG.BASE_URL + "auth/login", payload);
   }
 
   verifyForm(code: string): Observable<any> {
@@ -25,7 +25,7 @@ export class AuthService {
   }
 
   registerAccount(payload: any): Observable<any> {
-    return this.http.post(AUTH_API + apiAuth.apiRegister, payload);
+    return this.http.post(API_CONFIG.BASE_URL + "auth/register", payload);
   }
 
   sendOTP(account: string): Observable<any> {
