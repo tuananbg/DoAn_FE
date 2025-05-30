@@ -20,8 +20,8 @@ export class FormPhotoComponent implements OnInit {
   constructor(private elRef:ElementRef) {}
 
   ngOnInit() {
-    // this.imageUrl = `url('http://localhost:8080/api/v1/employee/avatar/${this.link}')`;
-    this.imageUrl = `url('http://103.56.162.235:8080/api/v1/employee/avatar/${this.link}')`;
+    this.imageUrl = `url('http://localhost:8080/api/v1/employee/avatar/${this.link}')`;
+    // this.imageUrl = `url('http://103.56.162.235:8080/api/v1/employee/avatar/${this.link}')`;
   }
 
 }
