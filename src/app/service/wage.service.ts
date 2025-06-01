@@ -111,9 +111,9 @@ export class WageService {
     );
   }
 
-  deleteForEmployee(id: string): Observable<any> {
+  deleteForEmployee(employeeCode: string,allowanceCode: string): Observable<any> {
     return this.httpClient.delete(
-      API_CONFIG.BASE_URL + "allowance/deleteForEmployee/" + id,
+      API_CONFIG.BASE_URL + "allowance/deleteForEmployee/" + employeeCode+"/"+allowanceCode,
     );
   }
 

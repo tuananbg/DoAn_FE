@@ -34,6 +34,7 @@ export class ListWageForEmployeeComponent implements OnInit {
   isLoading = false;
   message: string = '';
   idUserDetailWage: any;
+  allowanceCode: any;
 
   @Input() isVisableButton = true;
   @Input() employeeCode!: string;
@@ -154,8 +155,8 @@ export class ListWageForEmployeeComponent implements OnInit {
   openModalDelete(item: any): void {
     if (!item.totalEmp) {
       this.isVisibleModalDelete = true;
-      this.idUserDetailWage = item.userDetailWageId;
-      this.message = `Bạn có chắc chắn muốn xóa phụ cấp mã <b>${this.idUserDetailWage}</b> không?`
+      this.allowanceCode = item.allowanceCode;
+      this.message = `Bạn có chắc chắn muốn xóa phụ cấp mã ${this.allowanceCode} không?`;
     }
   }
 
@@ -165,7 +166,7 @@ export class ListWageForEmployeeComponent implements OnInit {
   }
 
   callBackModalDelete() {
-    this.wageService.deleteForEmployee(this.idUserDetailWage).subscribe(res => {
+    this.wageService.deleteForEmployee(this.employeeCode,this.allowanceCode).subscribe(res => {
       if (res && res.code === "OK") {
         const data = res.data;
         this.toastService.openSuccessToast('Xóa phụ cấp của nhân viên thành công');

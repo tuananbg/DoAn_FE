@@ -49,7 +49,7 @@
       </div>
       <div class="list__head-right">
         <div class="list__head-btn" style="display: flex; gap: 10px;">
-          <app-button-create (clickCreate)="openCreateModal()" [loading]="isLoading"></app-button-create>
+          <app-button-create  [appCheckAuthorize]="['ADMIN']" (clickCreate)="openCreateModal()" [loading]="isLoading"></app-button-create>
         </div>
       </div>
     </div>
@@ -74,10 +74,13 @@
           <th nzWidth="150px" class="text-center">
            Ngày tạo
           </th>
+          <th nzWidth="150px" class="text-center">
+            Ngày cập nhật
+          </th>
           <th nzWidth="200px" class="text-center">
             Trạng thái
           </th>
-          <th nzWidth="100px" class="text-center">
+          <th [appCheckAuthorize]="['ADMIN']" nzWidth="100px" class="text-center">
             Hành động
           </th>
         </tr>
@@ -89,6 +92,7 @@
             <td class="max-width-150" [nz-tooltip]="data.departmentCode">{{data.departmentCode}}</td>
             <td class="max-width-150" [nz-tooltip]="data.departmentName">{{data.departmentName}}</td>
             <td class="max-width-150 text-center" [nz-tooltip]="data.createdDate | date: 'dd/MM/yyyy'">{{ data.createdDate | date: 'dd/MM/yyyy' }}</td>
+            <td class="max-width-150 text-center" [nz-tooltip]="data.modifiedDate | date: 'dd/MM/yyyy'">{{ data.modifiedDate | date: 'dd/MM/yyyy' }}</td>
             <td class="max-width-100 text-center" [nz-tooltip]="'Vô hiệu'" *ngIf="data.status === 0">
               <span class="css-badge badge badge-pill bg-danger p-3">Vô hiệu</span></td>
             <td class="max-width-100 text-center" [nz-tooltip]="'Hoạt động'" *ngIf="data.status === 1">
@@ -96,6 +100,7 @@
             <td class="text-center max-width-150">
               <div class="action">
                 <app-button-icon
+                  [appCheckAuthorize]="['ADMIN']"
                   class="action__margin"
                   [isEdit]="true"
                   [tooltipTitle]="'Cập nhật phòng ban'"
@@ -104,6 +109,7 @@
                 </app-button-icon>
 
                 <app-button-icon
+                  [appCheckAuthorize]="['ADMIN']"
                   *ngIf="currentTabIndex === 0"
                   class="action__margin"
                   [isLock]="true"
@@ -112,6 +118,7 @@
                 </app-button-icon>
 
                 <app-button-icon
+                  [appCheckAuthorize]="['ADMIN']"
                   *ngIf="currentTabIndex === 1"
                   class="action__margin"
                   [isUnlock]="true"
