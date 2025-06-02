@@ -48,7 +48,7 @@
       </div>
       <div class="list__head-right">
         <div class="list__head-btn">
-          <app-button-create (clickCreate)="openCreateModal()" [loading]="isLoading"></app-button-create>
+          <app-button-create [appCheckAuthorize]="['ADMIN']" (clickCreate)="openCreateModal()" [loading]="isLoading"></app-button-create>
         </div>
       </div>
     </div>
@@ -86,7 +86,7 @@
           <th nzWidth="200px" class="text-center">
             Trạng thái
           </th>
-          <th nzWidth="150px" class="text-center">
+          <th [appCheckAuthorize]="['ADMIN']"  nzWidth="150px" class="text-center">
             Hành động
           </th>
         </tr>
@@ -113,6 +113,7 @@
             <td class="text-center max-width-150">
               <div class="action">
                 <app-button-icon
+                  [appCheckAuthorize]="['ADMIN']"
                   class="action__margin"
                   [isEdit]="true"
                   [tooltipTitle]="'Cập nhật tài khoản'"
@@ -121,6 +122,7 @@
                 </app-button-icon>
 
                 <app-button-icon
+                  [appCheckAuthorize]="['ADMIN']"
                   *ngIf="currentTabIndex === 0"
                   class="action__margin"
                   [isLock]="true"
@@ -129,6 +131,7 @@
                 </app-button-icon>
 
                 <app-button-icon
+                  [appCheckAuthorize]="['ADMIN']"
                   *ngIf="currentTabIndex === 1"
                   class="action__margin"
                   [isUnlock]="true"
